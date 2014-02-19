@@ -18,6 +18,8 @@ develop-eggs
 lib
 lib64
 __pycache__
+development_talissa
+env
 
 
 # Installer logs
