@@ -8,16 +8,12 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid',
-    'SQLAlchemy',
-    'transaction',
-    'pyramid_tm',
     'pyramid_debugtoolbar',
-    'zope.sqlalchemy',
     'waitress',
     ]
 
 setup(name='crabpy_pyramid',
-      version='0.0',
+      version='0.1.0',
       description='crabpy_pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
