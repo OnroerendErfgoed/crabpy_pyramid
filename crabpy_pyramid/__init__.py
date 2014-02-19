@@ -43,9 +43,24 @@ def _build_capakey(registry):
     Build a Capakey connection to Elasticsearch and add it to the registry.
     '''
     ES = registry.queryUtility(ICapakey)
+    if ES is not None:
+        return ES
+    settings = registry.settings
+    capakey_args = _parse_settings(settings)
+    ES = capakey.Elastic(**capakey_args)
+    registry.register.Utility(ES, ICapakey)
+    return registry.queryUtility(ICapakey)
 
 
 def _get_capakey(registry):
+    '''
+    Get the Capakey connection
+    '''
+    #argument might be a config or a request
+    regis = getattr(registry, 'registry', None)
+    if regis is None:
+        regis = registry
+    return regis.queryUtility(ICapakey)
     
 
 def includeme(config):
@@ -84,9 +99,6 @@ def includeme(config):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
-    Base.metadata.bind = engine
     config = Configurator(settings=settings)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
