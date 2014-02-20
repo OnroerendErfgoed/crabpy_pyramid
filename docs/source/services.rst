@@ -1,7 +1,11 @@
 Services
 ========
 
-Crabpy_pyramid exposes the following services:
+* Return format is same as dojo rest store
+* Uses Range header for slicing (eg. items=1-10)
+* Mime-type is application/json
+
+Crabpy_pyramid exposes the following services.
 
 Capakey
 -------
