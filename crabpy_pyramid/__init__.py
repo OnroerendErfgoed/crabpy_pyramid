@@ -1,6 +1,5 @@
 from pyramid.config import Configurator
 
-import capakey
 import warnings
 
 from pyramid.settings import asbool
@@ -9,49 +8,32 @@ from pyramid.settings import asbool
 class ICapakey():
     pass
 
-
 def _parse_settings(settings):
     capakey_args = {}
     defaults = {
-        'user': None,
-        'password': None,
-        'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+        'capakey.user': None,
+        'capakey.password': None,
+        'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
     }
     capakey_args = defaults.copy()
 
     # set settings
-    for short_key_name in ('user', 'password', 'wsdl'):
-        key_name = 'capakey.%s' % (short_key_name)
+    for key_name in ('capakey.user', 'capakey.password', 'capakey.wsdl'):
         if key_name in settings:
-            capakey_args[key_name] = \
-                settings.get(key_name, defaults.get(short_key_name))
+            capakey_args[key_name] = settings.get(key_name, defaults.get(key_name))
 
     # not set user or password
-    for short_key_name in ('user', 'password'):
-        key_name = 'capakey.%s' % (short_key_name)
-        if key_name is None:
+    for key_name in ('capakey.user', 'capakey.password'):
+        if capakey_args[key_name] is None:
             warnings.warn(
                 '%s was not found in the settings, \
-                    capakey needs this parameter to function properly.',
+capakey needs this parameter to function properly.' % key_name,
                 UserWarning
             )
+    return capakey_args
 
 
-def _build_capakey(registry):
-    '''
-    Build a Capakey connection to Elasticsearch and add it to the registry.
-    '''
-    ES = registry.queryUtility(ICapakey)
-    if ES is not None:
-        return ES
-    settings = registry.settings
-    capakey_args = _parse_settings(settings)
-    ES = capakey.Elastic(**capakey_args)
-    registry.register.Utility(ES, ICapakey)
-    return registry.queryUtility(ICapakey)
-
-
-def _get_capakey(registry):
+def get_capakey(registry):
     '''
     Get the Capakey connection
     '''
@@ -59,20 +41,23 @@ def _get_capakey(registry):
     regis = getattr(registry, 'registry', None)
     if regis is None:
         regis = registry
-    return regis.queryUtility(ICapakey)
+    return regis.settings 
 
 
 def includeme(config):
-    _build_capakey(config.registry)
-    config.add_directive('get_capakey', _get_capakey)
+    config.add_static_view('static', 'static', cache_max_age=3600)
+    _parse_settings(config.registry)
+    config.add_directive('get_capakey', get_capakey)
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
+    '''
+     This function returns a Pyramid WSGI application.
+    '''
     config = Configurator(settings=settings)
-    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.include('pyramid_chameleon')
     config.add_route('home', '/')
+    config.add_route('page', '/page')
     includeme(config)
     config.scan()
     return config.make_wsgi_app()
