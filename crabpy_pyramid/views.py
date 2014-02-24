@@ -9,15 +9,14 @@ def my_view(request):
 @view_config(route_name='list_gemeenten', renderer='templates/talissa.pt')
 def list_gemeenten(request):
     Gateway = request.capakey_gateway()
-    sort = '%(sort)s' % request.matchdict
-    return {'project': Gateway.list_gemeenten(sort)}
+    return {'project': Gateway.list_gemeenten()}
 
 
-@view_config(route_name='get_gemeente_by_niscode', renderer='templates/talissa.pt')
-def get_gemeente_by_id(request):
+@view_config(route_name='get_gemeente', renderer='templates/talissa.pt')
+def get_gemeente_by_niscode(request):
     Gateway = request.capakey_gateway()
-    niscode = request.matchdict.get('niscode')
-    return {'project': Gateway.get_gemeente_by_id(niscode)}
+    gemeente_id = request.matchdict.get('gemeente_id')
+    return {'project': Gateway.get_gemeente_by_id(gemeente_id)}
     
 @view_config(route_name='list_kadastrale_afdelingen', renderer='templates/talissa.pt')
 def list_kadastrale_afdelingen(request):
