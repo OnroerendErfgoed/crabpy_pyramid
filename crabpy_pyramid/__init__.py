@@ -86,6 +86,8 @@ def main(global_config, **settings):
     config.add_route('list_kadastrale_afdelingen_by_niscode', '/capakey/gemeenten/{gemeente_id}/afdelingen')
     config.add_route('list_kadastrale_afdelingen', '/capakey/afdelingen')
     config.add_route('get_kadastrale_afdeling_by_id', '/capakey/afdelingen/{afdeling_id}')
+    config.add_route('list_secties_by_afdeling', '/capakey/afdelingen/{afdeling_id}/secties')
+    config.add_route('get_sectie_by_id_and_afdeling', '/capakey/afdelingen/{afdeling_id}/secties/{sectie_id}')
     includeme(config)
     config.scan()
     return config.make_wsgi_app()

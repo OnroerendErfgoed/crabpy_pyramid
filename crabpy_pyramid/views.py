@@ -34,3 +34,15 @@ def get_kadastrale_afdeling_by_id(request):
     afdeling_id = request.matchdict.get('afdeling_id')
     return {'project': Gateway.get_kadastrale_afdeling_by_id(afdeling_id)}
 
+@view_config(route_name='list_secties_by_afdeling', renderer='templates/talissa.pt')
+def list_secties_by_afdeling(request):
+    Gateway = request.capakey_gateway()
+    afdeling_id = request.matchdict.get('afdeling_id')
+    return {'project': Gateway.list_secties_by_afdeling(afdeling_id)}
+    
+@view_config(route_name='get_sectie_by_id_and_afdeling', renderer='templates/talissa.pt')
+def get_sectie_by_id_and_afdeling(request):
+    Gateway = request.capakey_gateway()
+    afdeling_id = request.matchdict.get('afdeling_id')
+    sectie_id = request.matchdict.get('sectie_id')
+    return {'project': Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)}
