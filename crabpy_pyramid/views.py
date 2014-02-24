@@ -11,15 +11,26 @@ def list_gemeenten(request):
     Gateway = request.capakey_gateway()
     return {'project': Gateway.list_gemeenten()}
 
-
 @view_config(route_name='get_gemeente', renderer='templates/talissa.pt')
 def get_gemeente_by_niscode(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     return {'project': Gateway.get_gemeente_by_id(gemeente_id)}
     
-@view_config(route_name='list_kadastrale_afdelingen', renderer='templates/talissa.pt')
+@view_config(route_name='list_kadastrale_afdelingen_by_niscode', renderer='templates/talissa.pt')
 def list_kadastrale_afdelingen(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     return {'project': Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id)}
+
+@view_config(route_name='list_kadastrale_afdelingen', renderer='templates/talissa.pt')
+def list_kadastrale_afdelingen(request):
+    Gateway = request.capakey_gateway()
+    return {'project': Gateway.list_kadastrale_afdelingen()}
+    
+@view_config(route_name='get_kadastrale_afdeling_by_id', renderer='templates/talissa.pt')
+def get_kadastrale_afdeling_by_id(request):
+    Gateway = request.capakey_gateway()
+    afdeling_id = request.matchdict.get('afdeling_id')
+    return {'project': Gateway.get_kadastrale_afdeling_by_id(afdeling_id)}
+
