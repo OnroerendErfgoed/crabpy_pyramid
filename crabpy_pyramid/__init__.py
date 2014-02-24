@@ -81,7 +81,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     config.include('pyramid_chameleon')
     config.add_route('home', '/')
-    config.add_route('list_gemeenten', '/list_gemeenten')
+    config.add_route('list_gemeenten', '/list_gemeenten/{sort}')
     config.add_route('get_gemeente_by_id', '/get_gemeente_by_id/{id}')
     includeme(config)
     config.scan()
