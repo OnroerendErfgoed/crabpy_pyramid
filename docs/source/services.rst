@@ -32,6 +32,14 @@ Capakey
        Content-Range: 0-4/306
 
        [
+        {
+           'id': 44021,
+           'naam': 'Gent',
+           'centroid': [104154.2225, 197300.703],
+           'bbox': [94653.453, 185680.984, 113654.992, 208920.422]
+        }, {
+           ...
+        }
        ]
 
     :reqheader Range: Can be used to ask for a certain set of results, 
