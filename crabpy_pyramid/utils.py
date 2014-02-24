@@ -49,5 +49,5 @@ def perceel_adapter(obj,request):
     
 json_renderer.add_adapter(Gemeente, gemeente_adapter)
 json_renderer.add_adapter(Afdeling, afdeling_adapter)
-json_renderer.add_adadpter(Sectie, sectie_adapter)
+json_renderer.add_adapter(Sectie, sectie_adapter)
 json_renderer.add_adapter(Perceel, perceel_adapter)
