@@ -12,6 +12,13 @@ requires = [
     'waitress',
     ]
 
+tests_requires = [
+    'nose',
+    'coverage'
+]
+
+testing_extras = tests_requires + []
+
 setup(name='crabpy_pyramid',
       version='0.1.0',
       description='crabpy_pyramid',
@@ -31,6 +38,7 @@ setup(name='crabpy_pyramid',
       zip_safe=False,
       test_suite='crabpy_pyramid',
       install_requires=requires,
+      tests_require=tests_requires,
       entry_points="""\
       [paste.app_factory]
       main = crabpy_pyramid:main
