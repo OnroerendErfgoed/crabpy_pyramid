@@ -1,16 +1,17 @@
 # -*- coding: utf8 -*-
 
 from pyramid import testing
+from crabpy.gateway import capakey
+from crabpy.gateway.capakey import CapakeyGateway
+from crabpy.client import capakey_factory
 
-from pyramid_capakey import (
-    ICapakey,
+from crabpy_pyramid import (
     get_capakey,
-    _build_capakey,
     includeme,
-    _parse_settings
+    _parse_settings,
+    _build_capakey,
+    ICapakey
 )
-
-import capakey
 
 import warnings
 
@@ -18,10 +19,6 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # noqa
-
-
-def dummy_encoder(obj):
-    return obj
 
 
 class TestRegistry(object):
@@ -38,43 +35,54 @@ class TestRegistry(object):
     def queryUtility(self, iface):
         return self.capakey
 
-    def registerUtility(self, rawes, iface):
-        self.rawes = rawes
+    def registerUtility(self, capakey, iface):
+        self.capakey = capakey
 
 
 class TestGetAndBuild(unittest.TestCase):
 
     def test_get_capakey(self):
         r = TestRegistry()
-        ES = capakey.Elastic(url='http://localhost:9200')
+        ES = capakey.CapakeyGateway(capakey_factory(
+            {'user': None, 'password': None,
+            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        ))
         r.registerUtility(ES, ICapakey)
         ES2 = get_capakey(r)
         self.assertEqual(ES, ES2)
 
+
     def test_build_capakey_already_exists(self):
         r = TestRegistry()
-        ES = capakey.Elastic('http://localhost:9200')
+        ES = capakey.CapakeyGateway(capakey_factory(
+            {'user': None, 'password': 'TalissaWachtwoord',
+            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        ))
         r.registerUtility(ES, ICapakey)
         ES2 = _build_capakey(r)
         self.assertEqual(ES, ES2)
 
     def test_build_capakey_default_settings(self):
         r = TestRegistry()
-        ES = _build_capakey(r)
-        self.assertIsInstance(ES, capakey.Elastic)
-        self.assertEqual('localhost:9200', ES.url.netloc)
+        ES = capakey.CapakeyGateway(capakey_factory(
+            {'user': None, 'password': None,
+            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        ))
+        r.registerUtility(ES, ICapakey)
+        ES2 = _build_capakey(r)
+        self.assertIsInstance(ES, capakey.CapakeyGateway)
+        self.assertIsInstance(ES2, capakey.CapakeyGateway)
+        self.assertEqual(ES, ES2)
 
-    def test_build_capakey_custom_settings(self):
+    def test_build_rawes_custom_settings(self):
         settings = {
             'capakey.user': 'Talissa',
             'capakey.password': 'TalissaWachtwoord',
-            'capakey. wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         }
         r = TestRegistry(settings)
         ES = _build_capakey(r)
-        self.assertIsInstance(ES, capakey.Elastic)
-        self.assertEqual('elastic.search.org:9200', ES.url.netloc)
-
+        self.assertIsInstance(ES, capakey.CapakeyGateway)
 
 class TestSettings(unittest.TestCase):
 
@@ -113,20 +121,13 @@ class TestSettings(unittest.TestCase):
         self.assertEqual('Talissa', args['user'])
         self.assertEqual('TalissaWachtwoord', args['password'])
 
-    def test_get_dotted_function_settings(self):
+    '''def test_missing_settings(self):
         settings = {
-            'capakey.json_encoder': 'pyramid_capakey.tests.dummy_encoder'
-        }
-        args = _parse_settings(settings)
-        self.assertEqual(dummy_encoder, args['json_encoder'])
-
-    def test_missing_settings(self):
-        settings = {
-            'capakey.except_on_error': False
+            'capakey.user':None
         }
         with warnings.catch_warnings(record=True) as w:
-            args = _parse_settings(settings)
-            self.assertEqual(1, len(w))
+            _parse_settings(settings)
+            self.assertEqual(1, len(w))'''
 
 
 class TestIncludeMe(unittest.TestCase):
@@ -144,14 +145,9 @@ class TestIncludeMe(unittest.TestCase):
     def test_includeme(self):
         includeme(self.config)
         ES = self.config.registry.queryUtility(ICapakey)
-        self.assertIsInstance(ES, capakey.Elastic)
-        self.assertEqual('localhost:9300', ES.url.netloc)
-        self.assertEqual('test', ES.json_encoder('test'))
-        self.assertEqual(dummy_encoder, ES.json_encoder)
-        self.assertEqual({'test': 'DUMMY'}, ES.connection.kwargs['json_decoder']('{"test": 1}'))
+        self.assertIsInstance(ES, capakey.CapakeyGateway)
 
     def test_directive_was_added(self):
         includeme(self.config)
-        ES = self.config.get_capakey()
-        self.assertIsInstance(ES, capakey.Elastic)
-        self.assertEqual('localhost:9300', ES.url.netloc)
+        r = self.config.registry.settings
+        self.assertEqual('Talissa', r['capakey.user'])  
