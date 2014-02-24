@@ -3,6 +3,11 @@ crabpy_pyramid
 
 Bindings for the crabpy library and the pyramid framework
 
+.. image:: https://travis-ci.org/OnroerendErfgoed/crabpy_pyramid.png?branch=master
+        :target: https://travis-ci.org/OnroerendErfgoed/crabpy_pyramid
+.. image:: https://badge.fury.io/py/crabpy_pyramid.png
+        :target: http://badge.fury.io/py/crabpy_pyramid
+
 Building the docs
 -----------------
 
