@@ -33,12 +33,20 @@ Capakey
 
        [
         {
-           'id': 44021,
-           'naam': 'Gent',
-           'centroid': [104154.2225, 197300.703],
-           'bbox': [94653.453, 185680.984, 113654.992, 208920.422]
+           'id': 44001,
+           'naam': 'Aalter'
         }, {
-           ...
+           'id': 44011,
+           'naam': 'Deinze'
+        }, {
+           'id': 44012,
+           'naam': 'De Pinte'
+        }, {
+           'id': 44013,
+           'naam': 'Destelbergen'
+        }, {
+           'id': 4401,
+           'naam': 'Gent',
         }
        ]
 
@@ -52,8 +60,30 @@ Capakey
 
     Get a gemeente by id
 
+    **Example request**:
+
+    .. sourcecode:: http
+
+       GET /capakey/gemeenten/44021 HTTP/1.1
+       Host: example.onroerenderfgoed.be
+       Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/javascript
+
+       {
+          'id': 44021,
+          'naam': 'Gent',
+          'centroid': [104154.2225, 197300.703],
+          'bbox': [94653.453, 185680.984, 113654.992, 208920.422]
+       }
+
     :statuscode 200: Gemeente was found.
-    :statuscode 404: Gemeenten was not found.
+    :statuscode 404: Gemeente was not found.
 
 .. http:get:: /capakey/gemeenten/(int:gemeente_id)/afdelingen
 
