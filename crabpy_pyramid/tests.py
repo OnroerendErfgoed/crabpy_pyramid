@@ -43,36 +43,39 @@ class TestGetAndBuild(unittest.TestCase):
 
     def test_get_capakey(self):
         r = TestRegistry()
-        ES = capakey.CapakeyGateway(capakey_factory(
-            {'user': None, 'password': None,
-            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        G = capakey.CapakeyGateway(capakey_factory(
+            user=None,
+            password=None,
+            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         ))
-        r.registerUtility(ES, ICapakey)
-        ES2 = get_capakey(r)
-        self.assertEqual(ES, ES2)
+        r.registerUtility(G, ICapakey)
+        G2 = get_capakey(r)
+        self.assertEqual(G, G2)
 
 
     def test_build_capakey_already_exists(self):
         r = TestRegistry()
-        ES = capakey.CapakeyGateway(capakey_factory(
-            {'user': None, 'password': 'TalissaWachtwoord',
-            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        G = capakey.CapakeyGateway(capakey_factory(
+            user=None,
+            password='TalissaWachtwoord',
+            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         ))
-        r.registerUtility(ES, ICapakey)
-        ES2 = _build_capakey(r)
-        self.assertEqual(ES, ES2)
+        r.registerUtility(G, ICapakey)
+        G2 = _build_capakey(r)
+        self.assertEqual(G, G2)
 
     def test_build_capakey_default_settings(self):
         r = TestRegistry()
-        ES = capakey.CapakeyGateway(capakey_factory(
-            {'user': None, 'password': None,
-            'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"}
+        G = capakey.CapakeyGateway(capakey_factory(
+            user=None,
+            password=None,
+            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         ))
-        r.registerUtility(ES, ICapakey)
-        ES2 = _build_capakey(r)
-        self.assertIsInstance(ES, capakey.CapakeyGateway)
-        self.assertIsInstance(ES2, capakey.CapakeyGateway)
-        self.assertEqual(ES, ES2)
+        r.registerUtility(G, ICapakey)
+        G2 = _build_capakey(r)
+        self.assertIsInstance(G, capakey.CapakeyGateway)
+        self.assertIsInstance(G2, capakey.CapakeyGateway)
+        self.assertEqual(G, G2)
 
     def test_build_rawes_custom_settings(self):
         settings = {
@@ -81,8 +84,8 @@ class TestGetAndBuild(unittest.TestCase):
             'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         }
         r = TestRegistry(settings)
-        ES = _build_capakey(r)
-        self.assertIsInstance(ES, capakey.CapakeyGateway)
+        G = _build_capakey(r)
+        self.assertIsInstance(G, capakey.CapakeyGateway)
 
 class TestSettings(unittest.TestCase):
 
@@ -122,12 +125,10 @@ class TestSettings(unittest.TestCase):
         self.assertEqual('TalissaWachtwoord', args['password'])
 
     '''def test_missing_settings(self):
-        settings = {
-            'capakey.user':None
-        }
+        settings = {}
         with warnings.catch_warnings(record=True) as w:
             _parse_settings(settings)
-            self.assertEqual(1, len(w))'''
+            self.assertEqual(2, len(w))'''
 
 
 class TestIncludeMe(unittest.TestCase):

@@ -23,7 +23,7 @@ def _parse_settings(settings):
     defaults = {
         'user': None,
         'password': None,
-        'wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+        'wsdl': 'http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL'
     }
     capakey_args = defaults.copy()
 
@@ -37,37 +37,35 @@ def _parse_settings(settings):
 
     # not set user or password
     for short_key_name in ('user', 'password'):
-        if capakey_args[short_key_name] is None:
+        if (not short_key_name in capakey_args) or capakey_args[short_key_name] is None:
             warnings.warn(
                 '%s was not found in the settings, \
-capakey needs this parameter to function properly.' % key_name,
+capakey needs this parameter to function properly.' % short_key_name,
                 UserWarning
             )
     return capakey_args
 
 def _build_capakey(registry):
-    """
-    Build a RawES connection to Elastic Search and add it to the registry.
-    """
-    ES = registry.queryUtility(ICapakey)
-    if ES is not None:
-        return ES
+    capakey = registry.queryUtility(ICapakey)
+    if capakey is not None:
+        return capakey
 
     settings = registry.settings
-    capakey_args = _parse_settings(settings)
-    ES = CapakeyGateway(capakey_factory(**capakey_args))
+    capakey_settings = _parse_settings(settings)
+    factory = capakey_factory(**capakey_settings)
+    capakey = CapakeyGateway(factory)
 
-    registry.registerUtility(ES, ICapakey)
+    registry.registerUtility(capakey, ICapakey)
     return registry.queryUtility(ICapakey)
 
 def get_capakey(registry):
     '''
-    Get the Capakey connection
+    Get the Capakey Gateway
     '''
     #argument might be a config or a request
     regis = getattr(registry, 'registry', None)
     if regis is None:
-        regis = registry(ICapakey)
+        regis = registry
 
     return regis.queryUtility(ICapakey)
 
