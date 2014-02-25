@@ -89,6 +89,42 @@ Capakey
 
     List_kadastrale_afdelingen_by_gemeente
 
+    **Example request**:
+
+    .. sourcecode:: http
+
+       GET /capakey/gemeenten/44021/afdelingen HTTP/1.1
+       Host: example.onroerenderfgoed.be
+       Accept: application/json
+       Range: 0-1
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/javascript
+       Content-Range: 0-1/30
+
+       [
+        {
+           'id': 44002,
+           'naam': 'Afsnee',
+           'gemeente': {
+                'id': 44021,
+                'naam': 'Gent'
+           }
+        }, {
+           'id': 44017,
+           'naam': 'Drongen',
+           'gemeente': {
+                'id': 44021,
+                'naam': 'Gent'
+           }
+        }
+       ]
+
+
     :statuscode 200: Gemeente was found.
     :statuscode 404: Gemeente was not found.
     
@@ -96,11 +132,72 @@ Capakey
 
     List_kadastrale_afdelingen
 
+    **Example request**:
+
+    .. sourcecode:: http
+
+       GET /capakey/afdelingen HTTP/1.1
+       Host: example.onroerenderfgoed.be
+       Accept: application/json
+       Range: 0-1
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/javascript
+       Content-Range: 0-1/1433
+
+       [
+        {
+           'id': 44002,
+           'naam': 'Afsnee',
+           'gemeente': {
+                'id': 44021,
+                'naam': 'Gent'
+           }
+        }, {
+           'id': 44017,
+           'naam': 'Drongen',
+           'gemeente': {
+                'id': 44021,
+                'naam': 'Gent'
+           }
+        }
+       ]
+
     :statuscode 200: Afdelingen were found.
 
 .. http:get:: /capakey/afdelingen/(int:afdeling_id)
 
     Get_kadastrale_afdeling_by_id
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+       GET /capakey/afdelingen/44017 HTTP/1.1
+       Host: example.onroerenderfgoed.be
+       Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/javascript
+
+       {
+           'id': 44017,
+           'naam': 'Drongen',
+           'gemeente': {
+                'id': 44021,
+                'naam': 'Gent'
+           },
+           'centroid': [104154.2225, 197300.703],
+           'bbox': [94653.453, 185680.984, 113654.992, 208920.422]
+       }
 
     :statuscode 200: Afdeling was found.
     :statuscode 404: Afdeling was not found.
