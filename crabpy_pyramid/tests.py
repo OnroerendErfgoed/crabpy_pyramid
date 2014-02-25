@@ -1,7 +1,6 @@
 # -*- coding: utf8 -*-
 
 from pyramid import testing
-from crabpy.gateway import capakey
 from crabpy.gateway.capakey import CapakeyGateway
 from crabpy.client import capakey_factory
 
@@ -43,7 +42,7 @@ class TestGetAndBuild(unittest.TestCase):
 
     def test_get_capakey(self):
         r = TestRegistry()
-        G = capakey.CapakeyGateway(capakey_factory(
+        G = CapakeyGateway(capakey_factory(
             user=None,
             password=None,
             wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
@@ -52,10 +51,9 @@ class TestGetAndBuild(unittest.TestCase):
         G2 = get_capakey(r)
         self.assertEqual(G, G2)
 
-
     def test_build_capakey_already_exists(self):
         r = TestRegistry()
-        G = capakey.CapakeyGateway(capakey_factory(
+        G = CapakeyGateway(capakey_factory(
             user=None,
             password='TalissaWachtwoord',
             wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
@@ -66,15 +64,15 @@ class TestGetAndBuild(unittest.TestCase):
 
     def test_build_capakey_default_settings(self):
         r = TestRegistry()
-        G = capakey.CapakeyGateway(capakey_factory(
+        G = CapakeyGateway(capakey_factory(
             user=None,
             password=None,
             wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
         ))
         r.registerUtility(G, ICapakey)
         G2 = _build_capakey(r)
-        self.assertIsInstance(G, capakey.CapakeyGateway)
-        self.assertIsInstance(G2, capakey.CapakeyGateway)
+        self.assertIsInstance(G, CapakeyGateway)
+        self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
     def test_build_rawes_custom_settings(self):
@@ -85,7 +83,8 @@ class TestGetAndBuild(unittest.TestCase):
         }
         r = TestRegistry(settings)
         G = _build_capakey(r)
-        self.assertIsInstance(G, capakey.CapakeyGateway)
+        self.assertIsInstance(G, CapakeyGateway)
+
 
 class TestSettings(unittest.TestCase):
 
@@ -146,9 +145,9 @@ class TestIncludeMe(unittest.TestCase):
     def test_includeme(self):
         includeme(self.config)
         ES = self.config.registry.queryUtility(ICapakey)
-        self.assertIsInstance(ES, capakey.CapakeyGateway)
+        self.assertIsInstance(ES, CapakeyGateway)
 
     def test_directive_was_added(self):
         includeme(self.config)
         r = self.config.registry.settings
-        self.assertEqual('Talissa', r['capakey.user'])  
+        self.assertEqual('Talissa', r['capakey.user'])

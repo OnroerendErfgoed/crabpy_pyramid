@@ -1,11 +1,7 @@
-from pyramid.response import Response
 from pyramid.view import view_config
 from .utils import range_return
 
-@view_config(route_name='home', renderer='json')
-def my_view(request):
-    return {'project': 'g'}
-        
+
 @view_config(route_name='list_gemeenten', renderer='listjson')
 def list_gemeenten(request):
     Gateway = request.capakey_gateway()
@@ -13,13 +9,18 @@ def list_gemeenten(request):
     r = range_return(request)
     return gemeenten[r[0]: r[1]]
 
+
 @view_config(route_name='get_gemeente', renderer='itemjson')
 def get_gemeente_by_niscode(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     return Gateway.get_gemeente_by_id(gemeente_id)
-    
-@view_config(route_name='list_kadastrale_afdelingen_by_gemeente', renderer='listjson')
+
+
+@view_config(
+    route_name='list_kadastrale_afdelingen_by_gemeente',
+    renderer='listjson'
+)
 def list_kadastrale_afdelingen_by_gemeente(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
@@ -27,18 +28,24 @@ def list_kadastrale_afdelingen_by_gemeente(request):
     r = range_return(request)
     return afdelingen[r[0]:r[1]]
 
+
 @view_config(route_name='list_kadastrale_afdelingen', renderer='listjson')
 def list_kadastrale_afdelingen(request):
     Gateway = request.capakey_gateway()
     afdelingen = Gateway.list_kadastrale_afdelingen()
     r = range_return(request)
     return afdelingen[r[0]:r[1]]
-    
-@view_config(route_name='get_kadastrale_afdeling_by_id', renderer='itemjson')
+
+
+@view_config(
+    route_name='get_kadastrale_afdeling_by_id',
+    renderer='itemjson'
+)
 def get_kadastrale_afdeling_by_id(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     return Gateway.get_kadastrale_afdeling_by_id(afdeling_id)
+
 
 @view_config(route_name='list_secties_by_afdeling', renderer='listjson')
 def list_secties_by_afdeling(request):
@@ -47,13 +54,18 @@ def list_secties_by_afdeling(request):
     secties = Gateway.list_secties_by_afdeling(afdeling_id)
     r = range_return(request)
     return secties[r[0]:r[1]]
-    
-@view_config(route_name='get_sectie_by_id_and_afdeling', renderer='itemjson')
+
+
+@view_config(
+    route_name='get_sectie_by_id_and_afdeling',
+    renderer='itemjson'
+)
 def get_sectie_by_id_and_afdeling(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie_id = request.matchdict.get('sectie_id')
     return Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
+
 
 @view_config(route_name='list_percelen_by_sectie', renderer='listjson')
 def list_percelen_by_sectie(request):
@@ -64,23 +76,34 @@ def list_percelen_by_sectie(request):
     percelen = Gateway.list_percelen_by_sectie(sectie)
     r = range_return(request)
     return percelen[r[0]:r[1]]
-    
-@view_config(route_name='get_perceel_by_sectie_and_id', renderer='itemjson')
+
+
+@view_config(
+    route_name='get_perceel_by_sectie_and_id',
+    renderer='itemjson'
+)
 def get_perceel_by_sectie_and_id(request):
     Gateway = request.capakey_gateway()
-    perceel_id = str(request.matchdict.get('perceel_id1'))+'/'+str(request.matchdict.get('perceel_id2'))
+    perceel_id = str(request.matchdict.get('perceel_id1'))+'/'\
+        + str(request.matchdict.get('perceel_id2'))
     sectie_id = request.matchdict.get('sectie_id')
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie = Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
     return Gateway.get_perceel_by_id_and_sectie(perceel_id, sectie)
-    
+
+
 @view_config(route_name='get_perceel_by_capakey', renderer='itemjson')
 def get_perceel_by_capakey(request):
     Gateway = request.capakey_gateway()
-    capakey = str(request.matchdict.get('capakey1'))+'/'+str(request.matchdict.get('capakey2'))
+    capakey = str(request.matchdict.get('capakey1'))+'/'\
+        + str(request.matchdict.get('capakey2'))
     return Gateway.get_perceel_by_capakey(capakey)
-    
-@view_config(route_name='get_perceel_by_percid', renderer='itemjson')
+
+
+@view_config(
+    route_name='get_perceel_by_percid',
+    renderer='itemjson'
+)
 def get_perceel_by_percid(request):
     Gateway = request.capakey_gateway()
     percid = request.matchdict.get('percid')
