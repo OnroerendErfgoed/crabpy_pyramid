@@ -1,6 +1,7 @@
 from pyramid.config import Configurator
-
+import os
 import warnings
+from dogpile.cache import make_region
 
 from crabpy.gateway.capakey import CapakeyGateway
 from crabpy.client import capakey_factory
@@ -46,16 +47,26 @@ capakey needs this parameter to function properly.' % short_key_name,
             )
     return capakey_args
 
+def _set_caches(settings, gateway):
+    #create cache
+    root = "./dogpile_data/"
+    if not os.path.exists(root):
+        os.makedirs(root)
+    for name in ('permanent', 'long', 'short'):
+        gateway.caches[name] = make_region()
+        gateway.caches[name].configure_from_config(settings, '%s.' % name)
+    
+
 
 def _build_capakey(registry):
     capakey = registry.queryUtility(ICapakey)
     if capakey is not None:
         return capakey
-
     settings = registry.settings
     capakey_settings = _parse_settings(settings)
     factory = capakey_factory(**capakey_settings)
     gateway = CapakeyGateway(factory)
+    _set_caches(settings, gateway)
 
     registry.registerUtility(gateway, ICapakey)
     return registry.queryUtility(ICapakey)
