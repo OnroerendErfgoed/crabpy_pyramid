@@ -304,3 +304,32 @@ Capakey
 
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
+
+Crab
+-----
+
+.. http:get:: /crab/gewesten
+
+.. http:get:: /crab/gewesten/(int:gewest_id)
+
+.. http:get:: /crab/gemeenten
+
+.. http:get:: /crab/gemeente/(int:id of int:niscode)
+
+.. http:get:: /crab/gemeente/(int:id of int:niscode)/straten
+
+.. http:get:: /crab/straten/(int:straat_id)
+
+.. http:get:: /crab/straten/(int:straat_id)/huisnummers
+
+.. http:get:: /crab/straten/(int:straat_id)/huisnummers/(string:huisnummer_label)
+
+.. http:get:: /crab/huisnummers/(int:huisnummer_id)
+
+.. http:get:: /crab/huisnummers/(int:huisnummer_id)/percelen
+
+.. http:get:: /crab/percelen/(int:perceel_id)
+
+.. http:get:: /crab/huisnummers/(int:huisnummer_id)/gebouwen
+
+.. http:get:: /crab/gebouwen/(int:gebouw_id)
