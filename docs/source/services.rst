@@ -312,7 +312,7 @@ Crab
 
 .. http:get:: /crab/gewesten/(int:gewest_id)
 
-.. http:get:: /crab/gemeenten
+.. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)
 
