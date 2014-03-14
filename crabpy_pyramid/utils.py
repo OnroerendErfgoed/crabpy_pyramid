@@ -126,7 +126,7 @@ json_item_renderer = JSON()
 
 def item_gemeente_adapter(obj, request):
     '''
-    Adapter for rendering a list of
+    Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
     '''
     return {
@@ -139,7 +139,7 @@ def item_gemeente_adapter(obj, request):
 
 def item_afdeling_adapter(obj, request):
     '''
-    Adapter for rendering a list of
+    Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
     '''
     return {
@@ -153,7 +153,7 @@ def item_afdeling_adapter(obj, request):
 
 def item_sectie_adapter(obj, request):
     '''
-    Adapter for rendering a list of
+    Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
     '''
     return {
@@ -166,7 +166,7 @@ def item_sectie_adapter(obj, request):
 
 def item_perceel_adapter(obj, request):
     '''
-    Adapter for rendering a list of
+    Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
     '''
     return {
