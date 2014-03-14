@@ -128,7 +128,6 @@ def item_gemeente_adapter(obj, request):
     '''
     Adapter for rendering a list of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
-    OR :class: `crabpy.gateway.crab.Gemeente` to json.
     '''
     return {
         'id': obj.id,
@@ -191,6 +190,19 @@ def item_gewest_adapter(obj, request):
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box
     }
+    
+def item_gemeente_crab_adapter(obj, request):
+    '''
+    Adapter for rendering an object of
+    :class: `crabpy.gateway.crab.Gemeente` to json.
+    '''
+    return {
+        'id': obj.id,
+        'naam': obj.naam,
+        'centroid': obj.centroid,
+        'bounding_box': obj.bounding_box,
+        'metadata': obj.metadata
+    }
 
 def item_straat_adapter(obj, request):
     '''
@@ -202,7 +214,8 @@ def item_straat_adapter(obj, request):
         'label': obj.label,
         'namen': obj.namen,
         'status': obj.status,
-        'taal': obj.taal
+        'taal': obj.taal,
+        'metadata': obj.metadata
     }
 
 def item_huisnummer_adapter(obj, request):
@@ -213,7 +226,8 @@ def item_huisnummer_adapter(obj, request):
     return {
         'id': obj.id,
         'huisnummer': obj.huisnummer,
-        'status': obj.status
+        'status': obj.status,
+        'metadata': obj.metadata
     } 
 
 def item_perceel_crab_adapter(obj, request):
@@ -224,6 +238,8 @@ def item_perceel_crab_adapter(obj, request):
     return {
         'id': obj.id,
         'centroid': obj.centroid
+        'metadata': obj.metadata,
+        'metadata': obj.metadata
     }
 
 def item_gebouw_adapter(obj, request):
@@ -236,15 +252,16 @@ def item_gebouw_adapter(obj, request):
         'aard': obj.aard,
         'status': obj.status,
         'geometriemethode': obj.methode,
-        'geometrie': obj.geometrie
+        'geometrie': obj.geometrie,
+        'metadata': obj.metadata
     }
 
 json_item_renderer.add_adapter(capakey.Gemeente, item_gemeente_adapter)
-json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_adapter)
 json_item_renderer.add_adapter(capakey.Afdeling, item_afdeling_adapter)
 json_item_renderer.add_adapter(capakey.Sectie, item_sectie_adapter)
 json_item_renderer.add_adapter(capakey.Perceel, item_perceel_adapter)
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
+json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_crab_adapter)
 json_item_renderer.add_adapter(crab.Straat, item_straat_adapter)
 json_item_renderer.add_adapter(crab.Huisnummer, item_huisnummer_adapter)
 json_item_renderer.add_adapter(crab.Perceel, item_perceel_crab_adapter)
