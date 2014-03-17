@@ -76,7 +76,7 @@ def list_straten_adapter(obj, request):
     return {
         'id': obj.id,
         'label': obj.label,
-        'status': obj.status
+        'status': obj.status,
     }
     
 def list_huisnummers_adapter(obj, request):
@@ -215,7 +215,7 @@ def item_straat_adapter(obj, request):
         'namen': obj.namen,
         'status': obj.status,
         'taal': obj.taal,
-        'metadata': obj.metadata
+        'metadata': obj.metadata,
     }
 
 def item_huisnummer_adapter(obj, request):
