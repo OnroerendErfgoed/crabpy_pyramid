@@ -41,6 +41,6 @@ def includeme(config):
     config.add_route('get_huisnummer_by_straat_and_label', '/crab/straten/{straat_id}/huisnummers/{huisnummer_label}')
     config.add_route('get_huisnummer_by_id', '/crab/huisnummers/{huisnummer_id}')
     config.add_route('list_percelen', '/crab/huisnummers/{huisnummer_id}/percelen')
-    config.add_route('get_perceel_by_id', '/crab/percelen/{perceel_id}')
+    config.add_route('get_perceel_by_id', '/crab/percelen/{perceel_id1}/{perceel_id2}')
     config.add_route('list_gebouwen', '/crab/huisnummers/{huisnummer_id}/gebouwen')
     config.add_route('get_gebouw_by_id', '/crab/gebouwen/{gebouw_id}')
