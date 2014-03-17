@@ -237,8 +237,7 @@ def item_perceel_crab_adapter(obj, request):
     '''
     return {
         'id': obj.id,
-        'centroid': obj.centroid
-        'metadata': obj.metadata,
+        'centroid': obj.centroid,
         'metadata': obj.metadata
     }
 

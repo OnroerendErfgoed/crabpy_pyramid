@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 from .utils import range_return
 
+''' Views for capakey services '''
 
 @view_config(route_name='list_gemeenten', renderer='listjson', accept='application/json')
 def list_gemeenten(request):
@@ -109,6 +110,7 @@ def get_perceel_by_percid(request):
     percid = request.matchdict.get('percid')
     return Gateway.get_perceel_by_percid(percid)
 
+''' Views for crab services '''
 
 @view_config(route_name='list_gewesten', renderer='listjson', accept='application/json')
 def list_gewesten(request):
@@ -120,7 +122,7 @@ def list_gewesten(request):
 @view_config(route_name='get_gewest_by_id', renderer='itemjson', accept='application/json')
 def get_gewest_by_id(request):
     Gateway = request.crab_gateway()
-    gewest_id = request.matchdict.get('gewest_id')
+    gewest_id = int(request.matchdict.get('gewest_id'))
     return Gateway.get_gewest_by_id(gewest_id)
     
 @view_config(route_name='list_gemeenten_crab', renderer='listjson', accept='application/json')
