@@ -43,7 +43,5 @@ setup(name='crabpy_pyramid',
       entry_points="""\
       [paste.app_factory]
       main = crabpy_pyramid:main
-      [console_scripts]
-      initialize_crabpy_pyramid_db = crabpy_pyramid.scripts.initializedb:main
       """,
       )
