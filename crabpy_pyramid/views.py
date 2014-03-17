@@ -128,7 +128,7 @@ def get_gewest_by_id(request):
 @view_config(route_name='list_gemeenten_crab', renderer='listjson', accept='application/json')
 def list_gemeenten_crab(request):
     Gateway = request.crab_gateway()
-    gewest_id = request.macthdict.get('gewest_id')
+    gewest_id = request.matchdict.get('gewest_id')
     gemeenten = Gateway.list_gemeenten(gewest_id)
     r = range_return(request)
     return gemeenten[r[0]: r[1]]
