@@ -310,26 +310,199 @@ Crab
 
 .. http:get:: /crab/gewesten
 
+    List_gewesten
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/gewesten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Gewesten were found.
+
 .. http:get:: /crab/gewesten/(int:gewest_id)
 
+    Get_gewest_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/gewesten/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Gewest was found.
+    :statuscode 404: Gewest was not found.
+
 .. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
+    
+    List_gemeenten
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/gewesten/2/gemeenten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Gemeenten were found.
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)
+    
+    Get_gemeente_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/gewesten/1/gemeenten/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    Get_gemeente_by_niscode
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/gewesten/2/gemeenten/11001 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+    
+    :statuscode 200: Gemeente was found.
+    :statuscode 404: Gemeente was not found.
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)/straten
 
+    List_straten
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+            
+            GET /crab/gemeente/11001/straten HTTP/1.1
+            Host: example.onroerenderfgoed.be
+            Accept: application/json
+            
+        :statuscode 200: Straten were found.
+
 .. http:get:: /crab/straten/(int:straat_id)
 
+    Get_straat_by_id
+    
+    **Example request**:
+    
+    ..sourcecode:: http
+    
+        GET /crab/straten/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Straat was found.
+    :statuscode 404: Straat was not found.
+        
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers
 
+    List_huisnummers
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/straten/1/huisnummers HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Huisnummers were found.
+
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers/(string:huisnummer_label)
+    
+    Get_huisnummer_by_nummer_and_label
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/straten/1/huisnummers/23 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Huisnummer was found.
+    :statuscode 404: Huisnummer was not found.
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)
 
+    Get_huisnummer_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/huisnummers/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+    
+    :statuscode 200: Huisnummer was found.
+    :statuscode 404: Huisnummer was not found.
+
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/percelen
+
+    List_percelen
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/huisnummers/1/percelen HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Percelen were found.
 
 .. http:get:: /crab/percelen/(int:perceel_id)
 
+    Get_perceel_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/percelen/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Perceel was found.
+    :statuscode 404: Perceel was not found.
+
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/gebouwen
 
+    List_gebouwen
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/huisnummer/1/gebouwen HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Gebouwen were found.
+
 .. http:get:: /crab/gebouwen/(int:gebouw_id)
+
+    Get_gebouw_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/gebouwen/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        
+    :statuscode 200: Gebouw was found.
+    :statuscode 404: Gebouw was not found.
