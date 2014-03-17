@@ -18,8 +18,8 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # noqa
-
-
+    
+    
 class TestRegistry(object):
 
     def __init__(self, settings=None):
@@ -49,6 +49,8 @@ class TestGetAndBuild(unittest.TestCase):
         ))
         r.registerUtility(G, ICapakey)
         G2 = get_capakey(r)
+        self.assertIsInstance(G, CapakeyGateway)
+        self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
     def test_build_capakey_already_exists(self):
@@ -60,6 +62,8 @@ class TestGetAndBuild(unittest.TestCase):
         ))
         r.registerUtility(G, ICapakey)
         G2 = _build_capakey(r)
+        self.assertIsInstance(G, CapakeyGateway)
+        self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
     def test_build_capakey_default_settings(self):
@@ -79,13 +83,22 @@ class TestGetAndBuild(unittest.TestCase):
         settings = {
             'capakey.user': 'Talissa',
             'capakey.password': 'TalissaWachtwoord',
-            'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
+            'root': './dogpile_data/',
+            'capakey.permanent.backend': 'dogpile.cache.dbm',
+            'capakey.permanent.expiration_time': 604800,
+            'capakey.permanent.arguments.filename': 'dogpile_data/capakey_permanent.dbm',
+            'capakey.long.backend': 'dogpile.cache.dbm',
+            'capakey.long.expiration_time': 86400,
+            'capakey.long.arguments.filename': 'dogpile_data/capakey_long.dbm',
+            'capakey.short.backend': 'dogpile.cache.dbm',
+            'capakey.short.expiration_time': 3600,
+            'capakey.short.arguments.filename': 'dogpile_data/capakey_short.dbm'
         }
         r = TestRegistry(settings)
         G = _build_capakey(r)
         self.assertIsInstance(G, CapakeyGateway)
-
-
+        
 class TestSettings(unittest.TestCase):
 
     def _assert_contains_all_keys(self, args):
@@ -95,7 +108,7 @@ class TestSettings(unittest.TestCase):
 
     def test_get_default_settings(self):
         settings = {}
-        args = _parse_settings(settings)
+        args = _parse_settings(settings, 'capakey')
         self._assert_contains_all_keys(args)
 
     def test_get_some_settings(self):
@@ -103,7 +116,7 @@ class TestSettings(unittest.TestCase):
             'capakey.user': 'Talissa',
             'capakey.password': 'TalissaWachtwoord',
         }
-        args = _parse_settings(settings)
+        args = _parse_settings(settings, 'capakey')
         self._assert_contains_all_keys(args)
         self.assertEqual('Talissa', args['user'])
         self.assertEqual('TalissaWachtwoord', args['password'])
@@ -114,7 +127,7 @@ class TestSettings(unittest.TestCase):
             'capakey.password': 'TalissaWachtwoord',
             'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
         }
-        args = _parse_settings(settings)
+        args = _parse_settings(settings, 'capakey')
         self._assert_contains_all_keys(args)
         self.assertEqual(
             "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
@@ -126,28 +139,6 @@ class TestSettings(unittest.TestCase):
     '''def test_missing_settings(self):
         settings = {}
         with warnings.catch_warnings(record=True) as w:
-            _parse_settings(settings)
+            _parse_settings(settings, 'capakey')
             self.assertEqual(2, len(w))'''
-
-
-class TestIncludeMe(unittest.TestCase):
-
-    def setUp(self):
-        self.config = testing.setUp()
-        self.config.registry.settings['capakey.user'] = 'Talissa'
-        self.config.registry.settings['capakey.password'] = 'TalissaWachtwoord'
-        self.config.registry.settings['capakey.wsdl'] = \
-            "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
-
-    def tearDown(self):
-        del self.config
-
-    def test_includeme(self):
-        includeme(self.config)
-        ES = self.config.registry.queryUtility(ICapakey)
-        self.assertIsInstance(ES, CapakeyGateway)
-
-    def test_directive_was_added(self):
-        includeme(self.config)
-        r = self.config.registry.settings
-        self.assertEqual('Talissa', r['capakey.user'])
+        
