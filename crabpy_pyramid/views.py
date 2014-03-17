@@ -148,7 +148,7 @@ def list_straten(request):
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     if len(gemeente_id)==5:
-        gemeente_id = get_gemeente.id
+        gemeente_id = Gateway.get_gemeente_by_niscode(gemeente_id)
     straten = Gateway.list_straten(gemeente_id)
     r = range_return(request)
     return straten[r[0]: r[1]]
@@ -173,7 +173,7 @@ def get_huisnummer_by_straat_and_label(request):
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     huisnummer = request.matchdict.get('huisnummer_label')
-    return Gateway.get_huinummer_by_nummer_and_straat(huisnummer, straat_id)
+    return Gateway.get_huisnummer_by_nummer_and_straat(huisnummer, straat_id)
     
     
 @view_config(route_name='get_huisnummer_by_id', renderer='itemjson', accept='application/json')
@@ -193,7 +193,7 @@ def list_percelen(request):
 @view_config(route_name='get_perceel_by_id', renderer='itemjson', accept='application/json')
 def get_perceel_by_id(request):
     Gateway = request.crab_gateway()
-    perceel_id = request.matchdict.get('perceel_id')
+    perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
     return Gateway.get_perceel_by_id(perceel_id)
 
 @view_config(route_name='list_gebouwen', renderer='listjson', accept='application/json')
