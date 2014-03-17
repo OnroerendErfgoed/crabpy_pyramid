@@ -49,6 +49,8 @@ class TestGetAndBuild(unittest.TestCase):
         ))
         r.registerUtility(G, ICapakey)
         G2 = get_capakey(r)
+        self.assertIsInstance(G, CapakeyGateway)
+        self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
     def test_build_capakey_already_exists(self):
@@ -60,6 +62,8 @@ class TestGetAndBuild(unittest.TestCase):
         ))
         r.registerUtility(G, ICapakey)
         G2 = _build_capakey(r)
+        self.assertIsInstance(G, CapakeyGateway)
+        self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
     def test_build_capakey_default_settings(self):
@@ -135,5 +139,6 @@ class TestSettings(unittest.TestCase):
     '''def test_missing_settings(self):
         settings = {}
         with warnings.catch_warnings(record=True) as w:
-            _parse_settings(settings)
+            _parse_settings(settings, 'capakey')
             self.assertEqual(2, len(w))'''
+        
