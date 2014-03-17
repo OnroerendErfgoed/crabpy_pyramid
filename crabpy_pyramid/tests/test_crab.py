@@ -42,7 +42,7 @@ class TestGetAndBuild(unittest.TestCase):
     def test_get_crab(self):
         r = TestRegistry()
         G = CrabGateway(crab_factory(
-            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            wsdl="http://crab.agiv.be/wscrab/wscrab.svc?wsdl"
         ))
         r.registerUtility(G, ICrab)
         G2 = get_crab(r)
@@ -53,7 +53,7 @@ class TestGetAndBuild(unittest.TestCase):
     def test_build_crab_already_exists(self):
         r = TestRegistry()
         G = CrabGateway(crab_factory(
-            wsdl ="http://ws.agiv.be/crabws/nodataset.asmx?WSDL"
+            wsdl ="http://crab.agiv.be/wscrab/wscrab.svc?wsdl"
         ))
         r.registerUtility(G, ICrab)
         G2 = _build_crab(r)
@@ -64,7 +64,7 @@ class TestGetAndBuild(unittest.TestCase):
     def test_build_crab_default_settings(self):
         r = TestRegistry()
         G = CrabGateway(crab_factory(
-            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            wsdl="http://crab.agiv.be/wscrab/wscrab.svc?wsdl"
         ))
         r.registerUtility(G, ICrab)
         G2 = _build_crab(r)
@@ -74,7 +74,7 @@ class TestGetAndBuild(unittest.TestCase):
 
     def test_build_rawes_custom_settings(self):
         settings = {
-            'crab.wsdl': "http://ws.agiv.be/crabws/nodataset.asmx?WSDL",
+            'crab.wsdl': "http://crab.agiv.be/wscrab/wscrab.svc?wsdl",
             'root': './dogpile_data/',
             'crab.permanent.backend': 'dogpile.cache.dbm',
             'crab.permanent.expiration_time': 604800,
@@ -102,12 +102,12 @@ class TestSettings(unittest.TestCase):
 
     def test_get_settings(self):
         settings = {
-            'crab.wsdl': "http://ws.agiv.be/crabws/nodataset.asmx?WSDL",
+            'crab.wsdl': "http://crab.agiv.be/wscrab/wscrab.svc?wsdl",
         }
         args = _parse_settings(settings, 'crab')
         self._assert_contains_all_keys(args)
         self.assertEqual(
-            "http://ws.agiv.be/crabws/nodataset.asmx?WSDL",
+            "http://crab.agiv.be/wscrab/wscrab.svc?wsdl",
             args['wsdl']
         )
 
