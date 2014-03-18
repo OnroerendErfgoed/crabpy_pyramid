@@ -201,7 +201,12 @@ def item_gemeente_crab_adapter(obj, request):
         'naam': obj.naam,
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box,
-        'metadata': obj.metadata
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': obj.metadata.begin_bewerking,
+            'begin_organisatie': obj.metadata.begin_organisatie
+        }
     }
 
 def item_straat_adapter(obj, request):
@@ -215,7 +220,12 @@ def item_straat_adapter(obj, request):
         'namen': obj.namen,
         'status': obj.status,
         'taal': obj.taal,
-        'metadata': obj.metadata,
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': obj.metadata.begin_bewerking,
+            'begin_organisatie': obj.metadata.begin_organisatie
+        }
     }
 
 def item_huisnummer_adapter(obj, request):
@@ -227,7 +237,12 @@ def item_huisnummer_adapter(obj, request):
         'id': obj.id,
         'huisnummer': obj.huisnummer,
         'status': obj.status,
-        'metadata': obj.metadata
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': obj.metadata.begin_bewerking,
+            'begin_organisatie': obj.metadata.begin_organisatie
+        }
     } 
 
 def item_perceel_crab_adapter(obj, request):
@@ -238,7 +253,12 @@ def item_perceel_crab_adapter(obj, request):
     return {
         'id': obj.id,
         'centroid': obj.centroid,
-        'metadata': obj.metadata
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': obj.metadata.begin_bewerking,
+            'begin_organisatie': obj.metadata.begin_organisatie
+        }
     }
 
 def item_gebouw_adapter(obj, request):
@@ -252,7 +272,12 @@ def item_gebouw_adapter(obj, request):
         'status': obj.status,
         'geometriemethode': obj.methode,
         'geometrie': obj.geometrie,
-        'metadata': obj.metadata
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': obj.metadata.begin_bewerking,
+            'begin_organisatie': obj.metadata.begin_organisatie
+        }
     }
 
 json_item_renderer.add_adapter(capakey.Gemeente, item_gemeente_adapter)
