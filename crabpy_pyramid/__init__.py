@@ -121,7 +121,6 @@ def get_crab(registry):
 def includeme(config):
     config.add_renderer('listjson', json_list_renderer)
     config.add_renderer('itemjson', json_item_renderer)
-    config.add_static_view('static', 'static', cache_max_age=3600)
     _build_capakey(config.registry)
     _build_crab(config.registry)
     config.add_directive('get_capakey', get_capakey)
@@ -135,8 +134,7 @@ def main(global_config, **settings):
      This function returns a Pyramid WSGI application.
     '''
     config = Configurator(settings=settings)
-    config.include('pyramid_chameleon')
-    
+
     # including routes
     config.include('crabpy_pyramid.routes')
     
