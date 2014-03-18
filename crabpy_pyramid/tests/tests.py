@@ -3,6 +3,7 @@
 from pyramid import testing
 from crabpy.gateway.capakey import CapakeyGateway
 from crabpy.gateway.crab import CrabGateway
+import os
 
 from crabpy_pyramid import (
     includeme,
@@ -52,13 +53,24 @@ class TestIncludeMe(unittest.TestCase):
     def tearDown(self):
         del self.config
 
-    def test_includeme(self):
+    def test_includeme_existing_root(self):
         includeme(self.config)
         ES = self.config.registry.queryUtility(ICapakey)
         self.assertIsInstance(ES, CapakeyGateway)
         ES = self.config.registry.queryUtility(ICrab)
         self.assertIsInstance(ES, CrabGateway)
-
+        
+    def test_includeme_nonexisting_root(self):
+        root = './testdir/'
+        self.config.registry.settings['root'] = root
+        includeme(self.config)
+        ES = self.config.registry.queryUtility(ICapakey)
+        self.assertIsInstance(ES, CapakeyGateway)
+        ES = self.config.registry.queryUtility(ICrab)
+        self.assertIsInstance(ES, CrabGateway)
+        os.rmdir(root)
+        
+        
     def test_directive_was_added(self):
         includeme(self.config)
         r = self.config.registry.settings
