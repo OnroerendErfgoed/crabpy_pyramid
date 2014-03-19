@@ -76,7 +76,11 @@ def list_straten_adapter(obj, request):
     return {
         'id': obj.id,
         'label': obj.label,
-        'status': obj.status,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
     }
     
 def list_huisnummers_adapter(obj, request):
@@ -86,7 +90,11 @@ def list_huisnummers_adapter(obj, request):
     '''
     return {
         'id':obj.id,
-        'status':obj.status,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
         'label':obj.huisnummer
     }
 
@@ -106,8 +114,16 @@ def list_gebouwen_adapter(obj, request):
     '''
     return{
         'id': obj.id,
-        'aard': obj.aard,
-        'status': obj.status
+        'aard': {
+            'id': obj.aard.id,
+            'naam': obj.aard.naam,
+            'definitie': obj.aard.definitie
+        },
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
     }
 
 json_list_renderer.add_adapter(capakey.Gemeente, list_gemeente_adapter)
@@ -204,8 +220,16 @@ def item_gemeente_crab_adapter(obj, request):
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
-            'begin_bewerking': obj.metadata.begin_bewerking,
-            'begin_organisatie': obj.metadata.begin_organisatie
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
         }
     }
 
@@ -218,13 +242,29 @@ def item_straat_adapter(obj, request):
         'id': obj.id,
         'label': obj.label,
         'namen': obj.namen,
-        'status': obj.status,
-        'taal': obj.taal,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
+        'taal': {
+            'id': obj.taal.id,
+            'naam': obj.taal.naam,
+            'definitie': obj.taal.definitie
+        },
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
-            'begin_bewerking': obj.metadata.begin_bewerking,
-            'begin_organisatie': obj.metadata.begin_organisatie
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
         }
     }
 
@@ -236,12 +276,24 @@ def item_huisnummer_adapter(obj, request):
     return {
         'id': obj.id,
         'huisnummer': obj.huisnummer,
-        'status': obj.status,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
-            'begin_bewerking': obj.metadata.begin_bewerking,
-            'begin_organisatie': obj.metadata.begin_organisatie
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
         }
     } 
 
@@ -256,8 +308,16 @@ def item_perceel_crab_adapter(obj, request):
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
-            'begin_bewerking': obj.metadata.begin_bewerking,
-            'begin_organisatie': obj.metadata.begin_organisatie
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
         }
     }
 
@@ -268,15 +328,35 @@ def item_gebouw_adapter(obj, request):
     '''
     return {
         'id': obj.id,
-        'aard': obj.aard,
-        'status': obj.status,
-        'geometriemethode': obj.methode,
+        'aard': {
+            'id': obj.aard.id,
+            'naam': obj.aard.naam,
+            'definitie': obj.aard. definitie
+        },
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
+        'geometriemethode': {
+            'id': obj.methode.id,
+            'naam': obj.methode.naam,
+            'definitie': obj.methode.definitie
+        },
         'geometrie': obj.geometrie,
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
-            'begin_bewerking': obj.metadata.begin_bewerking,
-            'begin_organisatie': obj.metadata.begin_organisatie
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
         }
     }
 
