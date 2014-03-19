@@ -26,8 +26,6 @@ class TestIncludeMe(unittest.TestCase):
             settings = {
                 'capakey.user': 'Talissa',
                 'capakey.password': 'TalissaWachtwoord',
-                'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
-                'crab.wsdl': "http://ws.agiv.be/crabws/nodataset.asmx?WSDL",
                 'root': './dogpile_data/',
                 'capakey.permanent.backend': 'dogpile.cache.dbm',
                 'capakey.permanent.expiration_time': 604800,

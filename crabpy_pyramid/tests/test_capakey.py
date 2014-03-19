@@ -44,8 +44,7 @@ class TestGetAndBuild(unittest.TestCase):
         r = TestRegistry()
         G = CapakeyGateway(capakey_factory(
             user=None,
-            password=None,
-            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            password=None
         ))
         r.registerUtility(G, ICapakey)
         G2 = get_capakey(r)
@@ -57,8 +56,7 @@ class TestGetAndBuild(unittest.TestCase):
         r = TestRegistry()
         G = CapakeyGateway(capakey_factory(
             user=None,
-            password='TalissaWachtwoord',
-            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            password='TalissaWachtwoord'
         ))
         r.registerUtility(G, ICapakey)
         G2 = _build_capakey(r)
@@ -70,8 +68,7 @@ class TestGetAndBuild(unittest.TestCase):
         r = TestRegistry()
         G = CapakeyGateway(capakey_factory(
             user=None,
-            password=None,
-            wsdl="http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL"
+            password=None
         ))
         r.registerUtility(G, ICapakey)
         G2 = _build_capakey(r)
@@ -83,7 +80,6 @@ class TestGetAndBuild(unittest.TestCase):
         settings = {
             'capakey.user': 'Talissa',
             'capakey.password': 'TalissaWachtwoord',
-            'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
             'root': './dogpile_data/',
             'capakey.permanent.backend': 'dogpile.cache.dbm',
             'capakey.permanent.expiration_time': 604800,
@@ -104,11 +100,10 @@ class TestSettings(unittest.TestCase):
     def _assert_contains_all_keys(self, args):
         self.assertIn('user', args)
         self.assertIn('password', args)
-        self.assertIn('wsdl', args)
 
     def test_get_default_settings(self):
         settings = {}
-        args = _parse_settings(settings, 'capakey')
+        args = _parse_settings(settings)
         self._assert_contains_all_keys(args)
 
     def test_get_some_settings(self):
@@ -116,7 +111,7 @@ class TestSettings(unittest.TestCase):
             'capakey.user': 'Talissa',
             'capakey.password': 'TalissaWachtwoord',
         }
-        args = _parse_settings(settings, 'capakey')
+        args = _parse_settings(settings)
         self._assert_contains_all_keys(args)
         self.assertEqual('Talissa', args['user'])
         self.assertEqual('TalissaWachtwoord', args['password'])
@@ -124,15 +119,10 @@ class TestSettings(unittest.TestCase):
     def test_get_all_settings(self):
         settings = {
             'capakey.user': 'Talissa',
-            'capakey.password': 'TalissaWachtwoord',
-            'capakey.wsdl': "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
+            'capakey.password': 'TalissaWachtwoord'
         }
-        args = _parse_settings(settings, 'capakey')
+        args = _parse_settings(settings)
         self._assert_contains_all_keys(args)
-        self.assertEqual(
-            "http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL",
-            args['wsdl']
-        )
         self.assertEqual('Talissa', args['user'])
         self.assertEqual('TalissaWachtwoord', args['password'])
 
