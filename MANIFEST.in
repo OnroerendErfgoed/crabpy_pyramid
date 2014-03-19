@@ -1,2 +1,1 @@
-include *.txt *.ini *.cfg *.rst
-recursive-include crabpy_pyramid *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+include README.rst CHANGES.rst LICENSE
