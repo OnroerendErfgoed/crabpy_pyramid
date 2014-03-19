@@ -119,6 +119,10 @@ def get_crab(registry):
 
 
 def includeme(config):
+    
+    # including routes
+    config.include('crabpy_pyramid.routes')
+    
     config.add_renderer('listjson', json_list_renderer)
     config.add_renderer('itemjson', json_item_renderer)
     _build_capakey(config.registry)
@@ -134,9 +138,6 @@ def main(global_config, **settings):
      This function returns a Pyramid WSGI application.
     '''
     config = Configurator(settings=settings)
-
-    # including routes
-    config.include('crabpy_pyramid.routes')
     
     includeme(config)
     config.scan()
