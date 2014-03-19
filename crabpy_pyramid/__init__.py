@@ -21,39 +21,32 @@ class ICapakey(Interface):
 class ICrab(Interface):
     pass
 
-def _parse_settings(settings, c):
+def _parse_settings(settings):
     args = {}
-    if c == 'capakey':
-        defaults = {
-            'user': None,
-            'password': None,
-            'wsdl': 'http://ws.agiv.be/capakeyws/nodataset.asmx?WSDL'
-        }
-    else:
-        defaults = {
-            'wsdl': 'http://crab.agiv.be/wscrab/wscrab.svc?wsdl'
-        }
+    defaults = {
+        'user': None,
+        'password': None
+    }
     args = defaults.copy()
 
     # set settings
-    for short_key_name in ('user', 'password', 'wsdl'):
-        key_name = "%s.%s" % (c, short_key_name)
+    for short_key_name in ('user', 'password'):
+        key_name = "capakey.%s" % (short_key_name)
         if key_name in settings:
             args[short_key_name] = settings.get(
                 key_name, defaults.get(short_key_name)
             )
-    # not set user or password for capakey
-    if c == 'capakey':
-        for short_key_name in ('user', 'password'):
-            if (
-                (not short_key_name in args) or
-                args[short_key_name] is None
-            ):
-                warnings.warn(
-                    '%s was not found in the settings, \
+    # not set user or password 
+    for short_key_name in ('user', 'password'):
+        if (
+            (not short_key_name in args) or
+            args[short_key_name] is None
+        ):
+            warnings.warn(
+                '%s was not found in the settings, \
     capakey needs this parameter to function properly.' % short_key_name,
-                    UserWarning
-                )
+                UserWarning
+            )
     return args
 
 
@@ -72,7 +65,7 @@ def _build_capakey(registry):
     if capakey is not None:
         return capakey
     settings = registry.settings
-    capakey_settings = _parse_settings(settings, 'capakey')
+    capakey_settings = _parse_settings(settings)
     factory = capakey_factory(**capakey_settings)
     gateway = CapakeyGateway(factory)
     _set_caches(settings, gateway, 'capakey')
@@ -86,8 +79,7 @@ def _build_crab(registry):
     if crab is not None:
         return crab
     settings = registry.settings
-    crab_settings = _parse_settings(settings, 'crab')
-    factory = crab_factory(**crab_settings)
+    factory = crab_factory()
     gateway = CrabGateway(factory)
     _set_caches(settings, gateway, 'crab')
     
@@ -138,6 +130,8 @@ def main(global_config, **settings):
      This function returns a Pyramid WSGI application.
     '''
     config = Configurator(settings=settings)
+
+
     
     includeme(config)
     config.scan()
