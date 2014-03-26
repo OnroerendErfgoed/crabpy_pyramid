@@ -9,6 +9,6 @@ install:
  - pip install nose coverage
  - pip install coveralls
 script: 
-  nosetests
+  nosetests --config nose_cover.cfg
 after_success:
   coveralls
