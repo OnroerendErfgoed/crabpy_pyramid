@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+'''
+including all the route information
+.. versionadded:: 0.1.0
+'''
 def includeme(config):
     config.add_route('list_gemeenten', '/capakey/gemeenten')
     config.add_route('get_gemeente', '/capakey/gemeenten/{gemeente_id}')

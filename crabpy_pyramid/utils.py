@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+'''
+Adapters to translate objects into json And range handling.
+.. versionadded:: 0.1.0
+'''
 from pyramid.renderers import JSON
 from crabpy.gateway import capakey, crab
 import re

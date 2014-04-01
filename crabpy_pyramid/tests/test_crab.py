@@ -1,4 +1,8 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+'''
+Testing of the crab specific aspects.
+.. versionadded:: 0.1.0
+'''
 
 from pyramid import testing
 from crabpy.gateway.crab import CrabGateway

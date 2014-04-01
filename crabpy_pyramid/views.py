@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+'''
+Views for capakey services
+.. versionadded:: 0.1.0
+'''
 from pyramid.view import view_config
 from .utils import range_return
-
-''' Views for capakey services '''
 
 @view_config(route_name='list_gemeenten', renderer='listjson', accept='application/json')
 def list_gemeenten(request):

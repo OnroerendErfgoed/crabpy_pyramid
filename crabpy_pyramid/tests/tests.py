@@ -1,4 +1,8 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+'''
+Testing of the initialization.
+.. versionadded:: 0.1.0
+'''
 
 from pyramid import testing
 from crabpy.gateway.capakey import CapakeyGateway
