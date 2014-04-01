@@ -4,26 +4,40 @@ import re
 
 json_list_renderer = JSON()
 
-
-def range_return(request):
+def range_header(range):
+    match = re.match('^items=([0-9]+)-([0-9]+)$', range)
+    if match:
+        start = int(match.group(1))
+        einde = int(match.group(2))
+        if einde < start:
+            einde = start
+        return {
+        'start': start,
+        'einde': einde,
+        'aantal': einde - start + 1
+        }
+    else:
+        return False
+    
+def range_return(request, total):
     range = False
     if ('Range' in request.headers):
         range = request.headers['Range']
+        range = range_header(range)
+        start = range['start']
+        einde = range['einde']
+        request.response.headers['Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
     elif ('X-Range' in request.headers):
         range = request.headers['X-Range']
-    if range:
-        match = re.match('^items=([0-9]+)-([0-9]+)$', range)
-        if match:
-            start = int(match.group(1))
-            einde = int(match.group(2))
-            if einde < start:
-                einde = start
-            aantal =  einde - start + 1
+        range = range_header(range)
+        start = range['start']
+        einde = range['einde']
+        request.response.headers['X-Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
     else:
         start = int(request.params.get('start', 0))
         aantal = int(request.params.get('aantal', 10))
-    end = start + aantal
-    return (start, end)
+        einde = start + aantal
+    return (start, einde)
 
 
 def list_gemeente_adapter(obj, request):
