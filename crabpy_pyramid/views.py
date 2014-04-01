@@ -7,7 +7,8 @@ from .utils import range_return
 def list_gemeenten(request):
     Gateway = request.capakey_gateway()
     gemeenten = Gateway.list_gemeenten(1)
-    r = range_return(request)
+    total = len(gemeenten)
+    r = range_return(request, total)
     return gemeenten[r[0]: r[1]]
 
 
