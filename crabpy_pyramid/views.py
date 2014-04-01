@@ -30,7 +30,8 @@ def list_kadastrale_afdelingen_by_gemeente(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     afdelingen = Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id)
-    r = range_return(request)
+    total = len(afdelingen)
+    r = range_return(request, total)
     return afdelingen[r[0]:r[1]]
 
 
@@ -38,7 +39,8 @@ def list_kadastrale_afdelingen_by_gemeente(request):
 def list_kadastrale_afdelingen(request):
     Gateway = request.capakey_gateway()
     afdelingen = Gateway.list_kadastrale_afdelingen()
-    r = range_return(request)
+    total = len(afdelingen)
+    r = range_return(request, total)
     return afdelingen[r[0]:r[1]]
 
 
@@ -57,7 +59,8 @@ def list_secties_by_afdeling(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     secties = Gateway.list_secties_by_afdeling(afdeling_id)
-    r = range_return(request)
+    total = len(secties)
+    r = range_return(request, total)
     return secties[r[0]:r[1]]
 
 
@@ -79,7 +82,8 @@ def list_percelen_by_sectie(request):
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie = Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
     percelen = Gateway.list_percelen_by_sectie(sectie)
-    r = range_return(request)
+    total = len(percelen)
+    r = range_return(request, total)
     return percelen[r[0]:r[1]]
 
 
@@ -120,7 +124,8 @@ def get_perceel_by_percid(request):
 def list_gewesten(request):
     Gateway = request.crab_gateway()
     gewesten = Gateway.list_gewesten()
-    r = range_return(request)
+    total = len(gewesten)
+    r = range_return(request, total)
     return gewesten[r[0]: r[1]]
 
 @view_config(route_name='get_gewest_by_id', renderer='itemjson', accept='application/json')
@@ -134,7 +139,8 @@ def list_gemeenten_crab(request):
     Gateway = request.crab_gateway()
     gewest_id = request.matchdict.get('gewest_id')
     gemeenten = Gateway.list_gemeenten(gewest_id)
-    r = range_return(request)
+    total = len(gemeenten)
+    r = range_return(request, total)
     return gemeenten[r[0]: r[1]]
 
 @view_config(route_name='get_gemeente_crab', renderer='itemjson', accept='application/json')
@@ -154,7 +160,8 @@ def list_straten(request):
     if len(gemeente_id)==5:
         gemeente_id = Gateway.get_gemeente_by_niscode(gemeente_id)
     straten = Gateway.list_straten(gemeente_id)
-    r = range_return(request)
+    total = len(straten)
+    r = range_return(request, total)
     return straten[r[0]: r[1]]
     
 
@@ -169,7 +176,8 @@ def list_huisnummers(request):
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
-    r = range_return(request)
+    total = len(huisnummers)
+    r = range_return(request, total)
     return huisnummers[r[0]: r[1]]
 
 @view_config(route_name='get_huisnummer_by_straat_and_label', renderer='itemjson', accept='application/json')
@@ -191,7 +199,8 @@ def list_percelen(request):
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     percelen = Gateway.list_percelen_by_huisnummer(huisnummer_id)
-    r = range_return(request)
+    total = len(percelen)
+    r = range_return(request, total)
     return percelen[r[0]: r[1]]
 
 @view_config(route_name='get_perceel_by_id', renderer='itemjson', accept='application/json')
@@ -205,7 +214,8 @@ def list_gebouwen(request):
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     gebouwen = Gateway.list_gebouwen_by_huisnummer(huisnummer_id)
-    r = range_return(request)
+    total = len(gebouwen)
+    r = range_return(request, total)
     return gebouwen[r[0]: r[1]]
 
 @view_config(route_name='get_gebouw_by_id', renderer='itemjson', accept='application/json')
