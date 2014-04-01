@@ -1,12 +1,27 @@
 from pyramid.renderers import JSON
 from crabpy.gateway import capakey, crab
+import re
 
 json_list_renderer = JSON()
 
 
 def range_return(request):
-    start = int(request.params.get('start', 0))
-    aantal = int(request.params.get('aantal', 10))
+    range = False
+    if ('Range' in request.headers):
+        range = request.headers['Range']
+    elif ('X-Range' in request.headers):
+        range = request.headers['X-Range']
+    if range:
+        match = re.match('^items=([0-9]+)-([0-9]+)$', range)
+        if match:
+            start = int(match.group(1))
+            einde = int(match.group(2))
+            if einde < start:
+                einde = start
+            aantal =  einde - start + 1
+    else:
+        start = int(request.params.get('start', 0))
+        aantal = int(request.params.get('aantal', 10))
     end = start + aantal
     return (start, end)
 
