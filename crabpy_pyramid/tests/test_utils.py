@@ -14,6 +14,14 @@ from webtest import TestApp
 
 from crabpy_pyramid import main
 
+def run_capakey_integration_tests():
+    from testconfig import config
+    from crabpy.tests import as_bool
+    try:
+        return as_bool(config['capakey']['run_integration_tests'])
+    except KeyError:  # pragma NO COVER
+        return False
+
 settings = {
     'capakey.user': 'USEr',
     'capakey.password': 'PSWD',
@@ -50,7 +58,11 @@ class FunctionalTests(unittest.TestCase):
         
     def tearDown(self):
         testing.tearDown()
-        
+   
+@unittest.skipUnless(
+    run_capakey_integration_tests(),
+    'No CAPAKEY Integration tests required'
+)
 class CapakeyFunctionalTests(FunctionalTests):
     def test_list_gemeenten(self):
         res = self.testapp.get('/capakey/gemeenten')
