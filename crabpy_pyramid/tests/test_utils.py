@@ -144,4 +144,8 @@ class CrabFunctionalTests(FunctionalTests):
     def test_get_gebouw_by_id(self):
         res = self.testapp.get('/crab/gebouwen/1538575')
         self.assertEqual('200 OK', res.status)
+        
+    def test_get_wegobject(self):
+        res = self.testapp.get('/crab/wegobjecten/53694755')
+        self.assertEqual('200 OK', res.status)
 
