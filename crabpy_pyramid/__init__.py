@@ -36,7 +36,7 @@ def _parse_settings(settings):
             args[short_key_name] = settings.get(
                 key_name, defaults.get(short_key_name)
             )
-    # not set user or password 
+    # not set user or password
     for short_key_name in ('user', 'password'):
         if (
             (not short_key_name in args) or
@@ -47,6 +47,10 @@ def _parse_settings(settings):
     capakey needs this parameter to function properly.' % short_key_name,
                 UserWarning
             )
+    # set proxy
+    args['proxy'] = get_proxy(settings)
+    
+    
     return args
 
 
@@ -59,6 +63,13 @@ def _set_caches(settings, gateway, c):
         gateway.caches[name] = make_region(key_mangler=str)
         gateway.caches[name].configure_from_config(settings, '%s.%s.' % (c, name))
 
+def get_proxy(settings):
+    args = {}
+    for short_key_name in ('http', 'https'):
+        key_name = "proxy.%s" % (short_key_name)
+        if key_name in settings:
+            args[short_key_name] = settings.get(key_name)
+    return args
 
 def _build_capakey(registry):
     capakey = registry.queryUtility(ICapakey)
@@ -79,7 +90,9 @@ def _build_crab(registry):
     if crab is not None:
         return crab
     settings = registry.settings
-    factory = crab_factory()
+    proxy = {}
+    proxy['proxy'] = get_proxy(settings)
+    factory = crab_factory(**proxy)
     gateway = CrabGateway(factory)
     _set_caches(settings, gateway, 'crab')
     
@@ -130,8 +143,6 @@ def main(global_config, **settings):
      This function returns a Pyramid WSGI application.
     '''
     config = Configurator(settings=settings)
-
-
     
     includeme(config)
     config.scan()
