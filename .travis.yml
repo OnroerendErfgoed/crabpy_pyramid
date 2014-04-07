@@ -6,8 +6,7 @@ python:
 install:
  - easy_install -U setuptools
  - python setup.py -q install
- - pip install nose coverage nose-testconfig
- - pip install coveralls
+ - pip install nose coverage nose-testconfig coveralls webtest
 script: 
   nosetests --config nose_cover.cfg --tc-file nose_travis.ini
 after_success:
