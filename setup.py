@@ -10,13 +10,13 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'waitress',
-    'crabpy>=0.3.0',
-    'webtest'
+    'crabpy>=0.3.2',
     ]
 
 tests_requires = [
     'nose',
-    'coverage'
+    'coverage',
+    'webtest'
 ]
 
 testing_extras = tests_requires + []
