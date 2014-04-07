@@ -10,7 +10,8 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'waitress',
-    'crabpy>=0.3.0'
+    'crabpy>=0.3.0',
+    'webtest'
     ]
 
 tests_requires = [
