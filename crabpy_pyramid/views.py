@@ -224,7 +224,7 @@ def get_gebouw_by_id(request):
     gebouw_id = request.matchdict.get('gebouw_id')
     return Gateway.get_gebouw_by_id(gebouw_id)
     
-@view_config(route_name='get_wegobject', renderer='listjson', accept='application/json')
+@view_config(route_name='get_wegobject', renderer='itemjson', accept='application/json')
 def get_wegobject(request):
     Gateway = request.crab_gateway()
     wegobject_id = request.matchdict.get('wegobject_id')
