@@ -42,6 +42,7 @@ def includeme(config):
     config.add_route('get_gemeente_crab', '/crab/gemeenten/{gemeente_id}')
     config.add_route('list_straten', '/crab/gemeenten/{gemeente_id}/straten')
     config.add_route('get_straat_by_id', '/crab/straten/{straat_id}')
+    config.add_route('get_wegobject', '/crab/wegobjecten/{wegobject_id}')
     config.add_route('list_huisnummers', '/crab/straten/{straat_id}/huisnummers')
     config.add_route('get_huisnummer_by_straat_and_label', '/crab/straten/{straat_id}/huisnummers/{huisnummer_label}')
     config.add_route('get_huisnummer_by_id', '/crab/huisnummers/{huisnummer_id}')
