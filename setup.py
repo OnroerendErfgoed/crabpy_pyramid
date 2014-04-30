@@ -22,17 +22,17 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.1.0a1',
+      version='0.1.0a2',
       description='crabpy_pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python",
-        'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         "Intended Audience :: Developers",
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
