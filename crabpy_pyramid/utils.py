@@ -5,8 +5,10 @@ Utility functions to help with range handling.
 .. versionadded:: 0.1.0
 '''
 
+import re
 
-def range_header(range):
+
+def parse_range_header(range):
     match = re.match('^items=([0-9]+)-([0-9]+)$', range)
     if match:
         start = int(match.group(1))
