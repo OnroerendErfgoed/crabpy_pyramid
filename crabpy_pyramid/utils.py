@@ -28,7 +28,7 @@ def range_return(request, total):
     range = False
     if ('Range' in request.headers):
         range = request.headers['Range']
-        range = range_header(range)
+        range = parse_range_header(range)
         start = range['start']
         einde = range['einde']
         request.response.headers['Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
