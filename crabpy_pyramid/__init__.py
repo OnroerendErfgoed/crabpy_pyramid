@@ -8,7 +8,7 @@ from crabpy.gateway.crab import CrabGateway
 from crabpy.client import capakey_factory, crab_factory
 from zope.interface import Interface
 
-from crabpy_pyramid.utils import (
+from crabpy_pyramid.renderers import (
     json_list_renderer,
     json_item_renderer
 )
