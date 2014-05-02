@@ -137,6 +137,8 @@ def includeme(config):
     config.add_request_method(get_capakey, 'capakey_gateway')
     config.add_request_method(get_crab, 'crab_gateway')
 
+    config.scan()
+
 
 def main(global_config, **settings):
     '''
@@ -145,5 +147,4 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     
     includeme(config)
-    config.scan()
     return config.make_wsgi_app()

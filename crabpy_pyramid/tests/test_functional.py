@@ -33,8 +33,8 @@ def run_crab_integration_tests():
         return False
 
 settings = {
-    'capakey.user': 'USEr',
-    'capakey.password': 'PSWD',
+    'capakey.user': 'vandaeko',
+    'capakey.password': 'f77737b9-55cc-4c4a-b86a-895d328c88f4',
     'root': './dogpile_data/',
     'capakey.permanent.backend': 'dogpile.cache.dbm',
     'capakey.permanent.expiration_time': 604800,
