@@ -126,7 +126,8 @@ def get_crab(registry):
 def includeme(config):
     
     # including routes
-    config.include('crabpy_pyramid.routes')
+    config.include('crabpy_pyramid.routes.crab')
+    config.include('crabpy_pyramid.routes.capakey')
     
     config.add_renderer('listjson', json_list_renderer)
     config.add_renderer('itemjson', json_item_renderer)
