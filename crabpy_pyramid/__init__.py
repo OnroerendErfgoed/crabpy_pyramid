@@ -107,7 +107,6 @@ def _build_capakey(registry, settings):
         del settings['cache_config']
     else:
         cache_config = {}
-    print settings
     factory = capakey_factory(**settings)
     gateway = CapakeyGateway(factory, cache_config=cache_config)
 
@@ -124,7 +123,6 @@ def _build_crab(registry, settings):
         del settings['cache_config']
     else:
         cache_config = {}
-    print settings
     factory = crab_factory(**settings)
     gateway = CrabGateway(factory, cache_config=cache_config)
     
