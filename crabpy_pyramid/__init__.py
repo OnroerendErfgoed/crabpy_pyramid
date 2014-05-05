@@ -28,6 +28,7 @@ class ICapakey(Interface):
 class ICrab(Interface):
     pass
 
+
 def _parse_settings(settings):
     args = {}
     defaults = {
@@ -133,6 +134,8 @@ def _build_crab(registry, settings):
 def get_capakey(registry):
     '''
     Get the Capakey Gateway
+
+    :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
     '''
     #argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -144,6 +147,8 @@ def get_capakey(registry):
 def get_crab(registry):
     '''
     Get the Crab Gateway
+
+    :rtype: :class:`crabpy.gateway.crab.CrabGateway`
     '''
     #argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -154,7 +159,11 @@ def get_crab(registry):
 
 
 def includeme(config):
+    '''
+    Include `crabpy_pyramid` in this `Pyramid` application.
 
+    :param pyramid.config.Configurator config: A Pyramid configurator.
+    '''
 
     settings = _parse_settings(config.registry.settings)
 

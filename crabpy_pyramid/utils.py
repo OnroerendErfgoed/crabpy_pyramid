@@ -9,6 +9,11 @@ import re
 
 
 def parse_range_header(range):
+    '''
+    Parse a dojo.store range header.
+
+    :rtype: dict
+    '''
     match = re.match('^items=([0-9]+)-([0-9]+)$', range)
     if match:
         start = int(match.group(1))
