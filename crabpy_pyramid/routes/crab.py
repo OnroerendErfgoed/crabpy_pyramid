@@ -5,7 +5,6 @@ Routes for the CRAB views.
 .. versionadded:: 0.1.0
 '''
 def includeme(config):
-    config.add_route('get_perceel_by_percid', '/capakey/percelen/{percid}')
     config.add_route('list_gewesten', '/crab/gewesten')
     config.add_route('get_gewest_by_id', '/crab/gewesten/{gewest_id}')
     config.add_route('list_gemeenten_crab', '/crab/gewesten/{gewest_id}/gemeenten')

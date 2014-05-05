@@ -11,7 +11,9 @@ from crabpy.client import crab_factory
 from crabpy_pyramid import (
     get_crab,
     _build_crab,
-    ICrab
+    ICrab,
+    _parse_settings,
+    _filter_settings
 )
 
 import warnings
@@ -55,7 +57,7 @@ class TestGetAndBuild(unittest.TestCase):
         r = TestRegistry()
         G = CrabGateway(crab_factory())
         r.registerUtility(G, ICrab)
-        G2 = _build_crab(r)
+        G2 = _build_crab(r, {})
         self.assertIsInstance(G, CrabGateway)
         self.assertIsInstance(G2, CrabGateway)
         self.assertEqual(G, G2)
@@ -64,24 +66,27 @@ class TestGetAndBuild(unittest.TestCase):
         r = TestRegistry()
         G = CrabGateway(crab_factory())
         r.registerUtility(G, ICrab)
-        G2 = _build_crab(r)
+        G2 = _build_crab(r, {})
         self.assertIsInstance(G, CrabGateway)
         self.assertIsInstance(G2, CrabGateway)  
         self.assertEqual(G, G2)
 
-    def test_build_rawes_custom_settings(self):
+    def test_build_crab_custom_settings(self):
         settings = {
-            'root': './dogpile_data/',
-            'crab.permanent.backend': 'dogpile.cache.dbm',
-            'crab.permanent.expiration_time': 604800,
-            'crab.permanent.arguments.filename': 'dogpile_data/crab_permanent.dbm',
-            'crab.long.backend': 'dogpile.cache.dbm',
-            'crab.long.expiration_time': 86400,
-            'crab.long.arguments.filename': 'dogpile_data/crab_long.dbm',
-            'crab.short.backend': 'dogpile.cache.dbm',
-            'crab.short.expiration_time': 3600,
-            'crab.short.arguments.filename': 'dogpile_data/crab_short.dbm'
+            'crabpy.cache.file.root': './dogpile_data/',
+            'crabpy.crab.permanent.backend': 'dogpile.cache.dbm',
+            'crabpy.crab.permanent.expiration_time': 604800,
+            'crabpy.crab.permanent.arguments.filename': 'dogpile_data/crab_permanent.dbm',
+            'crabpy.crab.long.backend': 'dogpile.cache.dbm',
+            'crabpy.crab.long.expiration_time': 86400,
+            'crabpy.crab.long.arguments.filename': 'dogpile_data/crab_long.dbm',
+            'crabpy.crab.short.backend': 'dogpile.cache.dbm',
+            'crabpy.crab.short.expiration_time': 3600,
+            'crabpy.crab.short.arguments.filename': 'dogpile_data/crab_short.dbm'
         }
         r = TestRegistry(settings)
-        G = _build_crab(r)
+        crab_settings = _filter_settings(_parse_settings(settings), 'crab.')
+        if 'include' in crab_settings:
+            del crab_settings['include']
+        G = _build_crab(r, crab_settings)
         self.assertIsInstance(G, CrabGateway)

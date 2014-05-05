@@ -36,3 +36,7 @@ def includeme(config):
         'get_perceel_by_capakey',
         '/capakey/percelen/{capakey1}/{capakey2}'
     )
+    config.add_route(
+        'get_perceel_by_percid',
+        '/capakey/percelen/{percid}'
+    )

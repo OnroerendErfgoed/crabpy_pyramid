@@ -12,6 +12,7 @@ from crabpy_pyramid import (
     get_capakey,
     includeme,
     _parse_settings,
+    _filter_settings,
     _build_capakey,
     ICapakey
 )
@@ -63,7 +64,7 @@ class TestGetAndBuild(unittest.TestCase):
             password='TalissaWachtwoord'
         ))
         r.registerUtility(G, ICapakey)
-        G2 = _build_capakey(r)
+        G2 = _build_capakey(r, {})
         self.assertIsInstance(G, CapakeyGateway)
         self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
@@ -75,35 +76,38 @@ class TestGetAndBuild(unittest.TestCase):
             password=None
         ))
         r.registerUtility(G, ICapakey)
-        G2 = _build_capakey(r)
+        G2 = _build_capakey(r, {})
         self.assertIsInstance(G, CapakeyGateway)
         self.assertIsInstance(G2, CapakeyGateway)
         self.assertEqual(G, G2)
 
-    def test_build_rawes_custom_settings(self):
+    def test_build_capakey_custom_settings(self):
         settings = {
-            'capakey.user': 'Talissa',
-            'capakey.password': 'TalissaWachtwoord',
-            'root': './dogpile_data/',
-            'capakey.permanent.backend': 'dogpile.cache.dbm',
-            'capakey.permanent.expiration_time': 604800,
-            'capakey.permanent.arguments.filename': 'dogpile_data/capakey_permanent.dbm',
-            'capakey.long.backend': 'dogpile.cache.dbm',
-            'capakey.long.expiration_time': 86400,
-            'capakey.long.arguments.filename': 'dogpile_data/capakey_long.dbm',
-            'capakey.short.backend': 'dogpile.cache.dbm',
-            'capakey.short.expiration_time': 3600,
-            'capakey.short.arguments.filename': 'dogpile_data/capakey_short.dbm'
+            'crabpy.capakey.user': 'Talissa',
+            'crabpy.capakey.password': 'TalissaWachtwoord',
+            'crabpy.cache.file.root': './dogpile_data/',
+            'crabpy.capakey.permanent.backend': 'dogpile.cache.dbm',
+            'crabpy.capakey.permanent.expiration_time': 604800,
+            'crabpy.capakey.permanent.arguments.filename': 'dogpile_data/capakey_permanent.dbm',
+            'crabpy.capakey.long.backend': 'dogpile.cache.dbm',
+            'crabpy.capakey.long.expiration_time': 86400,
+            'crabpy.capakey.long.arguments.filename': 'dogpile_data/capakey_long.dbm',
+            'crabpy.capakey.short.backend': 'dogpile.cache.dbm',
+            'crabpy.capakey.short.expiration_time': 3600,
+            'crabpy.capakey.short.arguments.filename': 'dogpile_data/capakey_short.dbm'
         }
         r = TestRegistry(settings)
-        G = _build_capakey(r)
+        capakey_settings = _filter_settings(_parse_settings(settings), 'capakey.')
+        if 'include' in capakey_settings:
+            del capakey_settings['include']
+        G = _build_capakey(r, capakey_settings)
         self.assertIsInstance(G, CapakeyGateway)
         
 class TestSettings(unittest.TestCase):
 
     def _assert_contains_all_keys(self, args):
-        self.assertIn('user', args)
-        self.assertIn('password', args)
+        self.assertIn('capakey.user', args)
+        self.assertIn('capakey.password', args)
 
     def test_get_default_settings(self):
         settings = {}
@@ -112,23 +116,23 @@ class TestSettings(unittest.TestCase):
 
     def test_get_some_settings(self):
         settings = {
-            'capakey.user': 'Talissa',
-            'capakey.password': 'TalissaWachtwoord',
+            'crabpy.capakey.user': 'Talissa',
+            'crabpy.capakey.password': 'TalissaWachtwoord',
         }
         args = _parse_settings(settings)
         self._assert_contains_all_keys(args)
-        self.assertEqual('Talissa', args['user'])
-        self.assertEqual('TalissaWachtwoord', args['password'])
+        self.assertEqual('Talissa', args['capakey.user'])
+        self.assertEqual('TalissaWachtwoord', args['capakey.password'])
 
     def test_get_all_settings(self):
         settings = {
-            'capakey.user': 'Talissa',
-            'capakey.password': 'TalissaWachtwoord'
+            'crabpy.capakey.user': 'Talissa',
+            'crabpy.capakey.password': 'TalissaWachtwoord'
         }
         args = _parse_settings(settings)
         self._assert_contains_all_keys(args)
-        self.assertEqual('Talissa', args['user'])
-        self.assertEqual('TalissaWachtwoord', args['password'])
+        self.assertEqual('Talissa', args['capakey.user'])
+        self.assertEqual('TalissaWachtwoord', args['capakey.password'])
 
     '''def test_missing_settings(self):
         settings = {}

@@ -6,10 +6,10 @@ Adapters to help render :mod:`crabpy.gateway.crab` objects to json.
 '''
 from crabpy.gateway import crab
 
-from . import(
-    json_list_renderer,
-    json_item_renderer
-)
+from pyramid.renderers import JSON
+
+json_list_renderer = JSON()
+json_item_renderer = JSON()
 
     
 def list_gewesten_adapter(obj, request):

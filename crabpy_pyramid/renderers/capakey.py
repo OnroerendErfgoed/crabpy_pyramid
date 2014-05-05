@@ -4,13 +4,12 @@ Adapters to help render :mod:`crabpy.gateway.capakey` objects to json.
 
 .. versionadded:: 0.1.0
 '''
-
 from crabpy.gateway import capakey
 
-from . import(
-    json_list_renderer,
-    json_item_renderer
-)
+from pyramid.renderers import JSON
+
+json_list_renderer = JSON()
+json_item_renderer = JSON()
 
 
 def list_gemeente_adapter(obj, request):
@@ -58,8 +57,7 @@ def list_perceel_adapter(obj, request):
         'capakey': obj.capakey,
         'percid': obj.percid
     }
-
-
+    
 json_list_renderer.add_adapter(capakey.Gemeente, list_gemeente_adapter)
 json_list_renderer.add_adapter(capakey.Afdeling, list_afdeling_adapter)
 json_list_renderer.add_adapter(capakey.Sectie, list_sectie_adapter)
