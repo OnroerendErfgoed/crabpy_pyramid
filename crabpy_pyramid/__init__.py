@@ -34,8 +34,6 @@ def _parse_settings(settings):
     defaults = {
         'capakey.include' : False,
         'crab.include' : True,
-        'capakey.user': None,
-        'capakey.password': None,
         'cache.file.root': '/tmp/dogpile_data'
     }
     args = defaults.copy()
@@ -54,17 +52,6 @@ def _parse_settings(settings):
         if key_name in settings:
             args[short_key_name] = settings.get(
                 key_name, defaults.get(short_key_name)
-            )
-    # not set user or password
-    for short_key_name in ('capakey.user', 'capakey.password'):
-        if (
-            (not short_key_name in args) or
-            args[short_key_name] is None
-        ):
-            warnings.warn(
-                '%s was not found in the settings, \
-    capakey needs this parameter to function properly.' % short_key_name,
-                UserWarning
             )
     # string setting
     for short_key_name in ('proxy.http', 'proxy.https', 'cache.file.root'):
@@ -175,13 +162,21 @@ def includeme(config):
     capakey_settings = _filter_settings(settings, 'capakey.')
     if capakey_settings['include']:
         del capakey_settings['include']
-        config.add_renderer('capakey_listjson', capakey_json_list_renderer)
-        config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
-        _build_capakey(config.registry, capakey_settings)
-        config.add_request_method(get_capakey, 'capakey_gateway')
-        config.add_directive('get_capakey', get_capakey)
-        config.include('crabpy_pyramid.routes.capakey')
-        config.scan('crabpy_pyramid.views.capakey')
+        if not 'user' in capakey_settings or not 'password' in capakey_settings:
+            warnings.warn(
+                'capakey.user or capakey.password was not found in \
+                the settings, capakey needs this parameter to \
+                function properly.' % short_key_name,
+                UserWarning
+            )
+        else:    
+            config.add_renderer('capakey_listjson', capakey_json_list_renderer)
+            config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
+            _build_capakey(config.registry, capakey_settings)
+            config.add_request_method(get_capakey, 'capakey_gateway')
+            config.add_directive('get_capakey', get_capakey)
+            config.include('crabpy_pyramid.routes.capakey')
+            config.scan('crabpy_pyramid.views.capakey')
     
     crab_settings = _filter_settings(settings, 'crab.')
     if crab_settings['include']:

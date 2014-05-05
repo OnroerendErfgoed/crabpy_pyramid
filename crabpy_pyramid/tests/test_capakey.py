@@ -109,11 +109,6 @@ class TestSettings(unittest.TestCase):
         self.assertIn('capakey.user', args)
         self.assertIn('capakey.password', args)
 
-    def test_get_default_settings(self):
-        settings = {}
-        args = _parse_settings(settings)
-        self._assert_contains_all_keys(args)
-
     def test_get_some_settings(self):
         settings = {
             'crabpy.capakey.user': 'Talissa',
