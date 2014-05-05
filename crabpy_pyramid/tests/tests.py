@@ -12,7 +12,8 @@ import os
 from crabpy_pyramid import (
     includeme,
     ICapakey,
-    ICrab
+    ICrab,
+    _filter_settings
 )
 
 import warnings
@@ -23,7 +24,7 @@ except ImportError:
     import unittest  # noqa
 
 
-class TestIncludeMe(unittest.TestCase):
+class TestSettings(unittest.TestCase):
 
     def setUp(self):
         self.config = testing.setUp(
@@ -56,6 +57,19 @@ class TestIncludeMe(unittest.TestCase):
 
     def tearDown(self):
         del self.config
+
+    def test_filter_settings(self):
+        settings = _filter_settings(
+            {
+                'cache.file.root' : '/tmp',
+                'crab.include': True,
+                'capakey.include': False,
+            }, 
+            'capakey.'
+        )
+        self.assertEquals(1, len(settings))
+        self.assertFalse(settings['include'])
+        self.assertNotIn('cache.file.root', settings)
 
     def test_includeme_existing_root(self):
         includeme(self.config)
