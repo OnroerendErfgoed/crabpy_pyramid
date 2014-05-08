@@ -137,3 +137,30 @@ class CapakeyListTests(unittest.TestCase):
                 }
             ]
         )
+
+
+class CapakeyItemTests(unittest.TestCase):
+
+    def setUp(self):
+        self.renderer = json_item_renderer({})
+
+    def tearDown(self):
+        del self.renderer
+
+    def test_item_gemeente(self):
+        g = Gemeente(
+            44021,
+            'Gent',
+            (104154.2225, 197300.703),
+            (94653.453, 185680.984, 113654.992, 208920.422)
+        )
+        dump = self.renderer(g,{})
+        self.assertEquals(
+            json.loads(dump),
+            {
+                'id': 44021,
+                'naam': 'Gent',
+                'centroid': [104154.2225, 197300.703],
+                'bounding_box': [94653.453, 185680.984, 113654.992, 208920.422]
+            }
+        )
