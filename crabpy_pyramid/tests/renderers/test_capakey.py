@@ -154,7 +154,7 @@ class CapakeyItemTests(unittest.TestCase):
             (104154.2225, 197300.703),
             (94653.453, 185680.984, 113654.992, 208920.422)
         )
-        dump = self.renderer(g,{})
+        dump = self.renderer(g, {})
         self.assertEquals(
             json.loads(dump),
             {
@@ -173,7 +173,7 @@ class CapakeyItemTests(unittest.TestCase):
             (104893.06375, 196022.244094),
             (104002.076625, 194168.3415, 105784.050875, 197876.146688)
         )
-        dump = self.renderer(a,{})
+        dump = self.renderer(a, {})
         self.assertEquals(
             json.loads(dump),
             {
@@ -189,7 +189,65 @@ class CapakeyItemTests(unittest.TestCase):
         )
 
     def test_item_sectie(self):
-        pass
+        s = Sectie(
+            'A',
+            Afdeling(44021, 'GENT  1 AFD', Gemeente(44021, 'Gent')),
+            (104893.06375, 196022.244094),
+            (104002.076625, 194168.3415, 105784.050875, 197876.146688)
+        )
+        dump = self.renderer(s, {})
+        self.assertEquals(
+            json.loads(dump),
+            {
+                'id': 'A',
+                'afdeling': {
+                    'id': 44021,
+                    'naam': 'GENT  1 AFD',
+                    'gemeente': {
+                        'id': 44021,
+                        'naam': 'Gent'
+                    },
+                },
+                'centroid': [104893.06375, 196022.244094],
+                'bounding_box': [104002.076625, 194168.3415, 105784.050875, 197876.146688]
+            }
+        )
 
     def test_item_perceel(self):
-        pass
+        p = Perceel(
+            '1154/02C000', 
+            Sectie(
+                'A',
+                Afdeling(
+                    46013,
+                    'KRUIBEKE 1 AFD/KRUIBEKE/',
+                    Gemeente(46013, 'Kruibeke')
+                )
+            ),
+            '40613A1154/02C000', '40613_A_1154_C_000_02',
+            'capaty', 'cashkey',
+            (104893.06375, 196022.244094),
+            (104002.076625, 194168.3415, 105784.050875, 197876.146688)
+        )
+        dump = self.renderer(p, {})
+        self.assertEquals(
+            json.loads(dump),
+            {
+                'id': '1154/02C000',
+                'sectie': {
+                    'id': 'A',
+                    'afdeling': {
+                        'id': 46013,
+                        'naam': 'KRUIBEKE 1 AFD/KRUIBEKE/',
+                        'gemeente': {
+                            'id': 46013,
+                            'naam': 'Kruibeke'
+                        },
+                    },
+                },
+                'capakey': '40613A1154/02C000',
+                'percid': '40613_A_1154_C_000_02',
+                'centroid': [104893.06375, 196022.244094],
+                'bounding_box': [104002.076625, 194168.3415, 105784.050875, 197876.146688]
+            }
+        )

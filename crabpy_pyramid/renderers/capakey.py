@@ -101,7 +101,14 @@ def item_sectie_adapter(obj, request):
     '''
     return {
         'id': obj.id,
-        'afdeling': obj.afdeling,
+        'afdeling': {
+            'id': obj.afdeling.id,
+            'naam': obj.afdeling.naam,
+            'gemeente': {
+                'id': obj.afdeling.gemeente.id,
+                'naam': obj.afdeling.gemeente.naam
+            },
+        },
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box
     }
@@ -114,7 +121,17 @@ def item_perceel_adapter(obj, request):
     '''
     return {
         'id': obj.id,
-        'sectie': obj.sectie,
+        'sectie': {
+            'id': obj.sectie.id,
+            'afdeling': {
+                'id': obj.sectie.afdeling.id,
+                'naam': obj.sectie.afdeling.naam,
+                'gemeente': {
+                    'id': obj.sectie.afdeling.gemeente.id,
+                    'naam': obj.sectie.afdeling.gemeente.naam
+                },
+            },
+        },
         'capakey': obj.capakey,
         'percid': obj.percid,
         'centroid': obj.centroid,
