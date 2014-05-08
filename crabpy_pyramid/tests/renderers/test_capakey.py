@@ -164,3 +164,32 @@ class CapakeyItemTests(unittest.TestCase):
                 'bounding_box': [94653.453, 185680.984, 113654.992, 208920.422]
             }
         )
+
+    def test_item_afdeling(self):
+        a = Afdeling(
+            44021,
+            'GENT  1 AFD',
+            Gemeente(44021, 'Gent'),
+            (104893.06375, 196022.244094),
+            (104002.076625, 194168.3415, 105784.050875, 197876.146688)
+        )
+        dump = self.renderer(a,{})
+        self.assertEquals(
+            json.loads(dump),
+            {
+                'id': 44021,
+                'naam': 'GENT  1 AFD',
+                'gemeente': {
+                    'id': 44021,
+                    'naam': 'Gent'
+                },
+                'centroid': [104893.06375, 196022.244094],
+                'bounding_box': [104002.076625, 194168.3415, 105784.050875, 197876.146688]
+            }
+        )
+
+    def test_item_sectie(self):
+        pass
+
+    def test_item_perceel(self):
+        pass

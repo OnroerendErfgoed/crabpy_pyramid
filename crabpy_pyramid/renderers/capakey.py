@@ -85,7 +85,10 @@ def item_afdeling_adapter(obj, request):
     return {
         'id': obj.id,
         'naam': obj.naam,
-        'gemeente': obj.gemeente,
+        'gemeente': {
+            'id': obj.gemeente.id,
+            'naam': obj.gemeente.naam
+        },
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box
     }
