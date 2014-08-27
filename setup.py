@@ -8,8 +8,6 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
 requires = [
     'pyramid',
-    'pyramid_debugtoolbar',
-    'waitress',
     'crabpy>=0.3.4'
 ]
 
@@ -31,6 +29,7 @@ setup(name='crabpy_pyramid',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Intended Audience :: Developers",
