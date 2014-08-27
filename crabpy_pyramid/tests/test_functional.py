@@ -55,7 +55,10 @@ settings = {
 
 
 def setUpModule():
-    shutil.rmtree(os.path.join(os.path.dirname(__file__), 'dogpile_data'))
+    shutil.rmtree(
+        os.path.join(os.path.dirname(__file__), 'dogpile_data'),
+        True
+    )
 
 class FunctionalTests(unittest.TestCase):
     @classmethod
