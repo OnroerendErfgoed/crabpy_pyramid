@@ -7,6 +7,7 @@ Functional tests.
 import unittest
 import json
 import os
+import shutil
 
 from paste.deploy.loadwsgi import appconfig
 
@@ -33,25 +34,28 @@ def run_crab_integration_tests():
         return False
 
 settings = {
-    'crabpy.cache.file.root': './dogpile_data/',
+    'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
     'crabpy.capakey.include': True,
     'crabpy.capakey.user': 'vandaeko',
     'crabpy.capakey.password': 'f77737b9-55cc-4c4a-b86a-895d328c88f4',
     'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
-    'crabpy.capakey.cache_config.permanent.arguments.filename': 'dogpile_data/capakey_permanent.dbm',
+    'crabpy.capakey.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_permanent.dbm'),
     'crabpy.capakey.cache_config.long.backend': 'dogpile.cache.dbm',
     'crabpy.capakey.cache_config.long.expiration_time': 86400,
-    'crabpy.capakey.cache_config.long.arguments.filename': 'dogpile_data/capakey_long.dbm',
+    'crabpy.capakey.cache_config.long.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_long.dbm'),
     'crabpy.crab.include': True,
     'crabpy.crab.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.permanent.expiration_time': 604800,
-    'crabpy.crab.cache_config.permanent.arguments.filename': 'dogpile_data/crab_permanent.dbm',
+    'crabpy.crab.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_permanent.dbm'),
     'crabpy.crab.cache_config.long.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.long.expiration_time': 86400,
-    'crabpy.crab.cache_config.long.arguments.filename': 'dogpile_data/crab_long.dbm',
+    'crabpy.crab.cache_config.long.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_long.dbm'),
 }
 
+
+def setUpModule():
+    shutil.rmtree(os.path.join(os.path.dirname(__file__), 'dogpile_data'))
 
 class FunctionalTests(unittest.TestCase):
     @classmethod
