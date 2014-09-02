@@ -169,7 +169,8 @@ def item_straat_adapter(obj, request):
                 'naam': obj.metadata.begin_organisatie.naam,
                 'definitie': obj.metadata.begin_organisatie.definitie
             }
-        }
+        },
+        'bounding_box': obj.bounding_box
     }
 
 def item_huisnummer_adapter(obj, request):
@@ -198,7 +199,8 @@ def item_huisnummer_adapter(obj, request):
                 'naam': obj.metadata.begin_organisatie.naam,
                 'definitie': obj.metadata.begin_organisatie.definitie
             }
-        }
+        },
+        'bounding_box': obj.bounding_box
     } 
 
 def item_perceel_crab_adapter(obj, request):
