@@ -34,17 +34,20 @@ def range_return(request, total):
     if ('Range' in request.headers):
         range = request.headers['Range']
         range = parse_range_header(range)
-        start = range['start']
-        einde = range['einde']
-        request.response.headers['Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
+        if range:
+            start = range['start']
+            einde = range['einde']
+            request.response.headers['Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
+            return (start, einde)
     elif ('X-Range' in request.headers):
         range = request.headers['X-Range']
         range = range_header(range)
-        start = range['start']
-        einde = range['einde']
-        request.response.headers['X-Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
-    else:
-        start = int(request.params.get('start', 0))
-        aantal = int(request.params.get('aantal', 10))
-        einde = start + aantal
+        if range:
+            start = range['start']
+            einde = range['einde']
+            request.response.headers['X-Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
+            return (start, einde)
+    start = int(request.params.get('start', 0))
+    aantal = int(request.params.get('aantal', 10))
+    einde = start + aantal
     return (start, einde)
