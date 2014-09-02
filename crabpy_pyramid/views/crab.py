@@ -34,8 +34,9 @@ def get_gewest_by_id(request):
 )
 def list_gemeenten_crab(request):
     Gateway = request.crab_gateway()
+    sort = request.params.get('sort', 1)
     gewest_id = request.matchdict.get('gewest_id')
-    gemeenten = Gateway.list_gemeenten(gewest_id)
+    gemeenten = Gateway.list_gemeenten(gewest_id, sort)
     total = len(gemeenten)
     r = range_return(request, total)
     return gemeenten[r[0]: r[1]]
