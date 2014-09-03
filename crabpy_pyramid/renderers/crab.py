@@ -22,7 +22,7 @@ def list_gewesten_adapter(obj, request):
         'naam': obj.naam
     }
 
-def list_provincies(obj, request):
+def list_provincies_adapter(obj, request):
     '''
     Adapter for rendering a list of
     :class: `crabpy.gateway.crab.Provincie` to json.
