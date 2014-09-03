@@ -29,6 +29,15 @@ def get_gewest_by_id(request):
     return Gateway.get_gewest_by_id(gewest_id)
     
 @view_config(
+    route_name='list_provincies',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_provincies(request):
+    Gateway = request.crab_gateway()
+    gewest_id = 
+    provincies = Gateway.list_provincies()
+    
+@view_config(
     route_name='list_gemeenten_crab',
     renderer='crab_listjson', accept='application/json'
 )
