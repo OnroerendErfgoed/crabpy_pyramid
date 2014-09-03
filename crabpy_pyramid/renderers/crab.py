@@ -126,6 +126,20 @@ def item_gewest_adapter(obj, request):
         'bounding_box': obj.bounding_box
     }
     
+def item_provincie_adapter(obj, request):
+    '''
+    Adapter for rendering a object of
+    :class: `crabpy.gateway.crab.Provincie` to json.
+    '''
+    return {
+        'niscode': obj.niscode,
+        'naam': obj.naam,
+        'gewest': {
+            'id': obj.gewest.id,
+            'naam': obj.gewest.naam
+        }
+    }
+
 def item_gemeente_adapter(obj, request):
     '''
     Adapter for rendering an object of
@@ -311,6 +325,7 @@ def item_wegobject_adapter(obj, request):
 
 
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
+json_item_renderer.add_adapter(crab.Provincie, item_provincie_adapter)
 json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_adapter)
 json_item_renderer.add_adapter(crab.Straat, item_straat_adapter)
 json_item_renderer.add_adapter(crab.Huisnummer, item_huisnummer_adapter)
