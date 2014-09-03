@@ -43,7 +43,7 @@ def list_provincies(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_provincie(request):
-    Gateway = request.crab.gateway()
+    Gateway = request.crab_gateway()
     provincie_id = int(request.matchdict.get('provincie_id'))
     provincie = Gateway.get_provincie_by_id(provincie_id)
     return provincie
