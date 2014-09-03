@@ -7,6 +7,7 @@ Routes for the CRAB views.
 def includeme(config):
     config.add_route('list_gewesten', '/crab/gewesten')
     config.add_route('get_gewest_by_id', '/crab/gewesten/{gewest_id}')
+    config.add_route('list_provincies', '/provincies')
     config.add_route('list_gemeenten_crab', '/crab/gewesten/{gewest_id}/gemeenten')
     config.add_route('get_gemeente_crab', '/crab/gemeenten/{gemeente_id}')
     config.add_route('list_straten', '/crab/gemeenten/{gemeente_id}/straten')
