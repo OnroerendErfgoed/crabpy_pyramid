@@ -22,6 +22,20 @@ def list_gewesten_adapter(obj, request):
         'naam': obj.naam
     }
 
+def list_provincies(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class: `crabpy.gateway.crab.Provincie` to json.
+    '''
+    return {
+        'niscode': obj.niscode,
+        'naam': obj.naam,
+        'gewest': {
+            'id': obj.gewest.id,
+            'naam': obj.gewest.naam
+        }
+    }
+
 def list_gemeente_adapter(obj, request):
     '''
     Adapter for rendering a list of
@@ -92,6 +106,7 @@ def list_gebouwen_adapter(obj, request):
 
 
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
+json_list_renderer.add_adapter(crab.Provincie, list_provincie_adapter)
 json_list_renderer.add_adapter(crab.Gemeente, list_gemeente_adapter)
 json_list_renderer.add_adapter(crab.Straat, list_straten_adapter)
 json_list_renderer.add_adapter(crab.Huisnummer, list_huisnummers_adapter)
