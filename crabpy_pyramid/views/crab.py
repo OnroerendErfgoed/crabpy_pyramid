@@ -44,12 +44,9 @@ def list_provincies(request):
 )
 def get_provincie(request):
     Gateway = request.crab.gateway()
-    sort = request.params.get('sort', 2)
     provincie_id = int(request.matchdict.get('provincie_id'))
-    gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id, sort)
-    total = len(gemeenten)
-    r = range_return(request, total)
-    return gemeenten(r[0]: r[1])
+    provincie = Gateway.get_provincie_by_id(provincie_id)
+    return provincie
     
 @view_config(
     route_name='list_gemeenten_crab',
