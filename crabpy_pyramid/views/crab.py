@@ -34,8 +34,9 @@ def get_gewest_by_id(request):
 )
 def list_provincies(request):
     Gateway = request.crab_gateway()
-    gewest_id = 
-    provincies = Gateway.list_provincies()
+    gewest_id = int(request.matchdict.get('gewest_id'))
+    provincies = Gateway.list_provincies(gewest_id)
+    return provincies
     
 @view_config(
     route_name='list_gemeenten_crab',
