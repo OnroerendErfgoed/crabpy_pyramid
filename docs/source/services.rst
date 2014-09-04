@@ -1,14 +1,14 @@
+.. _services:
+
+========
 Services
 ========
 
-* Return format is same as dojo rest store
-* Uses Range header for slicing (eg. items=1-10)
-* Mime-type is application/json
-
-Crabpy_pyramid exposes the following services.
+Crabpy_pyramid exposes the following services if both 
+:ref:`setting-capakey-include` and :ref:`setting-crab-include` are set to `True`.
 
 Capakey
--------
+=======
 
 .. http:get:: /capakey/gemeenten
 
@@ -306,7 +306,7 @@ Capakey
     :statuscode 404: Perceel was not found.
 
 Crab
------
+====
 
 .. http:get:: /crab/gewesten
 
