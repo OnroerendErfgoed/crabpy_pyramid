@@ -25,6 +25,8 @@ from crabpy_pyramid.renderers.crab import (
 
 from pyramid.settings import asbool
 
+import logging
+log = logging.getLogger(__name__)
 
 class ICapakey(Interface):
     pass
@@ -150,6 +152,15 @@ def get_crab(registry):
         
     return regis.queryUtility(ICrab)
 
+def _get_proxy_settings(settings):
+    base_settings = {}
+    if "proxy.http" or "proxy.https" in settings:
+        base_settings["proxy"] = {}
+        if "proxy.http" in settings:
+            base_settings["proxy"]["http"] = settings["proxy.http"]
+        if "proxy.https" in settings:
+            base_settings["proxy"]["https"] = settings["proxy.https"]
+    return base_settings
 
 def includeme(config):
     '''
@@ -159,13 +170,14 @@ def includeme(config):
     '''
 
     settings = _parse_settings(config.registry.settings)
+    base_settings = _get_proxy_settings(settings)
 
     # create cache
     root = settings.get('cache.file.root', '/tmp/dogpile_data')
     if not os.path.exists(root):
         os.makedirs(root)
 
-    capakey_settings = _filter_settings(settings, 'capakey.')
+    capakey_settings = dict(_filter_settings(settings, 'capakey.'), **base_settings)
     if capakey_settings['include']:
         log.info('Adding CAPAKEY Gateway.')
         del capakey_settings['include']
@@ -185,7 +197,7 @@ def includeme(config):
             config.include('crabpy_pyramid.routes.capakey')
             config.scan('crabpy_pyramid.views.capakey')
     
-    crab_settings = _filter_settings(settings, 'crab.')
+    crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
     if crab_settings['include']:
         log.info('Adding CRAB Gateway.')
         del crab_settings['include']

@@ -102,7 +102,9 @@ class TestGetAndBuild(unittest.TestCase):
             del capakey_settings['include']
         G = _build_capakey(r, capakey_settings)
         self.assertIsInstance(G, CapakeyGateway)
-        
+
+
+
 class TestSettings(unittest.TestCase):
 
     def _assert_contains_all_keys(self, args):
@@ -128,6 +130,7 @@ class TestSettings(unittest.TestCase):
         self._assert_contains_all_keys(args)
         self.assertEqual('Talissa', args['capakey.user'])
         self.assertEqual('TalissaWachtwoord', args['capakey.password'])
+
 
     '''def test_missing_settings(self):
         settings = {}
