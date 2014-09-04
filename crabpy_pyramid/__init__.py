@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+import logging
+log = logging.getLogger(__name__)
+
 from pyramid.config import Configurator
 import os
 import warnings
@@ -69,6 +74,7 @@ def _parse_settings(settings):
         if cache_config:
             args[short_key_name] = cache_config
     
+    log.debug(args) 
     return args
 
 def _filter_settings(settings, prefix):
@@ -161,6 +167,7 @@ def includeme(config):
 
     capakey_settings = _filter_settings(settings, 'capakey.')
     if capakey_settings['include']:
+        log.info('Adding CAPAKEY Gateway.')
         del capakey_settings['include']
         if not 'user' in capakey_settings or not 'password' in capakey_settings:
             warnings.warn(
@@ -180,6 +187,7 @@ def includeme(config):
     
     crab_settings = _filter_settings(settings, 'crab.')
     if crab_settings['include']:
+        log.info('Adding CRAB Gateway.')
         del crab_settings['include']
         config.add_renderer('crab_listjson', crab_json_list_renderer)
         config.add_renderer('crab_itemjson', crab_json_item_renderer)
