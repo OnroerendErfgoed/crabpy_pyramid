@@ -417,7 +417,7 @@ Crab
     
     **Example request**:
     
-    ..sourcecode:: http
+    .. sourcecode:: http
     
         GET /crab/straten/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
