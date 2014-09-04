@@ -13,7 +13,8 @@ from crabpy_pyramid import (
     includeme,
     ICapakey,
     ICrab,
-    _filter_settings
+    _filter_settings,
+    _get_proxy_settings
 )
 
 import warnings
@@ -70,6 +71,20 @@ class TestSettings(unittest.TestCase):
         self.assertEquals(1, len(settings))
         self.assertFalse(settings['include'])
         self.assertNotIn('cache.file.root', settings)
+
+    def test_filter_settings_with_proxy(self):
+        settings = {
+            'proxy.http' : 'http://proxy.example.com:3128',
+            'proxy.https' : 'https://httpsproxy.example.com:3128',
+            'crab.include': True,
+            'crab.cache_config.permanent.backend': 'dogpile.cache.dbm',
+        }
+        base_settings = _get_proxy_settings(settings)
+        crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
+        self.assertIn('proxy', crab_settings)
+        self.assertIn('http', crab_settings["proxy"])
+        self.assertIn('https', crab_settings["proxy"])
+
 
     def test_includeme_existing_root(self):
         includeme(self.config)
