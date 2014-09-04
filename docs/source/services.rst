@@ -319,6 +319,26 @@ Crab
         GET /crab/gewesten HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/javascript
+
+        [
+            {
+                "naam": "Brussels Hoofdstedelijk Gewest", 
+                "id": 1
+            }, {
+                "naam": "Vlaams Gewest",
+                "id": 2
+            }, {
+                "naam": "Waals Gewest",
+                "id": 3
+            }
+        ]
         
     :statuscode 200: Gewesten were found.
 
@@ -330,7 +350,7 @@ Crab
     
     .. sourcecode:: http
         
-        GET /crab/gewesten/1 HTTP/1.1
+        GET /crab/gewesten/2 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
         
@@ -349,6 +369,7 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
         
+    :query sort: One of ``id``, ``naam`` or ``niscode`` (default).
     :statuscode 200: Gemeenten were found.
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)
