@@ -22,6 +22,20 @@ def list_gewesten_adapter(obj, request):
         'naam': obj.naam
     }
 
+def list_provincie_adapter(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class: `crabpy.gateway.crab.Provincie` to json.
+    '''
+    return {
+        'niscode': obj.niscode,
+        'naam': obj.naam,
+        'gewest': {
+            'id': obj.gewest.id,
+            'naam': obj.gewest.naam
+        }
+    }
+
 def list_gemeente_adapter(obj, request):
     '''
     Adapter for rendering a list of
@@ -92,6 +106,7 @@ def list_gebouwen_adapter(obj, request):
 
 
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
+json_list_renderer.add_adapter(crab.Provincie, list_provincie_adapter)
 json_list_renderer.add_adapter(crab.Gemeente, list_gemeente_adapter)
 json_list_renderer.add_adapter(crab.Straat, list_straten_adapter)
 json_list_renderer.add_adapter(crab.Huisnummer, list_huisnummers_adapter)
@@ -111,6 +126,20 @@ def item_gewest_adapter(obj, request):
         'bounding_box': obj.bounding_box
     }
     
+def item_provincie_adapter(obj, request):
+    '''
+    Adapter for rendering a object of
+    :class: `crabpy.gateway.crab.Provincie` to json.
+    '''
+    return {
+        'niscode': obj.niscode,
+        'naam': obj.naam,
+        'gewest': {
+            'id': obj.gewest.id,
+            'naam': obj.gewest.naam
+        }
+    }
+
 def item_gemeente_adapter(obj, request):
     '''
     Adapter for rendering an object of
@@ -298,6 +327,7 @@ def item_wegobject_adapter(obj, request):
 
 
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
+json_item_renderer.add_adapter(crab.Provincie, item_provincie_adapter)
 json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_adapter)
 json_item_renderer.add_adapter(crab.Straat, item_straat_adapter)
 json_item_renderer.add_adapter(crab.Huisnummer, item_huisnummer_adapter)
