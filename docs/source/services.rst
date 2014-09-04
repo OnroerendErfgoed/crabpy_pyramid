@@ -357,6 +357,52 @@ Crab
     :statuscode 200: Gewest was found.
     :statuscode 404: Gewest was not found.
 
+.. http:get:: /crab/gewesten/(int:gewest_id)/provincies
+
+    Retrieve alle provincies in a gewest.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/gewesten/2/provincies HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/javascript
+
+        [
+            {
+                "naam": "Antwerpen",
+                "gewest": {"naam": "Vlaams Gewest", "id": 2},
+                "niscode": 10000
+            }, {
+                "naam": "Vlaams-Brabant",
+                "gewest": {"naam": "Vlaams Gewest", "id": 2},
+                "niscode": 20001
+            }, {
+                "naam": "West-Vlaanderen",
+                "gewest": {"naam": "Vlaams Gewest", "id": 2},
+                "niscode": 30000
+            }, {
+                "naam": "Oost-Vlaanderen",
+                "gewest": {"naam": "Vlaams Gewest", "id": 2},
+                "niscode": 40000
+            }, {
+                "naam": "Limburg", 
+                "gewest": {"naam": "Vlaams Gewest", "id": 2}, 
+                "niscode": 70000
+            }
+        ]
+
+    :statuscode 200: Gewest was found.
+    :statuscode 404: Gewest does not exist.
+
 .. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
     
     List_gemeenten
@@ -371,6 +417,7 @@ Crab
         
     :query sort: One of ``id``, ``naam`` or ``niscode`` (default).
     :statuscode 200: Gemeenten were found.
+    :statuscode 404: Gewest does not exist.
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)
     
