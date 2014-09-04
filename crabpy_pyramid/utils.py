@@ -30,6 +30,14 @@ def parse_range_header(range):
 
 
 def range_return(request, total):
+    '''
+    Determine what range of objects to return.
+
+    Will check fot both `Range` and `X-Range` headers in the request and
+    set the corresponding `Content-Range` header.
+
+    :rtype: tuple
+    '''
     range = False
     if ('Range' in request.headers):
         range = request.headers['Range']
