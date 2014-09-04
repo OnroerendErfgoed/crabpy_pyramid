@@ -39,8 +39,8 @@ crabpy.cache.file.root
 ----------------------
 
 Location where `dogpile.cache <http://dogpilecache.readthedocs.org/en/latest/>`_ 
-can create file caches. By default it's set to `/tmp/dogpile_data`. Should be
-changed for any setup that actually wants to use caching.
+can create file caches. By default it's set to :file:`/tmp/dogpile_data`. 
+Should be changed for any setup that actually wants to use caching.
 
 .. _setting-proxy-http:
 
