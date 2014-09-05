@@ -375,6 +375,7 @@ Crab
 
         HTTP/1.1 200 OK
         Content-Type: application/javascript
+        Content-Range: items 0-4/5
 
         [
             {
@@ -403,9 +404,37 @@ Crab
     :statuscode 200: Gewest was found.
     :statuscode 404: Gewest does not exist.
 
+.. http:get:: /crab/provincies/(int:provincie_id)
+
+    Get information about a certain provincie.
+
+    **Example request**:
+
+    .. sourcecode:: http
+    
+        GET /crab/provincies/30000 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/javascript
+
+        {
+            "naam": "West-Vlaanderen",
+            "gewest": {"naam": "Vlaams Gewest", "id": 2},
+            "niscode": 30000
+        }
+
+        :statuscode 200: Provincie was found.
+        :statuscode 404: Provincie was not found.
+
 .. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
     
-    List_gemeenten
+    List all gemeenten in a certain gewest.
     
     **Example request**:
     
@@ -418,6 +447,21 @@ Crab
     :query sort: One of ``id``, ``naam`` or ``niscode`` (default).
     :statuscode 200: Gemeenten were found.
     :statuscode 404: Gewest does not exist.
+
+.. http:get:: /crab/provincie/(int:provincie_id)/gemeenten
+
+    List all gemeenten in a certain provincie.
+
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/provincies/30000/gemeenten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    :statuscode 200: Gemeenten were found.
+    :satuscode 404: Provincie does not exist.
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)
     
@@ -446,7 +490,7 @@ Crab
 
 .. http:get:: /crab/gemeente/(int:id of int:niscode)/straten
 
-    List_straten
+    List all straten in a `gemeente`.
     
     **Example request**:
     
@@ -460,7 +504,7 @@ Crab
 
 .. http:get:: /crab/straten/(int:straat_id)
 
-    Get_straat_by_id
+    Get information on a `straat`, based on the `ID`.
     
     **Example request**:
     
@@ -475,7 +519,7 @@ Crab
         
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers
 
-    List_huisnummers
+    List all huisnummers in a `straat`.
     
     **Example request**:
     
@@ -489,7 +533,7 @@ Crab
 
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers/(string:huisnummer_label)
     
-    Get_huisnummer_by_nummer_and_label
+    Get more information on a huisnummer by it's straat_id and it's huisnummer.
     
     **Example request**:
     
@@ -504,7 +548,7 @@ Crab
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)
 
-    Get_huisnummer_by_id
+    Get more information on a huisnummer, based on an `ID`.
     
     **Example request**:
     
@@ -519,7 +563,7 @@ Crab
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/percelen
 
-    List_percelen
+    List all `percelen` linked to  certain `huisnummer`.
     
     **Example request**:
     
