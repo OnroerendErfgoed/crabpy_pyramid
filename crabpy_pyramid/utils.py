@@ -7,55 +7,56 @@ Utility functions to help with range handling.
 
 import re
 
+MAX_NUMBER_ITEMS = 5000
 
 def parse_range_header(range):
     '''
-    Parse a dojo.store range header.
+    Parse a range header as used by the dojo Json Rest store.
 
-    :rtype: dict
+    :param str range: The content of the range header to be parsed. 
+        eg. `items=0-9`
+    :returns: A dict with keys start, finish and number or `False` if the
+        range is invalid.
     '''
     match = re.match('^items=([0-9]+)-([0-9]+)$', range)
     if match:
         start = int(match.group(1))
-        einde = int(match.group(2))
-        if einde < start:
-            einde = start
+        finish = int(match.group(2))
+        if finish < start:
+            finish = start
         return {
-        'start': start,
-        'einde': einde,
-        'aantal': einde - start + 1
+            'start': start,
+            'finish': finish,
+            'count': finish - start + 1
         }
     else:
         return False
 
-
-def range_return(request, total):
+def range_return(request, items):
     '''
     Determine what range of objects to return.
 
     Will check fot both `Range` and `X-Range` headers in the request and
-    set the corresponding `Content-Range` header.
+    set both `Content-Range` and 'X-Content-Range' headers.
 
-    :rtype: tuple
+    :rtype: list
     '''
-    range = False
     if ('Range' in request.headers):
-        range = request.headers['Range']
-        range = parse_range_header(range)
-        if range:
-            start = range['start']
-            einde = range['einde']
-            request.response.headers['Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
-            return (start, einde)
-    elif ('X-Range' in request.headers):
-        range = request.headers['X-Range']
-        range = range_header(range)
-        if range:
-            start = range['start']
-            einde = range['einde']
-            request.response.headers['X-Content-Range'] = 'items %d-%d/%d' % (start, einde, total)
-            return (start, einde)
-    start = int(request.params.get('start', 0))
-    aantal = int(request.params.get('aantal', 10))
-    einde = start + aantal
-    return (start, einde)
+        range = parse_range_header(request.headers['Range'])
+    elif 'X-Range' in request.headers:
+        range = parse_range_header(request.headers['X-Range'])
+    else:
+        range = {
+            'start': 0,
+            'finish': MAX_NUMBER_ITEMS - 1,
+            'count': MAX_NUMBER_ITEMS
+        }
+    filtered = items[range['start']:range['count']]
+    if len(filtered) < range['count']:
+        # Something was stripped, deal with it
+        range['count'] = len(filtered)
+        range['finish'] = range['start'] + range['count'] - 1
+
+    request.response.headers['Content-Range'] = 'items %d-%d/%d' % (range['start'], range['finish'], len(items))
+    request.response.headers['X-Content-Range'] = request.response.headers['Content-Range']
+    return filtered

@@ -11,9 +11,7 @@ from crabpy_pyramid.utils import range_return
 def list_gemeenten(request):
     Gateway = request.capakey_gateway()
     gemeenten = Gateway.list_gemeenten(1)
-    total = len(gemeenten)
-    r = range_return(request, total)
-    return gemeenten[r[0]: r[1]]
+    return range_return(request, gemeenten)
 
 
 @view_config(route_name='get_gemeente', renderer='capakey_itemjson', accept='application/json')
@@ -31,18 +29,14 @@ def list_kadastrale_afdelingen_by_gemeente(request):
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     afdelingen = Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id)
-    total = len(afdelingen)
-    r = range_return(request, total)
-    return afdelingen[r[0]:r[1]]
+    return range_return(request, afdelingen)
 
 
 @view_config(route_name='list_kadastrale_afdelingen', renderer='capakey_listjson', accept='application/json')
 def list_kadastrale_afdelingen(request):
     Gateway = request.capakey_gateway()
     afdelingen = Gateway.list_kadastrale_afdelingen()
-    total = len(afdelingen)
-    r = range_return(request, total)
-    return afdelingen[r[0]:r[1]]
+    return range_return(request, afdelingen)
 
 
 @view_config(
@@ -63,9 +57,7 @@ def list_secties_by_afdeling(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     secties = Gateway.list_secties_by_afdeling(afdeling_id)
-    total = len(secties)
-    r = range_return(request, total)
-    return secties[r[0]:r[1]]
+    return range_return(request, secties)
 
 
 @view_config(
@@ -89,9 +81,7 @@ def list_percelen_by_sectie(request):
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie = Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
     percelen = Gateway.list_percelen_by_sectie(sectie)
-    total = len(percelen)
-    r = range_return(request, total)
-    return percelen[r[0]:r[1]]
+    return range_return(request, percelen)
 
 
 @view_config(

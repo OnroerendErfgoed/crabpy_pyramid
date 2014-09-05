@@ -15,9 +15,7 @@ from crabpy_pyramid.utils import range_return
 def list_gewesten(request):
     Gateway = request.crab_gateway()
     gewesten = Gateway.list_gewesten()
-    total = len(gewesten)
-    r = range_return(request, total)
-    return gewesten[r[0]: r[1]]
+    return range_return(request, gewesten)
 
 @view_config(
     route_name='get_gewest_by_id',
@@ -36,7 +34,7 @@ def list_provincies(request):
     Gateway = request.crab_gateway()
     gewest_id = int(request.matchdict.get('gewest_id'))
     provincies = Gateway.list_provincies(gewest_id)
-    return provincies
+    return range_return(request, provincies)
     
 @view_config(
     route_name='get_provincie',
@@ -54,12 +52,9 @@ def get_provincie(request):
 )
 def list_gemeenten_by_provincie(request):
     Gateway = request.crab_gateway()
-    sort = request.params.get('sort', 1)
     provincie_id = int(request.matchdict.get('provincie_id'))
-    gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id, sort)
-    total = len(gemeenten)
-    r = range_return(request, total)
-    return gemeenten[r[0]: r[1]]
+    gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id)
+    return range_return(request, gemeenten)
     
 @view_config(
     route_name='list_gemeenten_crab',
@@ -72,9 +67,7 @@ def list_gemeenten_crab(request):
     sort = sort_map.get(sort, 6)
     gewest_id = request.matchdict.get('gewest_id')
     gemeenten = Gateway.list_gemeenten(gewest_id, sort)
-    total = len(gemeenten)
-    r = range_return(request, total)
-    return gemeenten[r[0]: r[1]]
+    return range_return(request, gemeenten)
 
 @view_config(
     route_name='get_gemeente_crab',
@@ -87,7 +80,6 @@ def get_gemeente_crab(request):
         return Gateway.get_gemeente_by_niscode(gemeente_id)
     else:
         return Gateway.get_gemeente_by_id(gemeente_id)
-    
 
 @view_config(
     route_name='list_straten',
@@ -99,10 +91,7 @@ def list_straten(request):
     if len(gemeente_id)==5:
         gemeente_id = Gateway.get_gemeente_by_niscode(gemeente_id)
     straten = Gateway.list_straten(gemeente_id)
-    total = len(straten)
-    r = range_return(request, total)
-    return straten[r[0]: r[1]]
-    
+    return range_return(request, straten)
 
 @view_config(
     route_name='get_straat_by_id',
@@ -121,9 +110,7 @@ def list_huisnummers(request):
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
-    total = len(huisnummers)
-    r = range_return(request, total)
-    return huisnummers[r[0]: r[1]]
+    return range_return(request, huisnummers)
 
 @view_config(
     route_name='get_huisnummer_by_straat_and_label',
@@ -153,9 +140,7 @@ def list_percelen(request):
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     percelen = Gateway.list_percelen_by_huisnummer(huisnummer_id)
-    total = len(percelen)
-    r = range_return(request, total)
-    return percelen[r[0]: r[1]]
+    return range_return(request, percelen)
 
 @view_config(
     route_name='get_perceel_by_id',
@@ -174,9 +159,7 @@ def list_gebouwen(request):
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     gebouwen = Gateway.list_gebouwen_by_huisnummer(huisnummer_id)
-    total = len(gebouwen)
-    r = range_return(request, total)
-    return gebouwen[r[0]: r[1]]
+    return range_return(request, gebouwen)
 
 @view_config(
     route_name='get_gebouw_by_id',
