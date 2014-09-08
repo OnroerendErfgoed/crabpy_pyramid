@@ -222,6 +222,62 @@ Capakey
        Host: example.onroerenderfgoed.be
        Accept: application/json
 
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+        [
+          {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          },
+          {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "B"
+          },
+          {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "C"
+          },
+          {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "D"
+          }
+        ]
+
+
     :statuscode 200: Afdeling was found.
     :statuscode 404: Afdeling was not found.
 
@@ -236,6 +292,59 @@ Capakey
        GET /capakey/afdelingen/44017/secties/A HTTP/1.1
        Host: example.onroerenderfgoed.be
        Accept: application/json
+
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+
+       {
+        "afdeling": {
+          "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+          "bounding_box": [
+            94653.7508750036,
+            190442.133125,
+            101151.588,
+            197371.0951875
+          ],
+          "centroid": [
+            97902.6694375016,
+            193906.61415625
+          ],
+          "id": 44017,
+          "gemeente": {
+            "naam": "Gent",
+            "bounding_box": [
+              94653.4530000016,
+              185680.984000001,
+              113654.991999999,
+              208920.421999998
+            ],
+            "centroid": [
+              104154.2225,
+              197300.703
+            ],
+            "id": 44021
+          }
+        },
+        "bounding_box": [
+          96205.7660000026,
+          194208.691374999,
+          101032.139624998,
+          197371.0951875
+        ],
+        "centroid": [
+          98618.9528125003,
+          195789.893281249
+        ],
+        "id": "A"
+      }
+
 
     :statuscode 200: Sectie was found.
     :statuscode 404: Sectie was not found.
@@ -253,6 +362,97 @@ Capakey
        Accept: application/json
        Range: 0-4
 
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       [
+        {
+          "capakey": "44017A0003/00C000",
+          "id": "0003/00C000",
+          "percid": "44017_A_0003_C_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          }
+        },
+        {
+          "capakey": "44017A0004/00D000",
+          "id": "0004/00D000",
+          "percid": "44017_A_0004_D_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          }
+        },
+        {
+          "capakey": "44017A0004/00F000",
+          "id": "0004/00F000",
+          "percid": "44017_A_0004_F_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          }
+        },
+        {
+          "capakey": "44017A0004/00G000",
+          "id": "0004/00G000",
+          "percid": "44017_A_0004_G_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          }
+        },
+        {
+          "capakey": "44017A0006/00A000",
+          "id": "0006/00A000",
+          "percid": "44017_A_0006_A_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          }
+        }
+      ]
+
     :reqheader Range: Can be used to ask for a certain set of results, 
         eg. ``ìtems=0-5`` asks for the first 6 items.
     :resheader Content-Range: Tells the client what range of results is
@@ -262,7 +462,7 @@ Capakey
 
 .. http:get:: /capakey/afdelingen/(int:afdeling_id)/secties/(string:sectie_id)/percelen/(int:perceel_id)
 
-    Get_perceel_by_id_and_sectie
+    Get_perceel_by_sectie_and_id
 
     **Example request**:
 
@@ -272,6 +472,17 @@ Capakey
        Host: example.onroerenderfgoed.be
        Accept: application/json
 
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+
+
+       
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
 

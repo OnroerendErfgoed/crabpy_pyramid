@@ -19,9 +19,12 @@ def parse_range_header(range):
         range is invalid.
     '''
     match = re.match('^items=([0-9]+)-([0-9]+)$', range)
+
+    print match
     if match:
         start = int(match.group(1))
         finish = int(match.group(2))
+
         if finish < start:
             finish = start
         return {
