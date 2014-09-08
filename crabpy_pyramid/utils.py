@@ -20,7 +20,6 @@ def parse_range_header(range):
     '''
     match = re.match('^items=([0-9]+)-([0-9]+)$', range)
 
-    print match
     if match:
         start = int(match.group(1))
         finish = int(match.group(2))
