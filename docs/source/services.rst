@@ -21,14 +21,14 @@ Capakey
        GET /capakey/gemeenten HTTP/1.1
        Host: example.onroerenderfgoed.be
        Accept: application/json
-       Range: 0-4
+       Range: items=0-4
 
     **Example response**:
 
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
        Content-Range: 0-4/306
 
        [
@@ -73,7 +73,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
 
        {
           'id': 44021,
@@ -103,7 +103,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
        Content-Range: 0-1/30
 
        [
@@ -150,7 +150,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
        Content-Range: 0-1/1433
 
        [
@@ -194,7 +194,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
 
        {
            'id': 44017,
@@ -228,7 +228,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
        
         [
           {
@@ -300,7 +300,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
 
        {
           "afdeling": {
@@ -367,7 +367,7 @@ Capakey
     .. sourcecode:: http
 
        HTTP/1.1 200 OK
-       Content-Type: application/javascript
+       Content-Type: application/json
 
        [
           {
@@ -485,7 +485,7 @@ Capakey
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
 
-.. http:get:: /capakey/percelen/(string:capakey)
+.. http:get:: /capakey/percelen/(string:capakey1)/(string:capakey2)
 
     Get Perceel_by_capakey
 
@@ -493,9 +493,74 @@ Capakey
 
     .. sourcecode:: http
 
-       GET /capakey/percelen/(string:capakey) HTTP/1.1
+       GET /capakey/percelen/44021A3675/00A000 HTTP/1.1
        Host: example.onroerenderfgoed.be
        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       {
+        "percid": "44021_A_3675_A_000_00",
+        "sectie": {
+          "afdeling": {
+            "naam": "GENT  1 AFD",
+            "bounding_box": [
+              104002.076624997,
+              194168.341499999,
+              105784.050875001,
+              197876.1466875
+            ],
+            "centroid": [
+              104893.063749999,
+              196022.24409375
+            ],
+            "id": 44021,
+            "gemeente": {
+              "naam": "Gent",
+              "bounding_box": [
+                94653.4530000016,
+                185680.984000001,
+                113654.991999999,
+                208920.421999998
+              ],
+              "centroid": [
+                104154.2225,
+                197300.703
+              ],
+              "id": 44021
+            }
+          },
+          "bounding_box": [
+            104002.076624997,
+            194168.341499999,
+            105784.050875001,
+            197876.1466875
+          ],
+          "centroid": [
+            104893.063749999,
+            196022.24409375
+          ],
+          "id": "A"
+        },
+        "capakey": "44021A3675/00A000",
+        "bounding_box": [
+          105182.648999996,
+          197425.741999999,
+          105199.199000001,
+          197454.061999999
+        ],
+        "centroid": [
+          105190.923999999,
+          197439.901999999
+        ],
+        "id": "3675/00A000"
+       }
+
 
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
@@ -508,9 +573,75 @@ Capakey
 
     .. sourcecode:: http
 
-       GET /capakey/percelen/(string:percid) HTTP/1.1
+       GET /capakey/percelen/44017_A_0004_D_000_00 HTTP/1.1
        Host: example.onroerenderfgoed.be
        Accept: application/json
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+
+       {
+          "percid": "44017_A_0004_D_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "bounding_box": [
+                94653.7508750036,
+                190442.133125,
+                101151.588,
+                197371.0951875
+              ],
+              "centroid": [
+                97902.6694375016,
+                193906.61415625
+              ],
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "bounding_box": [
+                  94653.4530000016,
+                  185680.984000001,
+                  113654.991999999,
+                  208920.421999998
+                ],
+                "centroid": [
+                  104154.2225,
+                  197300.703
+                ],
+                "id": 44021
+              }
+            },
+            "bounding_box": [
+              96205.7660000026,
+              194208.691374999,
+              101032.139624998,
+              197371.0951875
+            ],
+            "centroid": [
+              98618.9528125003,
+              195789.893281249
+            ],
+            "id": "A"
+          },
+          "capakey": "44017A0004/00D000",
+          "bounding_box": [
+            98800.686999999,
+            197101.388,
+            98857.4720000029,
+            197133.022
+          ],
+          "centroid": [
+            98829.0795000009,
+            197117.205
+          ],
+          "id": "0004/00D000"
+        }
 
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
@@ -535,7 +666,7 @@ Crab
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
-        Content-Type: application/javascript
+        Content-Type: application/json
 
         [
             {
@@ -563,7 +694,35 @@ Crab
         GET /crab/gewesten/2 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+    
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "namen": {
+            "fr": "Région flamande",
+            "de": "Die Flämische Region",
+            "nl": "Vlaams Gewest"
+          },
+          "bounding_box": [
+            22279.17,
+            153050.23,
+            258873.3,
+            244022.31
+          ],
+          "centroid": [
+            138165.09,
+            189297.53
+          ],
+          "id": 2
+        }
+
     :statuscode 200: Gewest was found.
     :statuscode 404: Gewest was not found.
 
@@ -584,7 +743,7 @@ Crab
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
-        Content-Type: application/javascript
+        Content-Type: application/json
         Content-Range: items 0-4/5
 
         [
@@ -631,7 +790,7 @@ Crab
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
-        Content-Type: application/javascript
+        Content-Type: application/json
 
         {
             "naam": "West-Vlaanderen",
@@ -653,12 +812,45 @@ Crab
         GET /crab/gewesten/2/gemeenten HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+        Range: items=0-4
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+
+        [
+          {
+            "naam": "Aartselaar",
+            "id": 1
+          },
+          {
+            "naam": "Antwerpen",
+            "id": 2
+          },
+          {
+            "naam": "Boechout",
+            "id": 3
+          },
+          {
+            "naam": "Boom",
+            "id": 4
+          },
+          {
+            "naam": "Borsbeek",
+            "id": 5
+          }
+        ]
+
     :query sort: One of ``id``, ``naam`` or ``niscode`` (default).
     :statuscode 200: Gemeenten were found.
     :statuscode 404: Gewest does not exist.
 
-.. http:get:: /crab/provincie/(int:provincie_id)/gemeenten
+.. http:get:: /crab/provincies/(int:provincie_id)/gemeenten
 
     List all gemeenten in a certain provincie.
 
@@ -670,10 +862,40 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+          {
+            "naam": "Beernem",
+            "id": 182
+          },
+          {
+            "naam": "Blankenberge",
+            "id": 183
+          },
+          {
+            "naam": "Brugge",
+            "id": 184
+          },
+          {
+            "naam": "Damme",
+            "id": 185
+          },
+          {
+            "naam": "Jabbeke",
+            "id": 186
+          }
+        ]
+
     :statuscode 200: Gemeenten were found.
     :satuscode 404: Provincie does not exist.
 
-.. http:get:: /crab/gemeente/(int:id of int:niscode)
+.. http:get:: /crab/gemeenten/(int:id of int:niscode)
     
     Get_gemeente_by_id
     
@@ -681,24 +903,62 @@ Crab
     
     .. sourcecode:: http
     
-        GET /crab/gewesten/1/gemeenten/1 HTTP/1.1
+        GET /crab/gemeenten/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
+
     Get_gemeente_by_niscode
     
     **Example request**:
     
     .. sourcecode:: http
     
-        GET /crab/gewesten/2/gemeenten/11001 HTTP/1.1
+        GET /crab/gemeenten/11001 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
     
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "naam": "Aartselaar",
+          "bounding_box": [
+            148950.36,
+            199938.28,
+            152811.77,
+            204575.39
+          ],
+          "centroid": [
+            150881.07,
+            202256.84
+          ],
+          "id": 1,
+          "metadata": {
+            "begin_tijd": "2002-08-13 17:32:32",
+            "begin_datum": "1830-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "NGI",
+              "definitie": "Nationaal Geografisch Instituut.",
+              "id": "6"
+            },
+            "begin_bewerking": {
+              "naam": "invoer",
+              "definitie": "Invoer in de databank.",
+              "id": "1"
+            }
+          }
+        }
+
     :statuscode 200: Gemeente was found.
     :statuscode 404: Gemeente was not found.
 
-.. http:get:: /crab/gemeente/(int:id of int:niscode)/straten
+.. http:get:: /crab/gemeenten/(int:id of int:niscode)/straten
 
     List all straten in a `gemeente`.
     
@@ -706,11 +966,68 @@ Crab
     
     .. sourcecode:: http
             
-            GET /crab/gemeente/11001/straten HTTP/1.1
+            GET /crab/gemeenten/11001/straten HTTP/1.1
             Host: example.onroerenderfgoed.be
             Accept: application/json
-            
-        :statuscode 200: Straten were found.
+            Range: items=0-4
+
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 1,
+            "label": "Acacialaan"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 2,
+            "label": "Adriaan Sanderslei"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 3,
+            "label": "Ahornelaan"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 4,
+            "label": "Antoon van Brabantstraat"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 5,
+            "label": "Antwerpsesteenweg"
+          }
+        ]
+        
+    :statuscode 200: Straat was found.
 
 .. http:get:: /crab/straten/(int:straat_id)
 
@@ -723,6 +1040,59 @@ Crab
         GET /crab/straten/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "status": {
+            "naam": "inGebruik",
+            "definitie": null,
+            "id": "3"
+          },
+          "namen": [
+            [
+              "Acacialaan",
+              "nl"
+            ],
+            [
+              null,
+              null
+            ]
+          ],
+          "taal": {
+            "naam": "Nederlands",
+            "definitie": "Nederlands.",
+            "id": "nl"
+          },
+          "label": "Acacialaan",
+          "bounding_box": [
+            "150339.255243488",
+            "200079.666892901",
+            "150812.200907812",
+            "201166.401677653"
+          ],
+          "id": 1,
+          "metadata": {
+            "begin_tijd": "2013-04-12 20:07:25.960000",
+            "begin_datum": "1830-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "gemeente",
+              "definitie": "Gemeente.",
+              "id": "1"
+            },
+            "begin_bewerking": {
+              "naam": "correctie",
+              "definitie": "Correctie van de attributen.",
+              "id": "3"
+            }
+          }
+        }
         
     :statuscode 200: Straat was found.
     :statuscode 404: Straat was not found.
@@ -738,6 +1108,64 @@ Crab
         GET /crab/straten/1/huisnummers HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
+        Range: items=0-4
+
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+        [
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 78036,
+            "label": "21"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 153134,
+            "label": "4"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 221505,
+            "label": "11"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 379090,
+            "label": "23"
+          },
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "3"
+            },
+            "id": 526418,
+            "label": "13"
+          }
+        ]
         
     :statuscode 200: Huisnummers were found.
 
@@ -752,7 +1180,44 @@ Crab
         GET /crab/straten/1/huisnummers/23 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "status": {
+            "naam": "inGebruik",
+            "definitie": null,
+            "id": "3"
+          },
+          "bounding_box": [
+            150786.11,
+            200189.33,
+            150786.11,
+            200189.33
+          ],
+          "huisnummer": "23",
+          "id": 379090,
+          "metadata": {
+            "begin_tijd": "2013-04-12 20:06:33.720000",
+            "begin_datum": "1830-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "gemeente",
+              "definitie": "Gemeente.",
+              "id": "1"
+            },
+            "begin_bewerking": {
+              "naam": "correctie",
+              "definitie": "Correctie van de attributen.",
+              "id": "3"
+            }
+          }
+        }
+
     :statuscode 200: Huisnummer was found.
     :statuscode 404: Huisnummer was not found.
 
@@ -767,7 +1232,44 @@ Crab
         GET /crab/huisnummers/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-    
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "status": {
+            "naam": "inGebruik",
+            "definitie": null,
+            "id": "3"
+          },
+          "bounding_box": [
+            190700.24,
+            224649.87,
+            190700.24,
+            224649.87
+          ],
+          "huisnummer": "51",
+          "id": 1,
+          "metadata": {
+            "begin_tijd": "2014-03-19 17:00:27",
+            "begin_datum": "1830-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "gemeente",
+              "definitie": "Gemeente.",
+              "id": "1"
+            },
+            "begin_bewerking": {
+              "naam": "correctie",
+              "definitie": "Correctie van de attributen.",
+              "id": "3"
+            }
+          }
+        }
+
     :statuscode 200: Huisnummer was found.
     :statuscode 404: Huisnummer was not found.
 
@@ -783,9 +1285,21 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
         
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+          {
+            "id": "13040C1747/00G002"
+          }
+        ]
     :statuscode 200: Percelen were found.
 
-.. http:get:: /crab/percelen/(int:perceel_id)
+.. http:get:: /crab/percelen/(string:perceel_id1)/(string:perceel_id2)
 
     Get_perceel_by_id
     
@@ -793,10 +1307,40 @@ Crab
     
     .. sourcecode:: http
     
-        GET /crab/percelen/1 HTTP/1.1
+        GET /crab/percelen/13040C1747/00G002 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "centroid": [
+            190708.59,
+            224667.59
+          ],
+          "id": "13040C1747/00G002",
+          "metadata": {
+            "begin_tijd": "2009-09-11 12:46:55.693000",
+            "begin_datum": "1998-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "AAPD",
+              "definitie": "Algemene Administratie der Patrimoniumdocumentatie.",
+              "id": "3"
+            },
+            "begin_bewerking": {
+              "naam": "correctie",
+              "definitie": "Correctie van de attributen.",
+              "id": "3"
+            }
+          }
+        }
+
     :statuscode 200: Perceel was found.
     :statuscode 404: Perceel was not found.
 
@@ -811,7 +1355,28 @@ Crab
         GET /crab/huisnummer/1/gebouwen HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+          {
+            "status": {
+              "naam": "inGebruik",
+              "definitie": null,
+              "id": "4"
+            },
+            "aard": {
+              "naam": "hoofdgebouw",
+              "definitie": "hoofdgebouw volgens het GRB",
+              "id": "1"
+            },
+            "id": 1538575
+          }
+        ]
     :statuscode 200: Gebouwen were found.
 
 .. http:get:: /crab/gebouwen/(int:gebouw_id)
@@ -825,6 +1390,46 @@ Crab
         GET /crab/gebouwen/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+          "status": {
+            "naam": "inGebruik",
+            "definitie": null,
+            "id": "4"
+          },
+          "aard": {
+            "naam": "hoofdgebouw",
+            "definitie": "hoofdgebouw volgens het GRB",
+            "id": "1"
+          },
+          "geometriemethode": {
+            "naam": "grb",
+            "definitie": null,
+            "id": "3"
+          },
+          "geometrie": "POLYGON ((205574.52184166759 176477.42431658879, 205579.1574896723 176476.68550058827, 205578.6424176693 176472.64633258432, 205588.81227367371 176471.11494058371, 205589.80452967435 176478.83282858878, 205587.36587367207 176479.30028459057, 205588.38680167496 176487.107260596, 205576.12900967151 176488.87878059596, 205574.52184166759 176477.42431658879))",
+          "id": 1,
+          "metadata": {
+            "begin_tijd": "2011-04-29 13:11:28.540000",
+            "begin_datum": "1830-01-01 00:00:00",
+            "begin_organisatie": {
+              "naam": "AGIV",
+              "definitie": "Agentschap voor Geografische Informatie Vlaanderen.",
+              "id": "5"
+            },
+            "begin_bewerking": {
+              "naam": "invoer",
+              "definitie": "Invoer in de databank.",
+              "id": "1"
+            }
+          }
+        }
     :statuscode 200: Gebouw was found.
     :statuscode 404: Gebouw was not found.
