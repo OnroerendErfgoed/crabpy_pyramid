@@ -479,7 +479,32 @@ Capakey
        HTTP/1.1 200 OK
        Content-Type: application/json
 
-
+       {
+          "percid": "44017_A_0003_C_000_00",
+          "sectie": {
+            "afdeling": {
+              "naam": "GENT 27 AFD/DRONGEN  1 AFD/",
+              "id": 44017,
+              "gemeente": {
+                "naam": "Gent",
+                "id": 44021
+              }
+            },
+            "id": "A"
+          },
+          "capakey": "44017A0003/00C000",
+          "bounding_box": [
+            98798.1679999977,
+            197135.57,
+            98989.2730000019,
+            197356.498
+          ],
+          "centroid": [
+            98893.7204999998,
+            197246.034
+          ],
+          "id": "0003/00C000"
+       }
 
 
     :statuscode 200: Perceel was found.
