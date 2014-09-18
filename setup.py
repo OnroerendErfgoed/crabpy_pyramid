@@ -20,11 +20,11 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.1.0',
+      version='0.1.1',
       description='crabpy_pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python",
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
