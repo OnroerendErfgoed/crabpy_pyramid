@@ -16,7 +16,7 @@ Bindings for the crabpy library and the pyramid framework
 Building the docs
 -----------------
 
-More information about this library can be found in :file:`docs`. The docs can be 
+More information about this library can be found in `docs`. The docs can be 
 built using `Sphinx <http://sphinx-doc.org>`_.
 
 Please make sure you have installed Sphinx in the same environment where 
