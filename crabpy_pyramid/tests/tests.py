@@ -8,6 +8,7 @@ from pyramid import testing
 from crabpy.gateway.capakey import CapakeyGateway
 from crabpy.gateway.crab import CrabGateway
 import os
+import warnings
 
 from crabpy_pyramid import (
     includeme,
@@ -107,3 +108,12 @@ class TestSettings(unittest.TestCase):
         includeme(self.config)
         r = self.config.registry.settings
         self.assertEqual('Talissa', r['crabpy.capakey.user'])
+
+    def test_includeme_no_capakey_auth_warning(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            del self.config.registry.settings['crabpy.capakey.user']
+            del self.config.registry.settings['crabpy.capakey.password']
+            includeme(self.config)
+            self.assertEqual(1, len(w))
+            self.assertEqual(w[-1].category, UserWarning)

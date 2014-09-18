@@ -1,3 +1,10 @@
+0.1.1 (2014-09-18)
+------------------
+
+- Minor release adding and cleaning up lots of service documentation. (#14)
+- Fixes a small bug when no capakey username or password was set and the capakey
+  service was included. 
+
 0.1.0 (2014-09-05)
 ------------------
 

@@ -185,7 +185,7 @@ def includeme(config):
             warnings.warn(
                 'capakey.user or capakey.password was not found in \
                 the settings, capakey needs this parameter to \
-                function properly.' % short_key_name,
+                function properly.',
                 UserWarning
             )
         else:    
