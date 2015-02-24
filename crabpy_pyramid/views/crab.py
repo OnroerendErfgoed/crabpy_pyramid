@@ -196,5 +196,5 @@ def list_subadressen(request):
 )
 def get_subadres_by_id(request):
     Gateway = request.crab_gateway()
-    subadres_id = request.matchdir.get('subadres_id')
+    subadres_id = request.matchdict.get('subadres_id')
     return Gateway.get_subadres_by_id(subadres_id)
