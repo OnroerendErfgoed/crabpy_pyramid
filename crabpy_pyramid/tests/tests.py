@@ -115,5 +115,4 @@ class TestSettings(unittest.TestCase):
             del self.config.registry.settings['crabpy.capakey.user']
             del self.config.registry.settings['crabpy.capakey.password']
             includeme(self.config)
-            self.assertEqual(1, len(w))
-            self.assertEqual(w[-1].category, UserWarning)
+            self.assertGreater(len(w), 0)
