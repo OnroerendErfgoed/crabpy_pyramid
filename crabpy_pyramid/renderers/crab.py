@@ -103,6 +103,21 @@ def list_gebouwen_adapter(obj, request):
             'definitie': obj.status.definitie
         },
     }
+    
+def list_subadres_adapter(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class: `crabpy.gateway.crab.Subadres` to json.
+    '''
+    return {
+        'id': obj.id,
+        'subadres': obj.subadres,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        }
+    }
 
 
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
@@ -112,6 +127,7 @@ json_list_renderer.add_adapter(crab.Straat, list_straten_adapter)
 json_list_renderer.add_adapter(crab.Huisnummer, list_huisnummers_adapter)
 json_list_renderer.add_adapter(crab.Perceel, list_percelen_adapter)
 json_list_renderer.add_adapter(crab.Gebouw, list_gebouwen_adapter)
+json_list_renderer.add_adapter(crab.Subadres, list_subadres_adapter)
 
 
 def item_gewest_adapter(obj, request):
@@ -324,6 +340,40 @@ def item_wegobject_adapter(obj, request):
             }
         }
     }
+    
+def item_subadres_adapter(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class: `crabpy.gateway.Subadres` to json.
+    '''
+    return {
+        'id': obj.id,
+        'subadres': obj.subadres,
+        'status': {
+            'id': obj.status.id,
+            'naam': obj.status.naam,
+            'definitie': obj.status.definitie
+        },
+        'aard': {
+            'id': obj.aard.id,
+            'naam': obj.aard.naam,
+            'definitie': obj.aard.definitie
+        },
+        'metadata': {
+            'begin_tijd': obj.metadata.begin_tijd,
+            'begin_datum': obj.metadata.begin_datum,
+            'begin_bewerking': {
+                'id': obj.metadata.begin_bewerking.id,
+                'naam': obj.metadata.begin_bewerking.naam,
+                'definitie': obj.metadata.begin_bewerking.definitie
+            },
+            'begin_organisatie': {
+                'id': obj.metadata.begin_organisatie.id,
+                'naam': obj.metadata.begin_organisatie.naam,
+                'definitie': obj.metadata.begin_organisatie.definitie
+            }
+        }
+    }
 
 
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
@@ -334,3 +384,4 @@ json_item_renderer.add_adapter(crab.Huisnummer, item_huisnummer_adapter)
 json_item_renderer.add_adapter(crab.Perceel, item_perceel_crab_adapter)
 json_item_renderer.add_adapter(crab.Gebouw, item_gebouw_adapter)
 json_item_renderer.add_adapter(crab.Wegobject, item_wegobject_adapter)
+json_item_renderer.add_adapter(crab.Subadres, item_subadres_adapter)
