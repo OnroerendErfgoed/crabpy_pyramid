@@ -178,3 +178,23 @@ def get_wegobject(request):
     Gateway = request.crab_gateway()
     wegobject_id = request.matchdict.get('wegobject_id')
     return Gateway.get_wegobject_by_id(wegobject_id)
+
+
+@view_config(
+    route_name='list_subadressen',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_subadressen(request):
+    Gateway = request.crab_gateway()
+    huisnummer_id = request.matchdict.get('huisnummer_id')
+    subadressen = Gateway.list_subadressen_by_huisnummer(huisnummer_id)
+    return range_return(request, subadressen)
+    
+@view_config(
+    route_name='get_subadres_by_id',
+    renderer='crab_itemjson', accept='applcation/json'
+)
+def get_subadres_by_id(request):
+    Gateway = request.crab_gateway()
+    subadres_id = request.matchdir.get('subadres_id')
+    return Gateway.get_subadres_by_id(subadres_id)
