@@ -1458,3 +1458,93 @@ Crab
         }
     :statuscode 200: Gebouw was found.
     :statuscode 404: Gebouw was not found.
+    
+.. http:get:: /crab/huisnummers/(int:huisnummer_id)/subadressen
+
+    List_subadressen
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/huisnummer/1/subadressen HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+            {
+                "status":{
+                    "naam": "inGebruik",
+                    "definitie": null,
+                    "id": "3"
+                },
+                "id": 1120936,
+                "subadres": "B"
+            },{
+                "status":{
+                    "naam": "inGebruik",
+                    "definitie": null,
+                    "id": "3"
+                },
+                "id": 1120937,
+                "subadres": "C"
+            }
+        ]
+    :statuscode 200: Subadressen were found.
+
+.. http:get:: /crab/subadressen/(int:subadres_id)
+
+    Get_subadres_by_id
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+    
+        GET /crab/subadressen/1 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {
+            "status": {
+                "naam": "inGebruik",
+                "definitie": null,
+                "id": "3"
+            },
+            "metadata": {
+                "begin_tijd": "2013-04-12 20:07:13.180000",
+                "begin_datum": "1830-01-01 00:00:00",
+                "begin_organisatie": {
+                    "naam": "gemeente",
+                    "definitie": "Gemeente.",
+                    "id": "1"
+                },
+                "begin_bewerking": {
+                    "naam": "correctie",
+                    "definitie": "Correctie van de attributen.",
+                    "id": "3"
+                }
+            },
+            "aard": {
+                "naam": "rijksregister",
+                "definitie": "Rijksregister.",
+                "id": "2"
+            },
+            "id": 1120936,
+            "subadres": "B"
+        }
+        
+    :statuscode 200: Subadres was found.
+    :statuscode 404: Subadres was not found.
+
