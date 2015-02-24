@@ -23,4 +23,4 @@ def includeme(config):
     config.add_route('list_gebouwen', '/crab/huisnummers/{huisnummer_id}/gebouwen')
     config.add_route('get_gebouw_by_id', '/crab/gebouwen/{gebouw_id}')
     config.add_route('list_subadressen', '/crab/huisnummers/{huisnummer_id}/subadressen')
-    config.add_route('get_subadres_by_id', '/crab/subadres/{subadres_id}')
+    config.add_route('get_subadres_by_id', '/crab/subadressen/{subadres_id}')
