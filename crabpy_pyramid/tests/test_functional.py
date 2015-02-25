@@ -192,7 +192,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_list_subadressen(self):
-        res = self.testapp.get('/crab/huisnummer/129462/subadressen')
+        res = self.testapp.get('/crab/huisnummers/129462/subadressen')
         self.assertEqual('200 OK', res.status)
     
     def test_get_subadressen_by_id(self):
