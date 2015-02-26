@@ -1402,6 +1402,7 @@ Crab
             "id": 1538575
           }
         ]
+
     :statuscode 200: Gebouwen were found.
 
 .. http:get:: /crab/gebouwen/(int:gebouw_id)
@@ -1496,7 +1497,10 @@ Crab
                 "subadres": "C"
             }
         ]
+
     :statuscode 200: Subadressen were found.
+    :statuscode 404: The Huisnummer for which you are requesting Subadressen
+        does not exist.
 
 .. http:get:: /crab/subadressen/(int:subadres_id)
 
