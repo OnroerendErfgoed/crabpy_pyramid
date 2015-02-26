@@ -8,7 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
 requires = [
     'pyramid',
-    'crabpy>=0.4.1'
+    'crabpy>=0.5.0'
 ]
 
 tests_requires = [
@@ -20,7 +20,7 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.1.1',
+      version='0.2.0',
       description='crabpy_pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
