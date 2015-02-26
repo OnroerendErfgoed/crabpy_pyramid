@@ -1,3 +1,9 @@
+0.2.0 (2015-??-??)
+------------------
+
+- Implement two service endpoints dealing with Subadressen (think of boxes
+  in an appartment building). (#18) [TalissaJoly]
+
 0.1.1 (2014-09-18)
 ------------------
 
