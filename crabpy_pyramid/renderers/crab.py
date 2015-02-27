@@ -118,6 +118,15 @@ def list_subadres_adapter(obj, request):
             'definitie': obj.status.definitie
         }
     }
+    
+def list_postkantons_adapter(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class: `crabpy.gateway.crab.Postkanton` to json.
+    '''
+    return {
+        'id': obj.id
+    }
 
 
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
@@ -128,6 +137,7 @@ json_list_renderer.add_adapter(crab.Huisnummer, list_huisnummers_adapter)
 json_list_renderer.add_adapter(crab.Perceel, list_percelen_adapter)
 json_list_renderer.add_adapter(crab.Gebouw, list_gebouwen_adapter)
 json_list_renderer.add_adapter(crab.Subadres, list_subadres_adapter)
+json_list_renderer.add_adapter(crab.Postkanton, list_postkantons_adapter)
 
 
 def item_gewest_adapter(obj, request):

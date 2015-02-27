@@ -1552,3 +1552,29 @@ Crab
     :statuscode 200: Subadres was found.
     :statuscode 404: Subadres was not found.
 
+.. http:get:: /crab/gemeenten/(int:gemeente_id)/postkantons
+
+    List_postkantons
+    
+    **Example request**:
+    
+    .. sourcecode:: http
+        
+        GET /crab/gemeenten/90/postkantons HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+            {"id": 1730},
+            {"id": 1731}
+        ]
+
+    :statuscode 200: Postkantons were found.
+    :statuscode 404: The Gemeente for which you are requesting Postkantons
+        does not exist.
