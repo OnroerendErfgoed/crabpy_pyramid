@@ -192,9 +192,20 @@ def list_subadressen(request):
     
 @view_config(
     route_name='get_subadres_by_id',
-    renderer='crab_itemjson', accept='applcation/json'
+    renderer='crab_itemjson', accept='application/json'
 )
 def get_subadres_by_id(request):
     Gateway = request.crab_gateway()
     subadres_id = request.matchdict.get('subadres_id')
     return Gateway.get_subadres_by_id(subadres_id)
+    
+    
+@view_config(
+    route_name='list_postkantons_by_gemeente',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_postkantons_by_gemeente(request):
+    Gateway = request.crab_gateway()
+    gemeente_id = request.matchdict.get('gemeente_id')
+    postkantons = Gateway.list_postkantons_by_gemeente(gemeente_id)
+    return range_return(request, postkantons)

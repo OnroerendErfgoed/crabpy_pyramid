@@ -198,4 +198,7 @@ class CrabFunctionalTests(FunctionalTests):
     def test_get_subadressen_by_id(self):
         res = self.testapp.get('/crab/subadressen/1120934')
         self.assertEqual('200 OK', res.status)
+        
+    def test_list_postkantons_by_gemeente(self):
+        res = self.testapp.get('/crab/gemeenten/90/postkantons')
 
