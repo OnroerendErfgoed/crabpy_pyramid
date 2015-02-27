@@ -3,6 +3,8 @@
 
 - Implement two service endpoints dealing with Subadressen (think of boxes
   in an appartment building). (#18) [TalissaJoly]
+- Implement a service endpoint for listing the Postkantons (ie. Postcode) in
+  a certain gemeente. (#23) [TalissaJoly]
 
 0.1.1 (2014-09-18)
 ------------------
