@@ -1,10 +1,12 @@
-0.2.0 (2015-??-??)
+0.2.0 (2015-03-03)
 ------------------
 
 - Implement two service endpoints dealing with Subadressen (think of boxes
   in an appartment building). (#18) [TalissaJoly]
 - Implement a service endpoint for listing the Postkantons (ie. Postcode) in
   a certain gemeente. (#23) [TalissaJoly]
+- Cleanedthe code a bit by removing unneeded bits and pieces. (#17) (#19)
+  [TalissaJoly]
 
 0.1.1 (2014-09-18)
 ------------------
