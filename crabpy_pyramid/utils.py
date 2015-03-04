@@ -58,6 +58,8 @@ def range_return(request, items):
         # Something was stripped, deal with it
         range['count'] = len(filtered)
         range['finish'] = range['start'] + range['count'] - 1
+    if range['finish'] >= MAX_NUMBER_ITEMS:
+        range['finish'] = MAX_NUMBER_ITEMS - 1
 
     request.response.headers['Content-Range'] = 'items %d-%d/%d' % (range['start'], range['finish'], len(items))
     request.response.headers['X-Content-Range'] = request.response.headers['Content-Range']
