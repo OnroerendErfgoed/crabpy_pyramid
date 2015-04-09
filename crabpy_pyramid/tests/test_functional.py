@@ -201,4 +201,16 @@ class CrabFunctionalTests(FunctionalTests):
         
     def test_list_postkantons_by_gemeente(self):
         res = self.testapp.get('/crab/gemeenten/90/postkantons')
-
+        self.assertEqual('200 OK', res.status)
+        
+    def test_list_adresposities_by_huisnummer(self):
+        res = self.testapp.get('/crab/huisnummers/145/adresposities')
+        self.assertEqual('200 OK', res.status)
+    
+    def test_list_adresposities_by_subadres(self):
+        res = self.testapp.get('/crab/subadressen/145/adresposities')
+        self.assertEqual('200 OK', res.status)
+        
+    def test_get_adrespositie_by_id(self):
+        res = self.testapp.get('/crab/adresposities/137')
+        self.assertEqual('200 OK', res.status)
