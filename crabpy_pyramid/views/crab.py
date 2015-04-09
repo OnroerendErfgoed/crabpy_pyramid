@@ -209,3 +209,35 @@ def list_postkantons_by_gemeente(request):
     gemeente_id = request.matchdict.get('gemeente_id')
     postkantons = Gateway.list_postkantons_by_gemeente(gemeente_id)
     return range_return(request, postkantons)
+
+
+@view_config(
+    route_name='list_adresposities_by_huisnummer',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_adresposities_by_huisnummer(request):
+    Gateway = request.crab_gateway()
+    huisnummer_id = request.matchdict.get('huisnummer_id')
+    adresposities = Gateway.list_adresposities_by_huisnummer(huisnummer_id)
+    return range_return(request, adresposities)
+
+
+@view_config(
+    route_name='list_adresposities_by_subadres',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_adresposities_by_subadres(request):
+    Gateway = request.crab_gateway()
+    subadres_id = request.matchdict.get('subadres_id')
+    adresposities = Gateway.list_adresposities_by_subadres(subadres_id)
+    return range_return(request, adresposities)
+    
+
+@view_config(
+    route_name='get_adrespositie_by_id',
+    renderer='crab_itemjson', accept='application/json'
+)
+def get_adrespositie_by_id(request):
+    Gateway = request.crab_gateway()
+    adrespositie_id = request.matchdict.get('adrespositie_id')
+    return Gateway.get_adrespositie_by_id(adrespositie_id)
