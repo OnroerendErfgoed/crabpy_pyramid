@@ -1,3 +1,14 @@
+0.3.0 (2015-??-??)
+------------------
+
+- Add Adresposities. Add endpoints that exposes the Adresposities linked to a
+  certain Huisnummer or Subadres. (#26) [TalissaJoly]
+- Limit the number of results that can be returned in a list. There was some
+  partial handling for this, but only when the user did not send any range
+  headers. This behavious was deemed potentially hazardous and changed. Now,
+  only a maximum of 5.000 records will be returned and range slicing works
+  correctly. (#16) [TalissaJoly]
+
 0.2.0 (2015-03-03)
 ------------------
 

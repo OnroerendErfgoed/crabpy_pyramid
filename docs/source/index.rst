@@ -6,15 +6,13 @@
 Welcome to crabpy_pyramid's documentation!
 ==========================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
    setup
    services
    api
-
+   changes
 
 
 Indices and tables
