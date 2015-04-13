@@ -11,11 +11,11 @@ from pyramid.renderers import JSON
 json_list_renderer = JSON()
 json_item_renderer = JSON()
 
-    
+
 def list_gewesten_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Gewest` to json.
+    :class:`crabpy.gateway.crab.Gewest` to json.
     '''
     return {
         'id': obj.id,
@@ -25,7 +25,7 @@ def list_gewesten_adapter(obj, request):
 def list_provincie_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Provincie` to json.
+    :class:`crabpy.gateway.crab.Provincie` to json.
     '''
     return {
         'niscode': obj.niscode,
@@ -39,7 +39,7 @@ def list_provincie_adapter(obj, request):
 def list_gemeente_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class `crabpy.gateway.crab.Gemeenten` to json.
+    :class:`crabpy.gateway.crab.Gemeenten` to json.
     '''
     return {
         'id': obj.id,
@@ -48,8 +48,8 @@ def list_gemeente_adapter(obj, request):
 
 def list_straten_adapter(obj, request):
     '''
-    Adapter for rendering a list of 
-    :class: `crabpy.gateway.crab.Straat` to json.
+    Adapter for rendering a list of
+    :class:`crabpy.gateway.crab.Straat` to json.
     '''
     return {
         'id': obj.id,
@@ -60,11 +60,11 @@ def list_straten_adapter(obj, request):
             'definitie': obj.status.definitie
         },
     }
-    
+
 def list_huisnummers_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Huisnummer` to json.
+    :class:`crabpy.gateway.crab.Huisnummer` to json.
     '''
     return {
         'id':obj.id,
@@ -78,8 +78,8 @@ def list_huisnummers_adapter(obj, request):
 
 def list_percelen_adapter(obj, request):
     '''
-    Adapter for rendering a list of 
-    :class: `crabpy.gateway.crab.Perceel` to json.
+    Adapter for rendering a list of
+    :class:`crabpy.gateway.crab.Perceel` to json.
     '''
     return {
         'id':obj.id
@@ -88,7 +88,7 @@ def list_percelen_adapter(obj, request):
 def list_gebouwen_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Gebouw` to json.
+    :class:`crabpy.gateway.crab.Gebouw` to json.
     '''
     return{
         'id': obj.id,
@@ -101,13 +101,13 @@ def list_gebouwen_adapter(obj, request):
             'id': obj.status.id,
             'naam': obj.status.naam,
             'definitie': obj.status.definitie
-        },
+        }
     }
-    
+
 def list_subadres_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Subadres` to json.
+    :class:`crabpy.gateway.crab.Subadres` to json.
     '''
     return {
         'id': obj.id,
@@ -118,20 +118,20 @@ def list_subadres_adapter(obj, request):
             'definitie': obj.status.definitie
         }
     }
-    
+
 def list_postkantons_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Postkanton` to json.
+    :class:`crabpy.gateway.crab.Postkanton` to json.
     '''
     return {
         'id': obj.id
     }
-    
+
 def list_adresposities_adapter(obj, request):
     '''
     Adapter for rendering a list of
-    :class: `crabpy.gateway.crab.Adrespositie` to json.
+    :class:`crabpy.gateway.crab.Adrespositie` to json.
     '''
     return {
         'id': obj.id,
@@ -166,11 +166,11 @@ def item_gewest_adapter(obj, request):
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box
     }
-    
+
 def item_provincie_adapter(obj, request):
     '''
     Adapter for rendering a object of
-    :class: `crabpy.gateway.crab.Provincie` to json.
+    :class:`crabpy.gateway.crab.Provincie` to json.
     '''
     return {
         'niscode': obj.niscode,
@@ -245,7 +245,7 @@ def item_straat_adapter(obj, request):
 
 def item_huisnummer_adapter(obj, request):
     '''
-    Adapter for rendering an object of 
+    Adapter for rendering an object of
     :class:`crabpy.gateway.crab.Huisnummer` to json.
     '''
     return {
@@ -271,7 +271,7 @@ def item_huisnummer_adapter(obj, request):
             }
         },
         'bounding_box': obj.bounding_box
-    } 
+    }
 
 def item_perceel_crab_adapter(obj, request):
     '''
@@ -335,7 +335,7 @@ def item_gebouw_adapter(obj, request):
             }
         }
     }
-    
+
 def item_wegobject_adapter(obj, request):
     '''
     Adapter for rendering a list of
@@ -365,11 +365,11 @@ def item_wegobject_adapter(obj, request):
             }
         }
     }
-    
+
 def item_subadres_adapter(obj, request):
     '''
     Adapter for rendering an item of
-    :class: `crabpy.gateway.Subadres` to json.
+    :class:`crabpy.gateway.Subadres` to json.
     '''
     return {
         'id': obj.id,
@@ -403,7 +403,7 @@ def item_subadres_adapter(obj, request):
 def item_adrespositie_adapter(obj, request):
     '''
     Adapter for rendering an item of
-    :class: `crabpy.gateway.Adrespositie` to json.
+    :class:`crabpy.gateway.Adrespositie` to json.
     '''
     return {
         'id': obj.id,
