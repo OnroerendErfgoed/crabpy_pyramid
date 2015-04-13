@@ -1579,3 +1579,116 @@ Crab
     :statuscode 200: Subadres was found.
     :statuscode 404: Subadres was not found.
 
+.. http:get:: /crab/huisnummers/(int:huisnummer_id)/adresposities
+
+    List all adresposities for a certain huisnummer.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/huisnummer/1/adresposities HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+            {
+                "herkomst": {
+                    "naam": "manueleAanduidingVanPerceel",
+                    "definitie": null,
+                    "id": "2"
+                },
+                "id": 4087928
+            }
+        ]
+
+    :statuscode 200: A (possibly empty) list of adresposities is available.
+    :statuscode 404: The Huisnummer for which you are requesting Adresposities
+        does not exist.
+
+.. http:get:: /crab/subadressen/(int:subadres_id)/adresposities
+
+    List all adresposities for a certain subadres.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/huisnummer/800000/adresposities HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+            {
+                "herkomst": {
+                    "naam": "afgeleidVanGebouw",
+                    "definitie": null,
+                    "id": "10"
+                },
+                "id": 2706297
+            }
+        ]
+
+    :statuscode 200: A (possibly empty) list of adresposities is available.
+    :statuscode 404: The Subadres for which you are requesting Adresposities
+        does not exist.
+
+.. http:get:: /crab/adresposities/(int:adrespositie_id)
+
+    List all information on a certain adrespositie.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/adresposities/2706297 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+   **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {
+            "herkomst": {
+                "naam": "afgeleidVanGebouw",
+                "definitie": null,
+                "id": "10"
+            },
+            "metadata": {
+                "begin_tijd": "2013-01-19 06:28:57.483000",
+                "begin_datum": "1830-01-01 00:00:00",
+                "begin_organisatie": {
+                    "naam": "AGIV",
+                    "definitie": "Agentschap voor Geografische Informatie
+        Vlaanderen.",
+                    "id": "5"
+                },
+                "begin_bewerking": {
+                    "naam": "correctie",
+                    "definitie": "Correctie van de attributen.",
+                    "id": "3"
+                }
+            },
+            "geometrie": "POINT (154546.38 216367)",
+            "id": 2706297,
+            "aard": {
+                "naam": "subAdres",
+                "definitie": "Aanduiding van een plaats op een huisnummer",
+                "id": "1"
+            }
+        }
