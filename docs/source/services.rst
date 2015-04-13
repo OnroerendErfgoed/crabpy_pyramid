@@ -4,7 +4,7 @@
 Services
 ========
 
-Crabpy_pyramid exposes the following services if both 
+Crabpy_pyramid exposes the following services if both
 :ref:`setting-capakey-include` and :ref:`setting-crab-include` are set to `True`.
 
 Capakey
@@ -50,7 +50,7 @@ Capakey
         }
        ]
 
-    :reqheader Range: Can be used to ask for a certain set of results, 
+    :reqheader Range: Can be used to ask for a certain set of results,
         eg. ``ìtems=0-24`` asks for the first 25 items.
     :resheader Content-Range: Tells the client what range of results is
         being returned, eg. ``items=0-24/306`` for the first 25 items out of 306.
@@ -125,13 +125,13 @@ Capakey
        ]
 
 
-    :reqheader Range: Can be used to ask for a certain set of results, 
+    :reqheader Range: Can be used to ask for a certain set of results,
         eg. ``ìtems=0-24`` asks for the first 25 items.
     :resheader Content-Range: Tells the client what range of results is
         being returned, eg. ``items=0-9/30`` for the first 10 items out of 30.
     :statuscode 200: Gemeente was found.
     :statuscode 404: Gemeente was not found.
-    
+
 .. http:get:: /capakey/afdelingen
 
     List_kadastrale_afdelingen
@@ -171,7 +171,7 @@ Capakey
         }
        ]
 
-    :reqheader Range: Can be used to ask for a certain set of results, 
+    :reqheader Range: Can be used to ask for a certain set of results,
         eg. ``ìtems=0-24`` asks for the first 25 items.
     :resheader Content-Range: Tells the client what range of results is
         being returned, eg. ``items=0-99/1433`` for the first 100 items out of 1433.
@@ -229,7 +229,7 @@ Capakey
 
        HTTP/1.1 200 OK
        Content-Type: application/json
-       
+
         [
           {
             "afdeling": {
@@ -452,7 +452,7 @@ Capakey
           }
         ]
 
-    :reqheader Range: Can be used to ask for a certain set of results, 
+    :reqheader Range: Can be used to ask for a certain set of results,
         eg. ``ìtems=0-5`` asks for the first 6 items.
     :resheader Content-Range: Tells the client what range of results is
         being returned, eg. ``items=0-5/145`` for the first 6 items out of 145.
@@ -677,11 +677,11 @@ Crab
 .. http:get:: /crab/gewesten
 
     List_gewesten
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/gewesten HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -695,7 +695,7 @@ Crab
 
         [
             {
-                "naam": "Brussels Hoofdstedelijk Gewest", 
+                "naam": "Brussels Hoofdstedelijk Gewest",
                 "id": 1
             }, {
                 "naam": "Vlaams Gewest",
@@ -705,21 +705,21 @@ Crab
                 "id": 3
             }
         ]
-        
+
     :statuscode 200: Gewesten were found.
 
 .. http:get:: /crab/gewesten/(int:gewest_id)
 
     Get_gewest_by_id
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/gewesten/2 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-    
+
 
 
     **Example response**:
@@ -789,8 +789,8 @@ Crab
                 "gewest": {"naam": "Vlaams Gewest", "id": 2},
                 "niscode": 40000
             }, {
-                "naam": "Limburg", 
-                "gewest": {"naam": "Vlaams Gewest", "id": 2}, 
+                "naam": "Limburg",
+                "gewest": {"naam": "Vlaams Gewest", "id": 2},
                 "niscode": 70000
             }
         ]
@@ -805,7 +805,7 @@ Crab
     **Example request**:
 
     .. sourcecode:: http
-    
+
         GET /crab/provincies/30000 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -827,13 +827,13 @@ Crab
         :statuscode 404: Provincie was not found.
 
 .. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
-    
+
     List all gemeenten in a certain gewest.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/gewesten/2/gemeenten HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -880,9 +880,9 @@ Crab
     List all gemeenten in a certain provincie.
 
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/provincies/30000/gemeenten HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -921,28 +921,28 @@ Crab
     :satuscode 404: Provincie does not exist.
 
 .. http:get:: /crab/gemeenten/(int:id of int:niscode)
-    
+
     Get_gemeente_by_id
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/gemeenten/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
 
     Get_gemeente_by_niscode
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/gemeenten/11001 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-    
+
 
     **Example response**:
 
@@ -986,11 +986,11 @@ Crab
 .. http:get:: /crab/gemeenten/(int:gemeente_id)/postkantons
 
     List all `postkantons` in a certain `gemeente`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/gemeenten/90/postkantons HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1013,11 +1013,11 @@ Crab
 .. http:get:: /crab/gemeenten/(int:id of int:niscode)/straten
 
     List all straten in a `gemeente`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-            
+
             GET /crab/gemeenten/11001/straten HTTP/1.1
             Host: example.onroerenderfgoed.be
             Accept: application/json
@@ -1078,17 +1078,17 @@ Crab
             "label": "Antwerpsesteenweg"
           }
         ]
-        
+
     :statuscode 200: Straat was found.
 
 .. http:get:: /crab/straten/(int:straat_id)
 
     Get information on a `straat`, based on the `ID`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/straten/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1145,18 +1145,18 @@ Crab
             }
           }
         }
-        
+
     :statuscode 200: Straat was found.
     :statuscode 404: Straat was not found.
-        
+
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers
 
     List all huisnummers in a `straat`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/straten/1/huisnummers HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1218,17 +1218,17 @@ Crab
             "label": "13"
           }
         ]
-        
+
     :statuscode 200: Huisnummers were found.
 
 .. http:get:: /crab/straten/(int:straat_id)/huisnummers/(string:huisnummer_label)
-    
+
     Get more information on a huisnummer by it's straat_id and it's huisnummer.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/straten/1/huisnummers/23 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1276,11 +1276,11 @@ Crab
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)
 
     Get more information on a huisnummer, based on an `ID`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/huisnummers/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1328,15 +1328,15 @@ Crab
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/percelen
 
     List all `percelen` linked to  certain `huisnummer`.
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/huisnummers/1/percelen HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
-        
+
     **Example response**:
 
     .. sourcecode:: http
@@ -1354,11 +1354,11 @@ Crab
 .. http:get:: /crab/percelen/(string:perceel_id1)/(string:perceel_id2)
 
     Get_perceel_by_id
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/percelen/13040C1747/00G002 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1399,11 +1399,11 @@ Crab
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/gebouwen
 
     List_gebouwen
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/huisnummer/1/gebouwen HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1435,11 +1435,11 @@ Crab
 .. http:get:: /crab/gebouwen/(int:gebouw_id)
 
     Get_gebouw_by_id
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/gebouwen/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1486,15 +1486,15 @@ Crab
         }
     :statuscode 200: Gebouw was found.
     :statuscode 404: Gebouw was not found.
-    
+
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/subadressen
 
     List_subadressen
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-        
+
         GET /crab/huisnummer/1/subadressen HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1532,11 +1532,11 @@ Crab
 .. http:get:: /crab/subadressen/(int:subadres_id)
 
     Get_subadres_by_id
-    
+
     **Example request**:
-    
+
     .. sourcecode:: http
-    
+
         GET /crab/subadressen/1 HTTP/1.1
         Host: example.onroerenderfgoed.be
         Accept: application/json
@@ -1575,7 +1575,7 @@ Crab
             "id": 1120936,
             "subadres": "B"
         }
-        
+
     :statuscode 200: Subadres was found.
     :statuscode 404: Subadres was not found.
 
