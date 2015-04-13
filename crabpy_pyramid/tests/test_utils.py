@@ -78,3 +78,16 @@ class UtilsTests(unittest.TestCase):
         filtered = range_return(req, items)
         self.assertEquals(items, filtered)
         self.assertEquals(req.response.headers['Content-Range'], 'items 0-9/10')
+        
+    def test_range_return_max_return(self):
+        items = range (9999)
+        req = DummyRequest()
+        req.headers['Range'] = 'items=0-9999'
+        filtered = range_return(req, items)
+        self.assertEquals(items[0:5000], filtered)
+        self.assertEqual(req.response.headers['Content-Range'], 'items 0-4999/9999')
+        items = range(14999)
+        req.headers['Range'] = 'items=5000-15000'
+        filtered = range_return(req, items)
+        self.assertEqual(items[5000:10000], filtered)
+        self.assertEqual(req.response.headers['Content-Range'], 'items 5000-9999/14999')
