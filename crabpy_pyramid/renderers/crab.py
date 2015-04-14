@@ -5,6 +5,7 @@ Adapters to help render :mod:`crabpy.gateway.crab` objects to json.
 .. versionadded:: 0.1.0
 '''
 from crabpy.gateway import crab
+import pycountry
 
 from pyramid.renderers import JSON
 
@@ -141,6 +142,15 @@ def list_adresposities_adapter(obj, request):
             'definitie': obj.herkomst.definitie
         }
     }
+    
+def list_landen_adapter(obj, request):
+    '''
+    Adapter for rendering a list of landen to json.
+    '''
+    return {
+        'id': obj.alpha2,
+        'naam': obj.name
+    }
 
 
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
@@ -153,6 +163,7 @@ json_list_renderer.add_adapter(crab.Gebouw, list_gebouwen_adapter)
 json_list_renderer.add_adapter(crab.Subadres, list_subadres_adapter)
 json_list_renderer.add_adapter(crab.Postkanton, list_postkantons_adapter)
 json_list_renderer.add_adapter(crab.Adrespositie, list_adresposities_adapter)
+json_list_renderer.add_adapter(pycountry.db.Data, list_landen_adapter)
 
 
 def item_gewest_adapter(obj, request):
@@ -433,6 +444,18 @@ def item_adrespositie_adapter(obj, request):
             }
         }
     }
+    
+def item_land_adapter(obj, request):
+    '''
+    Adapter for rendering an item of
+    :class: `pycountry.db.Data` to json.
+    '''
+    return {
+        'id': obj.alpha2,
+        'alpha2': obj.alpha2,
+        'alpha3': obj.alpha3,
+        'naam': obj.name
+    }
 
 
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
@@ -445,3 +468,4 @@ json_item_renderer.add_adapter(crab.Gebouw, item_gebouw_adapter)
 json_item_renderer.add_adapter(crab.Wegobject, item_wegobject_adapter)
 json_item_renderer.add_adapter(crab.Subadres, item_subadres_adapter)
 json_item_renderer.add_adapter(crab.Adrespositie, item_adrespositie_adapter)
+json_item_renderer.add_adapter(pycountry.db.Data, item_land_adapter)

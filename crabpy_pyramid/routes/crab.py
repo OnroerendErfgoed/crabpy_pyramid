@@ -28,3 +28,5 @@ def includeme(config):
     config.add_route('list_adresposities_by_huisnummer', '/crab/huisnummers/{huisnummer_id}/adresposities')
     config.add_route('list_adresposities_by_subadres', '/crab/subadressen/{subadres_id}/adresposities')
     config.add_route('get_adrespositie_by_id', '/crab/adresposities/{adrespositie_id}')
+    config.add_route('list_landen', '/crab/landen')
+    config.add_route('get_land_by_id', '/crab/landen/{land_id}')

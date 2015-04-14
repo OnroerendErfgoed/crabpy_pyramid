@@ -6,6 +6,7 @@ Views for CRAB services
 '''
 from pyramid.view import view_config
 from crabpy_pyramid.utils import range_return
+import pycountry
 
 
 @view_config(
@@ -241,3 +242,19 @@ def get_adrespositie_by_id(request):
     Gateway = request.crab_gateway()
     adrespositie_id = request.matchdict.get('adrespositie_id')
     return Gateway.get_adrespositie_by_id(adrespositie_id)
+    
+
+@view_config(
+    route_name='list_landen',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_landen(request):
+    return list(pycountry.countries)
+    
+@view_config(
+    route_name='get_land_by_id',
+    renderer='crab_itemjson', accept='application/json'
+)
+def get_land_by_id(request):
+    land_id = request.matchdict.get('land_id')
+    return pycountry.countries.get(alpha2=land_id)
