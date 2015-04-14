@@ -214,3 +214,10 @@ class CrabFunctionalTests(FunctionalTests):
     def test_get_adrespositie_by_id(self):
         res = self.testapp.get('/crab/adresposities/137')
         self.assertEqual('200 OK', res.status)
+        
+    def test_list_landen(self):
+        res = self.testapp.get('/crab/landen')
+        self.assertEqual('200 OK', res.status)
+        
+    def test_get_land_by_id(self):
+        res = self.testapp.get('/crab/landen/BE')
