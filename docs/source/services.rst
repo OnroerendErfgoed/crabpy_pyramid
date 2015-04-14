@@ -153,23 +153,23 @@ Capakey
        Content-Type: application/json
        Content-Range: 0-1/1433
 
-       [
-        {
-           'id': 44002,
-           'naam': 'Afsnee',
-           'gemeente': {
-                'id': 44021,
-                'naam': 'Gent'
-           }
-        }, {
-           'id': 44017,
-           'naam': 'Drongen',
-           'gemeente': {
-                'id': 44021,
-                'naam': 'Gent'
-           }
-        }
-       ]
+            [
+                {
+                   "id": 44002,
+                   "naam": "Afsnee",
+                   "gemeente": {
+                        "id": 44021,
+                        "naam": "Gent"
+                   }
+                }, {
+                   "id": 44017,
+                   "naam": "Drongen",
+                   "gemeente": {
+                        "id": 44021,
+                        "naam": "Gent"
+                   }
+                }
+            ]
 
     :reqheader Range: Can be used to ask for a certain set of results,
         eg. ``ìtems=0-24`` asks for the first 25 items.
@@ -196,16 +196,16 @@ Capakey
        HTTP/1.1 200 OK
        Content-Type: application/json
 
-       {
-           'id': 44017,
-           'naam': 'Drongen',
-           'gemeente': {
-                'id': 44021,
-                'naam': 'Gent'
-           },
-           'centroid': [104154.2225, 197300.703],
-           'bbox': [94653.453, 185680.984, 113654.992, 208920.422]
-       }
+           {
+               "id": 44017,
+               "naam": "Drongen",
+               "gemeente": {
+                    "id": 44021,
+                    "naam": "Gent"
+               },
+               "centroid": [104154.2225, 197300.703],
+               "bbox": [94653.453, 185680.984, 113654.992, 208920.422]
+           }
 
     :statuscode 200: Afdeling was found.
     :statuscode 404: Afdeling was not found.
@@ -823,8 +823,8 @@ Crab
             "niscode": 30000
         }
 
-        :statuscode 200: Provincie was found.
-        :statuscode 404: Provincie was not found.
+    :statuscode 200: Provincie was found.
+    :statuscode 404: Provincie was not found.
 
 .. http:get:: /crab/gewesten/(int:gewest_id)/gemeenten
 
@@ -918,7 +918,7 @@ Crab
         ]
 
     :statuscode 200: Gemeenten were found.
-    :satuscode 404: Provincie does not exist.
+    :statuscode 404: Provincie does not exist.
 
 .. http:get:: /crab/gemeenten/(int:id of int:niscode)
 
@@ -995,7 +995,7 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
@@ -1024,7 +1024,7 @@ Crab
             Range: items=0-4
 
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
@@ -1408,12 +1408,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         [
           {
             "status": {
@@ -1444,7 +1445,7 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
@@ -1499,12 +1500,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         [
             {
                 "status":{
@@ -1541,12 +1543,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         {
             "status": {
                 "naam": "inGebruik",
@@ -1591,12 +1594,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         [
             {
                 "herkomst": {
@@ -1624,12 +1628,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         [
             {
                 "herkomst": {
@@ -1657,12 +1662,13 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
 
-   **Example response**:
+    **Example response**:
 
     .. sourcecode:: http
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+
         {
             "herkomst": {
                 "naam": "afgeleidVanGebouw",
@@ -1692,3 +1698,78 @@ Crab
                 "id": "1"
             }
         }
+
+.. http:get:: /crab/landen
+
+    List all landen.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/landen HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            {
+                "naam": "Afghanistan",
+                "id": "AF"
+            },{
+                "naam": "\u00c5land Islands",
+                "id": "AX"
+            },{
+                "naam": "Albania",
+                "id": "AL"
+            },{
+                "naam": "Algeria",
+                "id": "DZ"
+            },{
+                "naam": "American Samoa",
+                "id": "AS"
+            },{
+                "naam": "Andorra",
+                "id": "AD"
+            },{
+                "naam": "Angola",
+                "id": "AO"
+            }
+        ]
+
+    :statuscode 200: List of landen was found.
+
+.. http:get:: /crab/landen/BE
+
+    List all information for a certain land.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/landen/BE HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "alpha2": "BE",
+            "alpha3": "BEL",
+            "id": "BE",
+            "naam": "Belgium"
+        }
+
+    :statuscode 200: Land was found.
+    :statuscode 404: Land was not found.
