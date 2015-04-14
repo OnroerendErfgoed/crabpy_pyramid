@@ -6,11 +6,15 @@ Adapters to help render :mod:`crabpy.gateway.crab` objects to json.
 '''
 from crabpy.gateway import crab
 import pycountry
+import gettext
 
 from pyramid.renderers import JSON
 
 json_list_renderer = JSON()
 json_item_renderer = JSON()
+
+nederlands = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['nl'])
+nederlands.install()
 
 
 def list_gewesten_adapter(obj, request):
@@ -149,7 +153,7 @@ def list_landen_adapter(obj, request):
     '''
     return {
         'id': obj.alpha2,
-        'naam': obj.name
+        'naam': _(obj.name)
     }
 
 
@@ -454,7 +458,7 @@ def item_land_adapter(obj, request):
         'id': obj.alpha2,
         'alpha2': obj.alpha2,
         'alpha3': obj.alpha3,
-        'naam': obj.name
+        'naam': _(obj.name)
     }
 
 
