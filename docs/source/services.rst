@@ -1327,7 +1327,7 @@ Crab
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/percelen
 
-    List all `percelen` linked to  certain `huisnummer`.
+    List all `percelen` linked to  a certain `huisnummer`.
 
     **Example request**:
 
@@ -1353,7 +1353,7 @@ Crab
 
 .. http:get:: /crab/percelen/(string:perceel_id1)/(string:perceel_id2)
 
-    Get_perceel_by_id
+    Get a preceel by it's id.
 
     **Example request**:
 
@@ -1398,7 +1398,7 @@ Crab
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/gebouwen
 
-    List_gebouwen
+    List all gebouwen associated with a certain huisnummer.
 
     **Example request**:
 
@@ -1435,7 +1435,7 @@ Crab
 
 .. http:get:: /crab/gebouwen/(int:gebouw_id)
 
-    Get_gebouw_by_id
+    Get a Gebouw by it's id.
 
     **Example request**:
 
@@ -1490,7 +1490,7 @@ Crab
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/subadressen
 
-    List_subadressen
+    List all Subadressen for a certain Huisnummer.
 
     **Example request**:
 
@@ -1533,7 +1533,7 @@ Crab
 
 .. http:get:: /crab/subadressen/(int:subadres_id)
 
-    Get_subadres_by_id
+    Get a Subadres based on it's id.
 
     **Example request**:
 
@@ -1717,6 +1717,7 @@ Crab
 
         HTTP/1.1 200 OK
         Content-Type: application/json
+        Content-Range: 0-6/249
 
         [
             {
