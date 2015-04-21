@@ -8,6 +8,7 @@ from pyramid.view import view_config
 from crabpy_pyramid.utils import range_return
 import pycountry
 
+from pyramid.httpexceptions import HTTPNotFound
 
 @view_config(
     route_name='list_gewesten',
@@ -257,4 +258,8 @@ def list_landen(request):
 )
 def get_land_by_id(request):
     land_id = request.matchdict.get('land_id')
-    return pycountry.countries.get(alpha2=land_id)
+    try:
+        land = pycountry.countries.get(alpha2=land_id)
+    except KeyError:
+        return HTTPNotFound()
+    return land
