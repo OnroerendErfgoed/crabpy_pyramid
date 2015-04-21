@@ -27,7 +27,7 @@ def get_gewest_by_id(request):
     Gateway = request.crab_gateway()
     gewest_id = int(request.matchdict.get('gewest_id'))
     return Gateway.get_gewest_by_id(gewest_id)
-    
+
 @view_config(
     route_name='list_provincies',
     renderer='crab_listjson', accept='application/json'
@@ -37,7 +37,7 @@ def list_provincies(request):
     gewest_id = int(request.matchdict.get('gewest_id'))
     provincies = Gateway.list_provincies(gewest_id)
     return range_return(request, provincies)
-    
+
 @view_config(
     route_name='get_provincie',
     renderer='crab_itemjson', accept='application/json'
@@ -47,7 +47,7 @@ def get_provincie(request):
     provincie_id = int(request.matchdict.get('provincie_id'))
     provincie = Gateway.get_provincie_by_id(provincie_id)
     return provincie
-    
+
 @view_config(
     route_name='list_gemeenten_by_provincie',
     renderer='crab_listjson', accept='application/json'
@@ -57,7 +57,7 @@ def list_gemeenten_by_provincie(request):
     provincie_id = int(request.matchdict.get('provincie_id'))
     gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id)
     return range_return(request, gemeenten)
-    
+
 @view_config(
     route_name='list_gemeenten_crab',
     renderer='crab_listjson', accept='application/json'
@@ -123,8 +123,8 @@ def get_huisnummer_by_straat_and_label(request):
     straat_id = request.matchdict.get('straat_id')
     huisnummer = request.matchdict.get('huisnummer_label')
     return Gateway.get_huisnummer_by_nummer_and_straat(huisnummer, straat_id)
-    
-    
+
+
 @view_config(
     route_name='get_huisnummer_by_id',
     renderer='crab_itemjson', accept='application/json'
@@ -171,7 +171,7 @@ def get_gebouw_by_id(request):
     Gateway = request.crab_gateway()
     gebouw_id = request.matchdict.get('gebouw_id')
     return Gateway.get_gebouw_by_id(gebouw_id)
-    
+
 @view_config(
     route_name='get_wegobject',
     renderer='crab_itemjson', accept='application/json'
@@ -191,7 +191,7 @@ def list_subadressen(request):
     huisnummer_id = request.matchdict.get('huisnummer_id')
     subadressen = Gateway.list_subadressen_by_huisnummer(huisnummer_id)
     return range_return(request, subadressen)
-    
+
 @view_config(
     route_name='get_subadres_by_id',
     renderer='crab_itemjson', accept='application/json'
@@ -200,8 +200,8 @@ def get_subadres_by_id(request):
     Gateway = request.crab_gateway()
     subadres_id = request.matchdict.get('subadres_id')
     return Gateway.get_subadres_by_id(subadres_id)
-    
-    
+
+
 @view_config(
     route_name='list_postkantons_by_gemeente',
     renderer='crab_listjson', accept='application/json'
@@ -233,7 +233,7 @@ def list_adresposities_by_subadres(request):
     subadres_id = request.matchdict.get('subadres_id')
     adresposities = Gateway.list_adresposities_by_subadres(subadres_id)
     return range_return(request, adresposities)
-    
+
 
 @view_config(
     route_name='get_adrespositie_by_id',
@@ -243,7 +243,7 @@ def get_adrespositie_by_id(request):
     Gateway = request.crab_gateway()
     adrespositie_id = request.matchdict.get('adrespositie_id')
     return Gateway.get_adrespositie_by_id(adrespositie_id)
-    
+
 
 @view_config(
     route_name='list_landen',
@@ -251,7 +251,7 @@ def get_adrespositie_by_id(request):
 )
 def list_landen(request):
     return list(pycountry.countries)
-    
+
 @view_config(
     route_name='get_land_by_id',
     renderer='crab_itemjson', accept='application/json'
