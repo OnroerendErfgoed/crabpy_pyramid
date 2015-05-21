@@ -134,8 +134,8 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_gewest_by_unexisting_id(self):
-        res = self.testapp.get('/crab/gewesten/0')
-        self.assertEqual('404 NotFound', res.status)
+        res = self.testapp.get('/crab/gewesten/0', status=404)
+        self.assertEqual('404 Not Found', res.status)
         
     def test_list_provincies(self):
         res = self.testapp.get('/crab/gewesten/2/provincies')
@@ -146,7 +146,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_provincie_by_unexisting_id(self):
-        res = self.testapp.get('/crab/provincies/00000')
+        res = self.testapp.get('/crab/provincies/00000', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_list_gemeenten_by_provincie(self):
@@ -162,7 +162,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_gemeente_crab_unexisting_niscode(self):
-        res = self.testapp.get('/crab/gemeenten/00000')
+        res = self.testapp.get('/crab/gemeenten/00000', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_get_gemeente_crab_id(self):
@@ -170,7 +170,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_gemeente_crab_unexisting_id(self):
-        res = self.testapp.get('/crab/gemeenten/0')
+        res = self.testapp.get('/crab/gemeenten/0', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_list_straten(self):
@@ -182,7 +182,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_straat_by_unexisting_id(self):
-        res = self.testapp.get('/crab/straten/0')
+        res = self.testapp.get('/crab/straten/0', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_list_huisnummers(self):
@@ -194,7 +194,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_huisnummer_by_unexisting_straat_and_label(self):
-        res = self.testapp.get('crab/straten/1/huisnummers/0')
+        res = self.testapp.get('/crab/straten/1/huisnummers/0', status=404)
         self.assertEqual('404 Not Found', res.status)
     
     def test_get_huisnummer_by_id(self):
@@ -202,7 +202,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_huisnummer_by_unexisting_id(self):
-        res = self.testapp.get('/crab/huisnummers/0')
+        res = self.testapp.get('/crab/huisnummers/0', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_list_percelen(self):
@@ -214,7 +214,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_perceel_by_unexisting_id(self):
-        res = self.testapp.get('crab/percelen/31433D0011/000000')
+        res = self.testapp.get('/crab/percelen/31433D0011/000000', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_list_gebouwen(self):
@@ -226,7 +226,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_gebouw_by_unexisting_id(self):
-        res = self.testapp.get('/crab/gebouwen/0')
+        res = self.testapp.get('/crab/gebouwen/99999999', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_get_wegobject(self):
@@ -234,7 +234,8 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_unexisting_wegobject(self):
-        res = self.testapp.get('/crab/wegobjecten/00000000')
+        res = self.testapp.get('/crab/wegobjecten/00000000', status=404)
+        self.assertEqual('404 Not Found', res.status)
         
     def test_list_subadressen(self):
         res = self.testapp.get('/crab/huisnummers/129462/subadressen')
@@ -245,7 +246,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_subadressen_by_unexisting_id(self):
-        res = self.testapp.get('/crab/subadressen/0000000')
+        res = self.testapp.get('/crab/subadressen/0000000', status=404)
         
     def test_list_postkantons_by_gemeente(self):
         res = self.testapp.get('/crab/gemeenten/90/postkantons')
@@ -264,7 +265,7 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         
     def test_get_adrespositie_by_unexisting_id(self):
-        res = self.testapp.get('/crab/adresposities/0')
+        res = self.testapp.get('/crab/adresposities/0', status=404)
         self.assertEqual('404 Not Found', res.status)
         
     def test_list_landen(self):
@@ -276,5 +277,5 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
     
     def test_get_land_by_unexisting_id(self):
-        res = self.testapp.get('crab/landen/BDH')
+        res = self.testapp.get('/crab/landen/BDH', status=404)
         self.assertEqual('404 Not Found', res.status)
