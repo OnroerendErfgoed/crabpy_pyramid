@@ -90,6 +90,10 @@ class CapakeyFunctionalTests(FunctionalTests):
     def test_get_gemeente_by_id(self):
         res = self.testapp.get('/capakey/gemeenten/11001')
         self.assertEqual('200 OK', res.status)
+        
+    def test_get_gemeente_by_unexisting_id(self):
+        res = self.testapp.get('/capakey/gemeenten/1100', status=404)
+        self.assertEqual('404 Not Found', res.status)
     
     def test_list_kadastrale_afdelingen_by_gemeente(self):
         res = self.testapp.get('/capakey/gemeenten/11001/afdelingen')
@@ -102,6 +106,10 @@ class CapakeyFunctionalTests(FunctionalTests):
     def test_get_sectie_by_id_and_afdeling(self):
         res = self.testapp.get('/capakey/afdelingen/11001/secties/B')
         self.assertEqual('200 OK', res.status)
+        
+    def test_get_sectie_by_unexisting_id_and_afdeling(self):
+        res = self.testapp.get('/capakey/afdelingen/11001/secties/Z', status=404)
+        self.assertEqual('404 Not Found', res.status)
 
     def test_list_percelen_by_sectie(self):
         res = self.testapp.get('/capakey/afdelingen/11001/secties/B/percelen')
@@ -110,14 +118,26 @@ class CapakeyFunctionalTests(FunctionalTests):
     def test_get_perceel_by_sectie_and_id(self):
         res = self.testapp.get('/capakey/afdelingen/11001/secties/B/percelen/0001/00S000')
         self.assertEqual('200 OK', res.status)
+        
+    def test_get_perceel_by_unexisting_sectie_and_id(self):
+        res = self.testapp.get('/capakey/afdelingen/11001/secties/B/percelen/0000/00000', status=404)
+        self.assertEqual('404 Not Found', res.status)
 
     def test_get_perceel_by_capakey(self):
         res = self.testapp.get('/capakey/percelen/11001B0001/00S000')
         self.assertEqual('200 OK', res.status)
+        
+    def test_get_perceel_by_unexisting_capakey(self):
+        res = self.testapp.get('/capakey/percelen/00000000000/000000', status=404)
+        self.assertEqual('404 Not Found', res.status)
 
     def test_get_perceel_by_percid(self):
         res = self.testapp.get('/capakey/percelen/11001_B_0001_S_000_00')
-        self.assertEqual('200 OK', res.status)  
+        self.assertEqual('200 OK', res.status)
+        
+    def test_get_perceel_by_unexisting_percid(self):
+        res = self.testapp.get('/capakey/percelen/00000_0_0000_0_000_00', status=404)
+        self.assertEqual('404 Not Found', res.status)
        
 
 @unittest.skipUnless(
