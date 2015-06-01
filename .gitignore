@@ -40,3 +40,6 @@ nosetests.xml
 
 #Dogpile
 dogpile_data
+
+# Rope
+.ropeproject
