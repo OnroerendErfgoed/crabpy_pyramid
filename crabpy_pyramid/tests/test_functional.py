@@ -16,9 +16,16 @@ from webtest import TestApp
 
 from crabpy_pyramid import main
 
+def as_bool(value):
+    '''
+    Cast a textual value from a config file to a boolean.
+    Will convert 'true', 'True', '1', 't', 'T' or 'Yes' to `True`. All other
+    values are considered to be `False`.
+    '''
+    return value in ['true', 'True', '1', 't', 'T', 'Yes']
+
 def run_capakey_integration_tests():
     from testconfig import config
-    from crabpy.tests import as_bool
     try:
         return as_bool(config['capakey']['run_integration_tests'])
     except KeyError:  # pragma NO COVER
@@ -27,7 +34,6 @@ def run_capakey_integration_tests():
 
 def run_crab_integration_tests():
     from testconfig import config
-    from crabpy.tests import as_bool
     try:
         return as_bool(config['crab']['run_integration_tests'])
     except KeyError:  # pragma NO COVER
@@ -221,3 +227,7 @@ class CrabFunctionalTests(FunctionalTests):
 
     def test_get_land_by_id(self):
         res = self.testapp.get('/crab/landen/BE')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_land_by_unexisting_id(self):
+        res = self.testapp.get('/crab/landen/MORDOR', status=404)
