@@ -1,10 +1,11 @@
-0.3.0 (2015-??-??)
+0.3.0 (2015-06-01)
 ------------------
 
 - Add Adresposities. Add endpoints that exposes the Adresposities linked to a
   certain Huisnummer or Subadres. (#26) [TalissaJoly]
 - Add Landen (countries). Add endpoints to get a list of Landen or more 
   information about a single Land. (#30, #31) [TalissaJoly]
+- Return HTTP 404 errors for certain unexisting resources. (#25) [TalissaJoly]
 - Limit the number of results that can be returned in a list. There was some
   partial handling for this, but only when the user did not send any range
   headers. This behavious was deemed potentially hazardous and changed. Now,
