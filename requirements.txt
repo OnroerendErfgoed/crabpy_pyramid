@@ -1,5 +1,4 @@
 # Tested and approved with these versions
-pyramid==1.5.4
-#crabpy==0.5.0
--e git+https://github.com/onroerenderfgoed/crabpy.git#egg=crabpy
+pyramid==1.5.7
+crabpy==0.6.0
 pycountry==1.10
