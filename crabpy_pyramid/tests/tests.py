@@ -66,7 +66,7 @@ class TestSettings(unittest.TestCase):
                 'cache.file.root' : '/tmp',
                 'crab.include': True,
                 'capakey.include': False,
-            }, 
+            },
             'capakey.'
         )
         self.assertEquals(1, len(settings))
@@ -93,7 +93,7 @@ class TestSettings(unittest.TestCase):
         self.assertIsInstance(capakey, CapakeyGateway)
         crab = self.config.registry.queryUtility(ICrab)
         self.assertIsInstance(crab, CrabGateway)
-        
+
     def test_includeme_nonexisting_root(self):
         root = './testdir/'
         self.config.registry.settings['crabpy.cache.file.root'] = root
@@ -103,7 +103,7 @@ class TestSettings(unittest.TestCase):
         crab = self.config.registry.queryUtility(ICrab)
         self.assertIsInstance(crab, CrabGateway)
         os.rmdir(root)
-        
+
     def test_directive_was_added(self):
         includeme(self.config)
         r = self.config.registry.settings
