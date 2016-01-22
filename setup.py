@@ -21,15 +21,16 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.3.0',
+      version='0.4.0.dev0',
       description='Bindings for the CRABpy webservices Pyramid.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-        "Development Status :: 4 - Beta",
+        'Development Status :: 5 - Production/Stable',
         "Programming Language :: Python",
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Intended Audience :: Developers",

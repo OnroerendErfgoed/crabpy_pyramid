@@ -1,3 +1,9 @@
+0.4.0 (2016-??-??)
+------------------
+
+- Update dependencies. Update pycountry to version 1.19.
+- Add explicit support for python 3.5.
+
 0.3.0 (2015-06-01)
 ------------------
 
