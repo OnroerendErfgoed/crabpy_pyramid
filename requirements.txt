@@ -1,4 +1,5 @@
 # Tested and approved with these versions
 pyramid==1.6.0
-crabpy==0.6.0
+# crabpy==0.7.0
+-e git+https://github.com/OnroerendErfgoed/crabpy.git#egg=crabpy
 pycountry==1.19
