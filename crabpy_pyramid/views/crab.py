@@ -97,6 +97,47 @@ def get_gemeente_crab(request):
             return HTTPNotFound()
 
 @view_config(
+    route_name='list_deelgemeenten',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_deelgemeenten(request):
+    Gateway = request.crab_gateway()
+    gewest_id = int(request.matchdict.get('gewest_id'))
+    if gewest_id != 2:
+        return HTTPNotFound()
+    deelgemeenten = Gateway.list_deelgemeenten(gewest_id)
+    return range_return(request, deelgemeenten)
+
+@view_config(
+    route_name='list_deelgemeenten_by_gemeente',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_deelgemeenten_by_gemeente(request):
+    Gateway = request.crab_gateway()
+    gemeente_id = request.matchdict.get('gemeente_id')
+    if len(gemeente_id) == 5:
+        try:
+            gemeente = Gateway.get_gemeente_by_niscode(gemeente_id)
+        except GatewayResourceNotFoundException:
+            return HTTPNotFound()
+    else:
+        try:
+            gemeente = Gateway.get_gemeente_by_id(gemeente_id)
+        except GatewayResourceNotFoundException:
+            return HTTPNotFound()
+    deelgemeenten = Gateway.list_deelgemeenten_by_gemeente(gemeente)
+    return range_return(request, deelgemeenten)
+
+@view_config(
+    route_name='get_deelgemeente_by_id',
+    renderer='crab_itemjson', accept='application/json'
+)
+def get_deelgemeente_by_id(request):
+    Gateway = request.crab_gateway()
+    deelgemeente_id = request.matchdict.get('deelgemeente_id')
+    return Gateway.get_deelgemeente_by_id(deelgemeente_id)
+
+@view_config(
     route_name='list_straten',
     renderer='crab_listjson', accept='application/json'
 )

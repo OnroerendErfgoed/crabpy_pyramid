@@ -51,6 +51,16 @@ def list_gemeente_adapter(obj, request):
         'naam': obj.naam
     }
 
+def list_deelgemeente_adapter(obj, request):
+    '''
+    Adapter for rendering a list of
+    :class:`crabpy.gateway.crab.Deelgemeente` to json.
+    '''
+    return {
+        'id': obj.id,
+        'naam': obj.naam
+    }
+
 def list_straten_adapter(obj, request):
     '''
     Adapter for rendering a list of
@@ -146,7 +156,7 @@ def list_adresposities_adapter(obj, request):
             'definitie': obj.herkomst.definitie
         }
     }
-    
+
 def list_landen_adapter(obj, request):
     '''
     Adapter for rendering a list of landen to json.
@@ -160,6 +170,7 @@ def list_landen_adapter(obj, request):
 json_list_renderer.add_adapter(crab.Gewest, list_gewesten_adapter)
 json_list_renderer.add_adapter(crab.Provincie, list_provincie_adapter)
 json_list_renderer.add_adapter(crab.Gemeente, list_gemeente_adapter)
+json_list_renderer.add_adapter(crab.Deelgemeente, list_deelgemeente_adapter)
 json_list_renderer.add_adapter(crab.Straat, list_straten_adapter)
 json_list_renderer.add_adapter(crab.Huisnummer, list_huisnummers_adapter)
 json_list_renderer.add_adapter(crab.Perceel, list_percelen_adapter)
@@ -219,6 +230,20 @@ def item_gemeente_adapter(obj, request):
                 'naam': obj.metadata.begin_organisatie.naam,
                 'definitie': obj.metadata.begin_organisatie.definitie
             }
+        }
+    }
+
+def item_deelgemeente_adapter(obj, request):
+    '''
+    Adapter for rendering a object of
+    :class:`crabpy.gateway.crab.Deelgemeente` to json.
+    '''
+    return {
+        'id': obj.id,
+        'naam': obj.naam,
+        'gemeente': {
+            'id': obj.gemeente.id,
+            'naam': obj.gemeente.naam
         }
     }
 
@@ -448,7 +473,7 @@ def item_adrespositie_adapter(obj, request):
             }
         }
     }
-    
+
 def item_land_adapter(obj, request):
     '''
     Adapter for rendering an item of
@@ -465,6 +490,7 @@ def item_land_adapter(obj, request):
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
 json_item_renderer.add_adapter(crab.Provincie, item_provincie_adapter)
 json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_adapter)
+json_item_renderer.add_adapter(crab.Deelgemeente, item_deelgemeente_adapter)
 json_item_renderer.add_adapter(crab.Straat, item_straat_adapter)
 json_item_renderer.add_adapter(crab.Huisnummer, item_huisnummer_adapter)
 json_item_renderer.add_adapter(crab.Perceel, item_perceel_crab_adapter)

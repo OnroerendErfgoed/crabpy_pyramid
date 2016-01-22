@@ -194,6 +194,18 @@ class CrabFunctionalTests(FunctionalTests):
         res = self.testapp.get('/crab/gemeenten/0', status=404)
         self.assertEqual('404 Not Found', res.status)
 
+    def test_list_deelgemeenten(self):
+        res = self.testapp.get('/crab/gewesten/2/deelgemeenten')
+        self.assertEqual('200 OK', res.status)
+
+    def test_list_deelgemeenten_by_gemeente(self):
+        res = self.testapp.get('/crab/gemeenten/11001/deelgemeenten')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_deelgemeente_by_id(self):
+        res = self.testapp.get('/crab/deelgemeenten/45062A')
+        self.assertEqual('200 OK', res.status)
+
     def test_list_straten(self):
         res = self.testapp.get('/crab/gemeenten/11001/straten')
         self.assertEqual('200 OK', res.status)
