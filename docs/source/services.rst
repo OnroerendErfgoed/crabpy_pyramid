@@ -983,6 +983,118 @@ Crab
     :statuscode 200: Gemeente was found.
     :statuscode 404: Gemeente was not found.
 
+.. http:get:: /crab/gewesten/(int:gewest_id)/deelgemeenten
+
+    List all deelgemeenten in a certain gewest.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/gewesten/2/deelgemeenten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+        Range: items=0-4
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            {
+                "naam": "Sint-Joris-Winge",
+                "id": "24135C"
+            }, {
+                "naam": "Meensel-Kiezegem",
+                "id": "24135B"
+            }, {
+                "naam": "Tielt",
+                "id": "24135A"
+            }, {
+                "naam": "Ertvelde",
+                "id": "44019C"
+            }, {
+                "naam": "Kluizen", 
+                "id": "44019D"
+            }
+        ]
+
+    :statuscode 200: Deelgemeenten were found.
+    :statuscode 404: Gewest does not exist.
+
+.. http:get:: /crab/gemeenten/(int:gemeente_id or int:niscode)/deelgemeenten
+
+    List all `deelgemeenten` in a certain `gemeente`.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/gemeenten/90/deelgemeenten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/gemeenten/11002/deelgemeenten HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        [
+            {"naam": "Asse", "id": "23002A"},
+            {"naam": "Kobbegem", "id": "23002C"},
+            {"naam": "Mollem", "id": "23002B"},
+            {"naam": "Zellik", "id": "23002E"},
+            {"naam": "Relegem", "id": "23002D"},
+            {"naam": "Bekkerzeel", "id": "23002F"}
+        ]
+
+    :statuscode 200: Deelgemeenten were found.
+    :statuscode 404: The Gemeente for which you are requesting Deelgemeenten
+        does not exist.
+
+.. http:get:: /crab/deelgemeenten/(string:deelgemeente_id)
+
+    Get all information on a certain `deelgemeente`.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/deelgemeenten/45062 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        {
+            "naam": "Sint-Maria-Horebeke",
+            "id": "45062A",
+            "gemeente": {
+                "id": 300,
+                "naam": "Horebeke"
+            }
+        }
+
+    :statuscode 200: Deelgemeente was found.
+    :statuscode 404: The Deelgemeente does not exist.
+
 .. http:get:: /crab/gemeenten/(int:gemeente_id)/postkantons
 
     List all `postkantons` in a certain `gemeente`.
@@ -1161,8 +1273,6 @@ Crab
         Host: example.onroerenderfgoed.be
         Accept: application/json
         Range: items=0-4
-
-
 
     **Example response**:
 
