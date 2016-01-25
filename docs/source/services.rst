@@ -1362,6 +1362,7 @@ Crab
             150786.11,
             200189.33
           ],
+          "postadres": "Acacialaan 23, 2630 Aartselaar",
           "huisnummer": "23",
           "id": 379090,
           "metadata": {
@@ -1415,6 +1416,7 @@ Crab
             224649.87
           ],
           "huisnummer": "51",
+          "postadres": "Steenweg op Oosthoven 51, 2300 Turnhout",
           "id": 1,
           "metadata": {
             "begin_tijd": "2014-03-19 17:00:27",
@@ -1463,7 +1465,7 @@ Crab
 
 .. http:get:: /crab/percelen/(string:perceel_id1)/(string:perceel_id2)
 
-    Get a preceel by it's id.
+    Get a perceel by it's id.
 
     **Example request**:
 
@@ -1487,6 +1489,10 @@ Crab
             224667.59
           ],
           "id": "13040C1747/00G002",
+          "postadressen": [
+            "Steenweg op Oosthoven 51, 2300 Turnhout",
+            "Steenweg op Oosthoven 53, 2300 Turnhout"
+          ],
           "metadata": {
             "begin_tijd": "2009-09-11 12:46:55.693000",
             "begin_datum": "1998-01-01 00:00:00",
@@ -1504,6 +1510,41 @@ Crab
         }
 
     :statuscode 200: Perceel was found.
+    :statuscode 404: Perceel was not found.
+
+.. http:get:: /crab/percelen/(string:perceel_id1)/(string:perceel_id2)/huisnummers
+
+    Get the huisnummers linked to a perceel.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /crab/percelen/13040C1747/00G002 HTTP/1.1
+        Host: example.onroerenderfgoed.be
+        Accept: application/json
+
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            {
+                "status": {"naam": "inGebruik", "definitie": null, "id": "3"},
+                "id": 1, 
+                "label": "51"
+            }, {
+                "status": {"naam": "buitenGebruik", "definitie": null, "id": "4"},
+                "id": 2021223,
+                "label": "53"
+            }
+        ]
+
+    :statuscode 200: Huisnummers were found.
     :statuscode 404: Perceel was not found.
 
 .. http:get:: /crab/huisnummers/(int:huisnummer_id)/gebouwen
