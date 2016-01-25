@@ -1,4 +1,4 @@
-0.4.0 (2016-??-??)
+0.4.0 (2016-01-25)
 ------------------
 
 - Update dependencies. Update pycountry to version 1.19.
