@@ -291,6 +291,7 @@ def item_huisnummer_adapter(obj, request):
     return {
         'id': obj.id,
         'huisnummer': obj.huisnummer,
+        'postadres': obj.postadres,
         'status': {
             'id': obj.status.id,
             'naam': obj.status.naam,
@@ -321,6 +322,7 @@ def item_perceel_crab_adapter(obj, request):
     return {
         'id': obj.id,
         'centroid': obj.centroid,
+        'postadressen': obj.postadressen,
         'metadata': {
             'begin_tijd': obj.metadata.begin_tijd,
             'begin_datum': obj.metadata.begin_datum,
@@ -414,6 +416,7 @@ def item_subadres_adapter(obj, request):
     return {
         'id': obj.id,
         'subadres': obj.subadres,
+        'postadres': obj.postadres,
         'status': {
             'id': obj.status.id,
             'naam': obj.status.naam,

@@ -250,6 +250,14 @@ class CrabFunctionalTests(FunctionalTests):
         res = self.testapp.get('/crab/percelen/31433D0011/000000', status=404)
         self.assertEqual('404 Not Found', res.status)
 
+    def test_list_huisnummers_by_perceel(self):
+        res = self.testapp.get('/crab/percelen/31433D0011/00T016/huisnummers')
+        self.assertEqual('200 OK', res.status)
+
+    def test_list_huisnummers_by_unexisting_perceel(self):
+        res = self.testapp.get('/crab/percelen/31433D0011/000000/huisnummers', status=404)
+        self.assertEqual('404 Not Found', res.status)
+
     def test_list_gebouwen(self):
         res = self.testapp.get('/crab/huisnummers/1/gebouwen')
         self.assertEqual('200 OK', res.status)

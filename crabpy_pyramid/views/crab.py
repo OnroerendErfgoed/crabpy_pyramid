@@ -220,6 +220,19 @@ def get_perceel_by_id(request):
         return HTTPNotFound()
 
 @view_config(
+    route_name='list_huisnummers_by_perceel',
+    renderer='crab_listjson', accept='application/json'
+)
+def list_huisnummers_by_perceel(request):
+    Gateway = request.crab_gateway()
+    perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
+    try:
+        perceel = Gateway.get_perceel_by_id(perceel_id)
+        return Gateway.list_huisnummers_by_perceel(perceel)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
+
+@view_config(
     route_name='list_gebouwen',
     renderer='crab_listjson', accept='application/json'
 )
