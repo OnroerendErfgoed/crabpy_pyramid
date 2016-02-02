@@ -1,3 +1,9 @@
+0.4.1 (2016-02-02)
+------------------
+
+- Better error handling for capakey views. Generate HTTP 404 Not Found instead
+  of HTTP 500 Internal Server Error. (#36)
+
 0.4.0 (2016-01-25)
 ------------------
 

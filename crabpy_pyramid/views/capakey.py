@@ -7,6 +7,11 @@ Views for CAPAKEY services.
 from pyramid.view import view_config
 from crabpy_pyramid.utils import range_return
 
+from crabpy.gateway.exception import GatewayResourceNotFoundException
+
+from pyramid.httpexceptions import HTTPNotFound
+
+
 @view_config(route_name='list_gemeenten', renderer='capakey_listjson', accept='application/json')
 def list_gemeenten(request):
     Gateway = request.capakey_gateway()
@@ -18,7 +23,10 @@ def list_gemeenten(request):
 def get_gemeente_by_niscode(request):
     Gateway = request.capakey_gateway()
     gemeente_id = int(request.matchdict.get('gemeente_id'))
-    return Gateway.get_gemeente_by_id(gemeente_id)
+    try:
+        return Gateway.get_gemeente_by_id(gemeente_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 
 @view_config(
@@ -46,7 +54,10 @@ def list_kadastrale_afdelingen(request):
 def get_kadastrale_afdeling_by_id(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
-    return Gateway.get_kadastrale_afdeling_by_id(afdeling_id)
+    try:
+        return Gateway.get_kadastrale_afdeling_by_id(afdeling_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 
 @view_config(
@@ -68,7 +79,10 @@ def get_sectie_by_id_and_afdeling(request):
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie_id = request.matchdict.get('sectie_id')
-    return Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
+    try:
+        return Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 
 @view_config(
@@ -95,7 +109,10 @@ def get_perceel_by_sectie_and_id(request):
     sectie_id = request.matchdict.get('sectie_id')
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie = Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
-    return Gateway.get_perceel_by_id_and_sectie(perceel_id, sectie)
+    try:
+        return Gateway.get_perceel_by_id_and_sectie(perceel_id, sectie)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 
 @view_config(
@@ -106,7 +123,10 @@ def get_perceel_by_capakey(request):
     Gateway = request.capakey_gateway()
     capakey = str(request.matchdict.get('capakey1'))+'/'\
         + str(request.matchdict.get('capakey2'))
-    return Gateway.get_perceel_by_capakey(capakey)
+    try:
+        return Gateway.get_perceel_by_capakey(capakey)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 
 @view_config(
@@ -116,4 +136,8 @@ def get_perceel_by_capakey(request):
 def get_perceel_by_percid(request):
     Gateway = request.capakey_gateway()
     percid = request.matchdict.get('percid')
-    return Gateway.get_perceel_by_percid(percid)
+    try:
+        return Gateway.get_perceel_by_percid(percid)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
+

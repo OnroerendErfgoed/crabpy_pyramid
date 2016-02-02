@@ -100,6 +100,18 @@ class CapakeyFunctionalTests(FunctionalTests):
         res = self.testapp.get('/capakey/gemeenten/11001/afdelingen')
         self.assertEqual('200 OK', res.status)
 
+    def test_list_kadastrale_afdelingen(self):
+        res = self.testapp.get('/capakey/afdelingen')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_kadastrale_afdeling_by_id(self):
+        res = self.testapp.get('/capakey/afdelingen/11001')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_kadastrale_afdeling_by_unexisting_id(self):
+        res = self.testapp.get('/capakey/afdelingen/99999', status=404)
+        self.assertEqual('404 Not Found', res.status)
+
     def test_list_secties_by_afdeling(self):
         res = self.testapp.get('/capakey/afdelingen/11001/secties')
         self.assertEqual('200 OK', res.status)
