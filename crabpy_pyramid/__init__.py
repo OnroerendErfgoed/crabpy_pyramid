@@ -25,6 +25,8 @@ from crabpy_pyramid.renderers.crab import (
 
 from pyramid.settings import asbool
 
+from collections import Sequence
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -75,13 +77,13 @@ def _parse_settings(settings):
                 cache_config[skey[len(key_name):]] = settings.get(skey)
         if cache_config:
             args[short_key_name] = cache_config
-    
-    log.debug(args) 
+
+    log.debug(args)
     return args
 
 def _filter_settings(settings, prefix):
     """
-    Filter all settings to only return settings that start with a certain 
+    Filter all settings to only return settings that start with a certain
     prefix.
 
     :param dict settings: A settings dictionary.
@@ -121,7 +123,7 @@ def _build_crab(registry, settings):
         cache_config = {}
     factory = crab_factory(**settings)
     gateway = CrabGateway(factory, cache_config=cache_config)
-    
+
     registry.registerUtility(gateway, ICrab)
     return registry.queryUtility(ICapakey)
 
@@ -138,7 +140,7 @@ def get_capakey(registry):
         regis = registry
 
     return regis.queryUtility(ICapakey)
-    
+
 def get_crab(registry):
     '''
     Get the Crab Gateway
@@ -149,7 +151,7 @@ def get_crab(registry):
     regis = getattr(registry, 'registry', None)
     if regis is None:
         regis = registry
-        
+
     return regis.queryUtility(ICrab)
 
 def _get_proxy_settings(settings):
@@ -162,6 +164,32 @@ def _get_proxy_settings(settings):
             base_settings["proxy"]["https"] = settings["proxy.https"]
     return base_settings
 
+def conditional_http_tween_factory(handler, registry):
+    '''
+    Tween that adds ETag headers and tells Pyramid to enable 
+    conditional responses where appropriate.
+    '''
+    def conditional_http_tween(request):
+        response = handler(request)
+
+        # If the Last-Modified header has been set, we want to enable the
+        # conditional response processing.
+        if response.last_modified is not None:
+            response.conditional_response = True
+
+        # We want to only enable the conditional machinery if either we
+        # were given an explicit ETag header by the view or we have a
+        # buffered response and can generate the ETag header ourself.
+        if response.etag is not None:
+            response.conditional_response = True
+        elif (isinstance(response.app_iter, Sequence) and
+                len(response.app_iter) == 1):
+            response.conditional_response = True
+            response.md5_etag()
+
+        return response
+    return conditional_http_tween
+
 def includeme(config):
     '''
     Include `crabpy_pyramid` in this `Pyramid` application.
@@ -171,6 +199,9 @@ def includeme(config):
 
     settings = _parse_settings(config.registry.settings)
     base_settings = _get_proxy_settings(settings)
+
+    #http caching tween
+    config.add_tween('crabpy_pyramid.conditional_http_tween_factory')
 
     # create cache
     root = settings.get('cache.file.root', '/tmp/dogpile_data')
@@ -188,7 +219,7 @@ def includeme(config):
                 function properly.',
                 UserWarning
             )
-        else:    
+        else:
             config.add_renderer('capakey_listjson', capakey_json_list_renderer)
             config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
             _build_capakey(config.registry, capakey_settings)
@@ -196,7 +227,7 @@ def includeme(config):
             config.add_directive('get_capakey', get_capakey)
             config.include('crabpy_pyramid.routes.capakey')
             config.scan('crabpy_pyramid.views.capakey')
-    
+
     crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
     if crab_settings['include']:
         log.info('Adding CRAB Gateway.')
@@ -215,6 +246,6 @@ def main(global_config, **settings):
      This function returns a Pyramid WSGI application.
     '''
     config = Configurator(settings=settings)
-    
+
     includeme(config)
     return config.make_wsgi_app()
