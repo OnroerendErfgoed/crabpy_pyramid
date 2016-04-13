@@ -359,4 +359,4 @@ class HttpCachingFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         etag = res.headers['Etag']
         res2 = self.testapp.get('/crab/gewesten', headers={'If-None-Match': etag})
-        self.assertEqual('304 Not Modified', res.status)
+        self.assertEqual('304 Not Modified', res2.status)
