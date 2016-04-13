@@ -343,3 +343,20 @@ class CrabFunctionalTests(FunctionalTests):
     def test_get_land_by_unexisting_id(self):
         res = self.testapp.get('/crab/landen/MORDOR', status=404)
         self.assertEqual('404 Not Found', res.status)
+
+@unittest.skipUnless(
+    run_crab_integration_tests(),
+    'No CRAB Integration tests required'
+)
+class HttpCachingFunctionalTests(FunctionalTests):
+    def test_list_gewesten(self):
+        res = self.testapp.get('/crab/gewesten')
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('ETag', res.headers)
+
+    def test_http_304_res(self):
+        res = self.testapp.get('/crab/gewesten')
+        self.assertEqual('200 OK', res.status)
+        etag = res.headers['Etag']
+        res2 = self.testapp.get('/crab/gewesten', headers={'If-None-Match': etag})
+        self.assertEqual('304 Not Modified', res.status)
