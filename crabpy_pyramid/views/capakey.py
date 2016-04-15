@@ -5,7 +5,7 @@ Views for CAPAKEY services.
 .. versionadded:: 0.1.0
 '''
 from pyramid.view import view_config
-from crabpy_pyramid.utils import range_return
+from crabpy_pyramid.utils import range_return, set_http_caching
 
 from crabpy.gateway.exception import GatewayResourceNotFoundException
 
@@ -14,6 +14,7 @@ from pyramid.httpexceptions import HTTPNotFound
 
 @view_config(route_name='list_gemeenten', renderer='capakey_listjson', accept='application/json')
 def list_gemeenten(request):
+    request = set_http_caching(request, 'capakey', 'permanent')
     Gateway = request.capakey_gateway()
     gemeenten = Gateway.list_gemeenten(1)
     return range_return(request, gemeenten)
@@ -21,6 +22,7 @@ def list_gemeenten(request):
 
 @view_config(route_name='get_gemeente', renderer='capakey_itemjson', accept='application/json')
 def get_gemeente_by_niscode(request):
+    request = set_http_caching(request, 'capakey', 'long')
     Gateway = request.capakey_gateway()
     gemeente_id = int(request.matchdict.get('gemeente_id'))
     try:
@@ -34,6 +36,7 @@ def get_gemeente_by_niscode(request):
     renderer='capakey_listjson', accept='application/json'
 )
 def list_kadastrale_afdelingen_by_gemeente(request):
+    request = set_http_caching(request, 'capakey', 'permanent')
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     afdelingen = Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id)
@@ -42,6 +45,7 @@ def list_kadastrale_afdelingen_by_gemeente(request):
 
 @view_config(route_name='list_kadastrale_afdelingen', renderer='capakey_listjson', accept='application/json')
 def list_kadastrale_afdelingen(request):
+    request = set_http_caching(request, 'capakey', 'permanent')
     Gateway = request.capakey_gateway()
     afdelingen = Gateway.list_kadastrale_afdelingen()
     return range_return(request, afdelingen)
@@ -52,6 +56,7 @@ def list_kadastrale_afdelingen(request):
     renderer='capakey_itemjson', accept='application/json'
 )
 def get_kadastrale_afdeling_by_id(request):
+    request = set_http_caching(request, 'capakey', 'long')
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     try:
@@ -65,6 +70,7 @@ def get_kadastrale_afdeling_by_id(request):
     renderer='capakey_listjson', accept='application/json'
 )
 def list_secties_by_afdeling(request):
+    request = set_http_caching(request, 'capakey', 'long')
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     secties = Gateway.list_secties_by_afdeling(afdeling_id)
@@ -76,6 +82,7 @@ def list_secties_by_afdeling(request):
     renderer='capakey_itemjson', accept='application/json'
 )
 def get_sectie_by_id_and_afdeling(request):
+    request = set_http_caching(request, 'capakey', 'long')
     Gateway = request.capakey_gateway()
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie_id = request.matchdict.get('sectie_id')
@@ -90,6 +97,7 @@ def get_sectie_by_id_and_afdeling(request):
     renderer='capakey_listjson', accept='application/json'
 )
 def list_percelen_by_sectie(request):
+    request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
     sectie_id = request.matchdict.get('sectie_id')
     afdeling_id = request.matchdict.get('afdeling_id')
@@ -103,6 +111,7 @@ def list_percelen_by_sectie(request):
     renderer='capakey_itemjson', accept='application/json'
 )
 def get_perceel_by_sectie_and_id(request):
+    request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
     perceel_id = str(request.matchdict.get('perceel_id1'))+'/'\
         + str(request.matchdict.get('perceel_id2'))
@@ -120,6 +129,7 @@ def get_perceel_by_sectie_and_id(request):
     renderer='capakey_itemjson', accept='application/json'
 )
 def get_perceel_by_capakey(request):
+    request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
     capakey = str(request.matchdict.get('capakey1'))+'/'\
         + str(request.matchdict.get('capakey2'))
@@ -134,6 +144,7 @@ def get_perceel_by_capakey(request):
     renderer='capakey_itemjson', accept='application/json'
 )
 def get_perceel_by_percid(request):
+    request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
     percid = request.matchdict.get('percid')
     try:

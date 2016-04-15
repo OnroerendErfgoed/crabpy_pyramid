@@ -5,18 +5,22 @@ Views for CRAB services
 .. versionadded:: 0.1.0
 '''
 from pyramid.view import view_config
-from crabpy_pyramid.utils import range_return
+from crabpy_pyramid.utils import range_return, set_http_caching
 import pycountry
 
 from crabpy.gateway.exception import GatewayResourceNotFoundException
 
 from pyramid.httpexceptions import HTTPNotFound
 
+import logging
+log = logging.getLogger(__name__)
+
 @view_config(
     route_name='list_gewesten',
     renderer='crab_listjson', accept='application/json'
 )
 def list_gewesten(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     gewesten = Gateway.list_gewesten()
     return range_return(request, gewesten)
@@ -26,6 +30,7 @@ def list_gewesten(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_gewest_by_id(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     gewest_id = int(request.matchdict.get('gewest_id'))
     try:
@@ -38,6 +43,7 @@ def get_gewest_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_provincies(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     gewest_id = int(request.matchdict.get('gewest_id'))
     provincies = Gateway.list_provincies(gewest_id)
@@ -48,6 +54,7 @@ def list_provincies(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_provincie(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     provincie_id = int(request.matchdict.get('provincie_id'))
     try:
@@ -60,6 +67,7 @@ def get_provincie(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_gemeenten_by_provincie(request):
+    request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     provincie_id = int(request.matchdict.get('provincie_id'))
     gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id)
@@ -70,6 +78,7 @@ def list_gemeenten_by_provincie(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_gemeenten_crab(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     sort = request.params.get('sort', 'niscode')
     sort_map = {'id': 1, 'naam': 2, 'niscode': 6}
@@ -83,6 +92,7 @@ def list_gemeenten_crab(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_gemeente_crab(request):
+    request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     if len(gemeente_id) == 5:
@@ -113,6 +123,7 @@ def list_deelgemeenten(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_deelgemeenten_by_gemeente(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     if len(gemeente_id) == 5:
@@ -133,15 +144,20 @@ def list_deelgemeenten_by_gemeente(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_deelgemeente_by_id(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
     deelgemeente_id = request.matchdict.get('deelgemeente_id')
-    return Gateway.get_deelgemeente_by_id(deelgemeente_id)
+    try:
+        return Gateway.get_deelgemeente_by_id(deelgemeente_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
 
 @view_config(
     route_name='list_straten',
     renderer='crab_listjson', accept='application/json'
 )
 def list_straten(request):
+    request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     if len(gemeente_id)==5:
@@ -154,6 +170,7 @@ def list_straten(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_straat_by_id(request):
+    request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     try:
@@ -166,6 +183,7 @@ def get_straat_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_huisnummers(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
@@ -176,6 +194,7 @@ def list_huisnummers(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_huisnummer_by_straat_and_label(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
     huisnummer = request.matchdict.get('huisnummer_label')
@@ -190,6 +209,7 @@ def get_huisnummer_by_straat_and_label(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_huisnummer_by_id(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     try:
@@ -202,6 +222,7 @@ def get_huisnummer_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_percelen(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     percelen = Gateway.list_percelen_by_huisnummer(huisnummer_id)
@@ -212,6 +233,7 @@ def list_percelen(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_perceel_by_id(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
     try:
@@ -224,6 +246,7 @@ def get_perceel_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_huisnummers_by_perceel(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
     try:
@@ -237,6 +260,7 @@ def list_huisnummers_by_perceel(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_gebouwen(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     gebouwen = Gateway.list_gebouwen_by_huisnummer(huisnummer_id)
@@ -247,6 +271,7 @@ def list_gebouwen(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_gebouw_by_id(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     gebouw_id = request.matchdict.get('gebouw_id')
     try:
@@ -259,6 +284,7 @@ def get_gebouw_by_id(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_wegobject(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     wegobject_id = request.matchdict.get('wegobject_id')
     try:
@@ -271,6 +297,7 @@ def get_wegobject(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_subadressen(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     subadressen = Gateway.list_subadressen_by_huisnummer(huisnummer_id)
@@ -281,6 +308,7 @@ def list_subadressen(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_subadres_by_id(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     subadres_id = request.matchdict.get('subadres_id')
     try:
@@ -294,6 +322,7 @@ def get_subadres_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_postkantons_by_gemeente(request):
+    request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
     postkantons = Gateway.list_postkantons_by_gemeente(gemeente_id)
@@ -305,6 +334,7 @@ def list_postkantons_by_gemeente(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_adresposities_by_huisnummer(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     huisnummer_id = request.matchdict.get('huisnummer_id')
     adresposities = Gateway.list_adresposities_by_huisnummer(huisnummer_id)
@@ -316,6 +346,7 @@ def list_adresposities_by_huisnummer(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_adresposities_by_subadres(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     subadres_id = request.matchdict.get('subadres_id')
     adresposities = Gateway.list_adresposities_by_subadres(subadres_id)
@@ -327,6 +358,7 @@ def list_adresposities_by_subadres(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_adrespositie_by_id(request):
+    request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     adrespositie_id = request.matchdict.get('adrespositie_id')
     try:
@@ -340,6 +372,7 @@ def get_adrespositie_by_id(request):
     renderer='crab_listjson', accept='application/json'
 )
 def list_landen(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     return list(pycountry.countries)
 
 @view_config(
@@ -347,6 +380,7 @@ def list_landen(request):
     renderer='crab_itemjson', accept='application/json'
 )
 def get_land_by_id(request):
+    request = set_http_caching(request, 'crab', 'permanent')
     land_id = request.matchdict.get('land_id')
     try:
         land = pycountry.countries.get(alpha2=land_id)
