@@ -59,9 +59,9 @@ settings = {
     'crabpy.crab.cache_config.long.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.long.expiration_time': 86400,
     'crabpy.crab.cache_config.long.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_long.dbm'),
-    'crabpy.capakey.cache_config.short.backend': 'dogpile.cache.dbm',
-    'crabpy.capakey.cache_config.short.expiration_time': 3600,
-    'crabpy.capakey.cache_config.short.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_short.dbm'),
+    'crabpy.crab.cache_config.short.backend': 'dogpile.cache.dbm',
+    'crabpy.crab.cache_config.short.expiration_time': 3600,
+    'crabpy.crab.cache_config.short.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_short.dbm'),
 }
 
 

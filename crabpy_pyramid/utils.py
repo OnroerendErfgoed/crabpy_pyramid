@@ -75,6 +75,9 @@ def set_http_caching(request, gateway='crab', region='permanent'):
     :param str region: What caching region to use? Defaults to `permanent`.
     :rtype: pyramid.request.Request
     '''
-    ctime = int(int(request.registry.settings['crabpy.%s.cache_config.%s.expiration_time' % (gateway, region)]) * 1.05)
+    crabpy_exp = request.registry.settings.get('crabpy.%s.cache_config.%s.expiration_time' % (gateway, region), None)
+    if crabpy_exp is None:
+        return request
+    ctime = int(int(crabpy_exp) * 1.05)
     request.response.cache_expires(ctime, public=True)
     return request
