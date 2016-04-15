@@ -1,3 +1,9 @@
+0.5.0 (2016-04-??)
+------------------
+
+- Add HTTP caching headers. Both conditional GET with ETags and Cache-Control
+  headers. Caching times are based on the ones passed to the gateways.
+
 0.4.1 (2016-02-02)
 ------------------
 

@@ -21,7 +21,7 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.4.1',
+      version='0.5.0',
       description='Bindings for the CRABpy webservices Pyramid.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
