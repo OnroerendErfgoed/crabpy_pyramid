@@ -1,8 +1,9 @@
-0.5.0 (2016-04-??)
+0.5.0 (2016-??-??)
 ------------------
 
 - Add HTTP caching headers. Both conditional GET with ETags and Cache-Control
   headers. Caching times are based on the ones passed to the gateways.
+- Empty proxy settings are filtered out before being passed to the gateways. (#38)
 
 0.4.1 (2016-02-02)
 ------------------
