@@ -156,12 +156,16 @@ def get_crab(registry):
 
 def _get_proxy_settings(settings):
     base_settings = {}
-    if "proxy.http" or "proxy.https" in settings:
+    http = settings.get('proxy.http', None)
+    https = settings.get('proxy.https', None)
+    if (http or https):
         base_settings["proxy"] = {}
         if "proxy.http" in settings:
             base_settings["proxy"]["http"] = settings["proxy.http"]
+            log.info('HTTP proxy: %s' % base_settings["proxy"]["http"])
         if "proxy.https" in settings:
             base_settings["proxy"]["https"] = settings["proxy.https"]
+            log.info('HTTPS proxy: %s' % base_settings["proxy"]["https"])
     return base_settings
 
 def conditional_http_tween_factory(handler, registry):

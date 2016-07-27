@@ -86,6 +86,13 @@ class TestSettings(unittest.TestCase):
         self.assertIn('http', crab_settings["proxy"])
         self.assertIn('https', crab_settings["proxy"])
 
+    def test_empty_proxy_settings(self):
+        settings = {
+            'proxy.http' : '',
+            'proxy.https' : '',
+        }
+        base_settings = _get_proxy_settings(settings)
+        self.assertNotIn('proxy', base_settings)
 
     def test_includeme_existing_root(self):
         includeme(self.config)
