@@ -48,6 +48,7 @@ def list_gemeente_adapter(obj, request):
     '''
     return {
         'id': obj.id,
+        'niscode': obj.niscode,
         'naam': obj.naam
     }
 
@@ -214,6 +215,7 @@ def item_gemeente_adapter(obj, request):
     '''
     return {
         'id': obj.id,
+        'niscode': obj.niscode,
         'naam': obj.naam,
         'centroid': obj.centroid,
         'bounding_box': obj.bounding_box,
