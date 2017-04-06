@@ -32,8 +32,6 @@ class TestSettings(unittest.TestCase):
         self.config = testing.setUp(
             settings = {
                 'crabpy.capakey.include': True,
-                'crabpy.capakey.user': 'Talissa',
-                'crabpy.capakey.password': 'TalissaWachtwoord',
                 'crabpy.cache.file.root': './dogpile_data/',
                 'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
                 'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
@@ -114,12 +112,10 @@ class TestSettings(unittest.TestCase):
     def test_directive_was_added(self):
         includeme(self.config)
         r = self.config.registry.settings
-        self.assertEqual('Talissa', r['crabpy.capakey.user'])
+        self.assertEqual('dogpile.cache.dbm', r['crabpy.capakey.cache_config.permanent.backend'])
 
     def test_includeme_no_capakey_auth_warning(self):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
-            del self.config.registry.settings['crabpy.capakey.user']
-            del self.config.registry.settings['crabpy.capakey.password']
             includeme(self.config)
             self.assertGreater(len(w), 0)

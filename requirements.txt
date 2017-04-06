@@ -1,4 +1,5 @@
 # Tested and approved with these versions
 pyramid==1.7.0
-crabpy==0.7.0
+#crabpy==0.8.0
+-e git+ssh://git@github.com/OnroerendErfgoed/crabpy.git@69_deprecate_capakey_soap#egg=crabpy
 pycountry==1.20
