@@ -5,7 +5,7 @@ Testing of the initialization.
 '''
 
 from pyramid import testing
-from crabpy.gateway.capakey import CapakeyGateway
+from crabpy.gateway.capakey import CapakeyRestGateway
 from crabpy.gateway.crab import CrabGateway
 import os
 import warnings
@@ -95,7 +95,7 @@ class TestSettings(unittest.TestCase):
     def test_includeme_existing_root(self):
         includeme(self.config)
         capakey = self.config.registry.queryUtility(ICapakey)
-        self.assertIsInstance(capakey, CapakeyGateway)
+        self.assertIsInstance(capakey, CapakeyRestGateway)
         crab = self.config.registry.queryUtility(ICrab)
         self.assertIsInstance(crab, CrabGateway)
 
@@ -104,7 +104,7 @@ class TestSettings(unittest.TestCase):
         self.config.registry.settings['crabpy.cache.file.root'] = root
         includeme(self.config)
         capakey = self.config.registry.queryUtility(ICapakey)
-        self.assertIsInstance(capakey, CapakeyGateway)
+        self.assertIsInstance(capakey, CapakeyRestGateway)
         crab = self.config.registry.queryUtility(ICrab)
         self.assertIsInstance(crab, CrabGateway)
         os.rmdir(root)
@@ -113,9 +113,3 @@ class TestSettings(unittest.TestCase):
         includeme(self.config)
         r = self.config.registry.settings
         self.assertEqual('dogpile.cache.dbm', r['crabpy.capakey.cache_config.permanent.backend'])
-
-    def test_includeme_no_capakey_auth_warning(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
-            includeme(self.config)
-            self.assertGreater(len(w), 0)
