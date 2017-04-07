@@ -174,13 +174,13 @@ def conditional_http_tween_factory(handler, registry):
     """
     settings = registry.settings if hasattr(registry, 'settings') else {}
     not_cacheble_list = []
-    if 'not.cacheble.list' in settings:
-        not_cacheble_list = settings['not.cacheble.list']
+    if 'not.cachable.list' in settings:
+        not_cacheble_list = settings.get('not.cachable.list').split()
 
     def conditional_http_tween(request):
         response = handler(request)
 
-        if request.current_route_url() not in not_cacheble_list:
+        if request.path not in not_cacheble_list:
 
             # If the Last-Modified header has been set, we want to enable the
             # conditional response processing.
