@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Adapters to help render :mod:`crabpy.gateway.capakey` objects to json.
 
 .. versionadded:: 0.1.0
-'''
+"""
 from crabpy.gateway import capakey
 
 from pyramid.renderers import JSON
@@ -13,10 +13,10 @@ json_item_renderer = JSON()
 
 
 def list_gemeente_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a list of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'naam': obj.naam
@@ -24,10 +24,10 @@ def list_gemeente_adapter(obj, request):
 
 
 def list_afdeling_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a list of
     :class: `crabpy.gateway.capakey.Afdeling` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'naam': obj.naam,
@@ -36,10 +36,10 @@ def list_afdeling_adapter(obj, request):
 
 
 def list_sectie_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a list of
     :class: `crabpy.gateway.capakey.Sectie` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'afdeling': obj.afdeling
@@ -47,10 +47,10 @@ def list_sectie_adapter(obj, request):
 
 
 def list_perceel_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a list of
     :class: `crabpy.gateway.capakey.Perceel` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'sectie': obj.sectie,
@@ -65,10 +65,10 @@ json_list_renderer.add_adapter(capakey.Perceel, list_perceel_adapter)
 
 
 def item_gemeente_adapter(obj, request):
-    '''
+    """
     Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Gemeente` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'naam': obj.naam,
@@ -78,10 +78,10 @@ def item_gemeente_adapter(obj, request):
 
 
 def item_afdeling_adapter(obj, request):
-    '''
+    """
     Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Afdeling` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'naam': obj.naam,
@@ -95,10 +95,10 @@ def item_afdeling_adapter(obj, request):
 
 
 def item_sectie_adapter(obj, request):
-    '''
+    """
     Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Sectie` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'afdeling': {
@@ -115,10 +115,10 @@ def item_sectie_adapter(obj, request):
 
 
 def item_perceel_adapter(obj, request):
-    '''
+    """
     Adapter for rendering an object of
     :class: `crabpy.gateway.capakey.Perceel` to json.
-    '''
+    """
     return {
         'id': obj.id,
         'sectie': {

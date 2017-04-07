@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Views for CAPAKEY services.
 
 .. versionadded:: 0.1.0
-'''
+"""
 from pyramid.view import view_config
 from crabpy_pyramid.utils import range_return, set_http_caching
 
@@ -113,8 +113,8 @@ def list_percelen_by_sectie(request):
 def get_perceel_by_sectie_and_id(request):
     request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
-    perceel_id = str(request.matchdict.get('perceel_id1'))+'/'\
-        + str(request.matchdict.get('perceel_id2'))
+    perceel_id = str(request.matchdict.get('perceel_id1')) + '/' \
+                 + str(request.matchdict.get('perceel_id2'))
     sectie_id = request.matchdict.get('sectie_id')
     afdeling_id = request.matchdict.get('afdeling_id')
     sectie = Gateway.get_sectie_by_id_and_afdeling(sectie_id, afdeling_id)
@@ -131,8 +131,8 @@ def get_perceel_by_sectie_and_id(request):
 def get_perceel_by_capakey(request):
     request = set_http_caching(request, 'capakey', 'short')
     Gateway = request.capakey_gateway()
-    capakey = str(request.matchdict.get('capakey1'))+'/'\
-        + str(request.matchdict.get('capakey2'))
+    capakey = str(request.matchdict.get('capakey1')) + '/' \
+              + str(request.matchdict.get('capakey2'))
     try:
         return Gateway.get_perceel_by_capakey(capakey)
     except GatewayResourceNotFoundException:
@@ -151,4 +151,3 @@ def get_perceel_by_percid(request):
         return Gateway.get_perceel_by_percid(percid)
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
-

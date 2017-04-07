@@ -43,3 +43,4 @@ dogpile_data
 
 # Rope
 .ropeproject
+.idea/

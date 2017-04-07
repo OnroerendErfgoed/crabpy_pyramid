@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Routes for the CAPAKEY views.
 
 .. versionadded:: 0.1.0
-'''
+"""
+
+
 def includeme(config):
     config.add_route('list_gemeenten', '/capakey/gemeenten')
     config.add_route('get_gemeente', '/capakey/gemeenten/{gemeente_id}')
@@ -20,7 +22,7 @@ def includeme(config):
         'list_secties_by_afdeling',
         '/capakey/afdelingen/{afdeling_id}/secties'
     )
-    config.add_route(   
+    config.add_route(
         'get_sectie_by_id_and_afdeling',
         '/capakey/afdelingen/{afdeling_id}/secties/{sectie_id}'
     )

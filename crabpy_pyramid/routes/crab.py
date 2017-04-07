@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Routes for the CRAB views.
 
 .. versionadded:: 0.1.0
-'''
+"""
+
+
 def includeme(config):
     config.add_route('list_gewesten', '/crab/gewesten')
     config.add_route('get_gewest_by_id', '/crab/gewesten/{gewest_id}')

@@ -1,27 +1,25 @@
 # -*- coding: utf-8 -*-
-from pyramid.config import Configurator
-import os
 
+import logging
+import os
+from collections import Sequence
+
+from crabpy.client import crab_factory
 from crabpy.gateway.capakey import CapakeyRestGateway
 from crabpy.gateway.crab import CrabGateway
-from crabpy.client import crab_factory
+from pyramid.config import Configurator
+from pyramid.settings import asbool
 from zope.interface import Interface
 
 from crabpy_pyramid.renderers.capakey import (
     json_list_renderer as capakey_json_list_renderer,
     json_item_renderer as capakey_json_item_renderer
 )
-
 from crabpy_pyramid.renderers.crab import (
     json_list_renderer as crab_json_list_renderer,
     json_item_renderer as crab_json_item_renderer
 )
 
-from pyramid.settings import asbool
-
-from collections import Sequence
-
-import logging
 log = logging.getLogger(__name__)
 
 
@@ -120,7 +118,7 @@ def get_capakey(registry):
     """
     Get the Capakey Gateway
 
-    :rtype: :class:`crabpy.gateway.capakey.CapakeyRestGateway`
+    :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
     """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -135,6 +133,7 @@ def get_crab(registry):
     Get the Crab Gateway
 
     :rtype: :class:`crabpy.gateway.crab.CrabGateway`
+    # argument might be a config or a request
     """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -178,11 +177,12 @@ def conditional_http_tween_factory(handler, registry):
         if response.etag is not None:
             response.conditional_response = True
         elif (isinstance(response.app_iter, Sequence) and
-                len(response.app_iter) == 1):
+                      len(response.app_iter) == 1):
             response.conditional_response = True
             response.md5_etag()
 
         return response
+
     return conditional_http_tween
 
 
