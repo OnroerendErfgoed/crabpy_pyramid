@@ -6,7 +6,7 @@ python:
  - 3.4
  - 3.5
 before_install:
- - git clone git@github.com:OnroerendErfgoed/crabpy.git
+ - git clone https://github.com/OnroerendErfgoed/crabpy.git
  - (cd crabpy && git checkout 69_deprecate_capakey_soap)
 install:
  - python setup.py develop
