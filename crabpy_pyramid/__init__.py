@@ -1,34 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import logging
-log = logging.getLogger(__name__)
-
-from pyramid.config import Configurator
 import os
 import warnings
-from dogpile.cache import make_region
+from collections import Sequence
 
+from crabpy.client import capakey_factory, crab_factory
 from crabpy.gateway.capakey import CapakeyGateway
 from crabpy.gateway.crab import CrabGateway
-from crabpy.client import capakey_factory, crab_factory
+from pyramid.config import Configurator
+from pyramid.settings import asbool
 from zope.interface import Interface
 
 from crabpy_pyramid.renderers.capakey import (
     json_list_renderer as capakey_json_list_renderer,
     json_item_renderer as capakey_json_item_renderer
 )
-
 from crabpy_pyramid.renderers.crab import (
     json_list_renderer as crab_json_list_renderer,
     json_item_renderer as crab_json_item_renderer
 )
 
-from pyramid.settings import asbool
-
-from collections import Sequence
-
-import logging
 log = logging.getLogger(__name__)
+
 
 class ICapakey(Interface):
     pass
@@ -41,8 +35,8 @@ class ICrab(Interface):
 def _parse_settings(settings):
     args = {}
     defaults = {
-        'capakey.include' : False,
-        'crab.include' : True,
+        'capakey.include': False,
+        'crab.include': True,
         'cache.file.root': '/tmp/dogpile_data'
     }
     args = defaults.copy()
@@ -81,6 +75,7 @@ def _parse_settings(settings):
     log.debug(args)
     return args
 
+
 def _filter_settings(settings, prefix):
     """
     Filter all settings to only return settings that start with a certain
@@ -95,6 +90,7 @@ def _filter_settings(settings, prefix):
             key = skey[len(prefix):]
             ret[key] = settings[skey]
     return ret
+
 
 def _build_capakey(registry, settings):
     capakey = registry.queryUtility(ICapakey)
@@ -134,12 +130,13 @@ def get_capakey(registry):
 
     :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
     '''
-    #argument might be a config or a request
+    # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
     if regis is None:
         regis = registry
 
     return regis.queryUtility(ICapakey)
+
 
 def get_crab(registry):
     '''
@@ -147,12 +144,13 @@ def get_crab(registry):
 
     :rtype: :class:`crabpy.gateway.crab.CrabGateway`
     '''
-    #argument might be a config or a request
+    # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
     if regis is None:
         regis = registry
 
     return regis.queryUtility(ICrab)
+
 
 def _get_proxy_settings(settings):
     base_settings = {}
@@ -168,11 +166,13 @@ def _get_proxy_settings(settings):
             log.info('HTTPS proxy: %s' % base_settings["proxy"]["https"])
     return base_settings
 
+
 def conditional_http_tween_factory(handler, registry):
     '''
     Tween that adds ETag headers and tells Pyramid to enable 
     conditional responses where appropriate.
     '''
+
     def conditional_http_tween(request):
         response = handler(request)
 
@@ -187,12 +187,14 @@ def conditional_http_tween_factory(handler, registry):
         if response.etag is not None:
             response.conditional_response = True
         elif (isinstance(response.app_iter, Sequence) and
-                len(response.app_iter) == 1):
+                      len(response.app_iter) == 1):
             response.conditional_response = True
             response.md5_etag()
 
         return response
+
     return conditional_http_tween
+
 
 def includeme(config):
     '''
@@ -204,7 +206,7 @@ def includeme(config):
     settings = _parse_settings(config.registry.settings)
     base_settings = _get_proxy_settings(settings)
 
-    #http caching tween
+    # http caching tween
     config.add_tween('crabpy_pyramid.conditional_http_tween_factory')
 
     # create cache

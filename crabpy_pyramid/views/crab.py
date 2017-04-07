@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Views for CRAB services
 
 .. versionadded:: 0.1.0
-'''
+"""
 from pyramid.view import view_config
 from crabpy_pyramid.utils import range_return, set_http_caching
 import pycountry
@@ -13,7 +13,9 @@ from crabpy.gateway.exception import GatewayResourceNotFoundException
 from pyramid.httpexceptions import HTTPNotFound
 
 import logging
+
 log = logging.getLogger(__name__)
+
 
 @view_config(
     route_name='list_gewesten',
@@ -24,6 +26,7 @@ def list_gewesten(request):
     Gateway = request.crab_gateway()
     gewesten = Gateway.list_gewesten()
     return range_return(request, gewesten)
+
 
 @view_config(
     route_name='get_gewest_by_id',
@@ -38,6 +41,7 @@ def get_gewest_by_id(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_provincies',
     renderer='crab_listjson', accept='application/json'
@@ -48,6 +52,7 @@ def list_provincies(request):
     gewest_id = int(request.matchdict.get('gewest_id'))
     provincies = Gateway.list_provincies(gewest_id)
     return range_return(request, provincies)
+
 
 @view_config(
     route_name='get_provincie',
@@ -62,6 +67,7 @@ def get_provincie(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_gemeenten_by_provincie',
     renderer='crab_listjson', accept='application/json'
@@ -72,6 +78,7 @@ def list_gemeenten_by_provincie(request):
     provincie_id = int(request.matchdict.get('provincie_id'))
     gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id)
     return range_return(request, gemeenten)
+
 
 @view_config(
     route_name='list_gemeenten_crab',
@@ -86,6 +93,7 @@ def list_gemeenten_crab(request):
     gewest_id = request.matchdict.get('gewest_id')
     gemeenten = Gateway.list_gemeenten(gewest_id, sort)
     return range_return(request, gemeenten)
+
 
 @view_config(
     route_name='get_gemeente_crab',
@@ -106,6 +114,7 @@ def get_gemeente_crab(request):
         except GatewayResourceNotFoundException:
             return HTTPNotFound()
 
+
 @view_config(
     route_name='list_deelgemeenten',
     renderer='crab_listjson', accept='application/json'
@@ -117,6 +126,7 @@ def list_deelgemeenten(request):
         return HTTPNotFound()
     deelgemeenten = Gateway.list_deelgemeenten(gewest_id)
     return range_return(request, deelgemeenten)
+
 
 @view_config(
     route_name='list_deelgemeenten_by_gemeente',
@@ -139,6 +149,7 @@ def list_deelgemeenten_by_gemeente(request):
     deelgemeenten = Gateway.list_deelgemeenten_by_gemeente(gemeente)
     return range_return(request, deelgemeenten)
 
+
 @view_config(
     route_name='get_deelgemeente_by_id',
     renderer='crab_itemjson', accept='application/json'
@@ -152,6 +163,7 @@ def get_deelgemeente_by_id(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_straten',
     renderer='crab_listjson', accept='application/json'
@@ -160,10 +172,11 @@ def list_straten(request):
     request = set_http_caching(request, 'crab', 'long')
     Gateway = request.crab_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
-    if len(gemeente_id)==5:
+    if len(gemeente_id) == 5:
         gemeente_id = Gateway.get_gemeente_by_niscode(gemeente_id)
     straten = Gateway.list_straten(gemeente_id)
     return range_return(request, straten)
+
 
 @view_config(
     route_name='get_straat_by_id',
@@ -178,6 +191,7 @@ def get_straat_by_id(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_huisnummers',
     renderer='crab_listjson', accept='application/json'
@@ -188,6 +202,7 @@ def list_huisnummers(request):
     straat_id = request.matchdict.get('straat_id')
     huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
     return range_return(request, huisnummers)
+
 
 @view_config(
     route_name='get_huisnummer_by_straat_and_label',
@@ -217,6 +232,7 @@ def get_huisnummer_by_id(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_percelen',
     renderer='crab_listjson', accept='application/json'
@@ -228,6 +244,7 @@ def list_percelen(request):
     percelen = Gateway.list_percelen_by_huisnummer(huisnummer_id)
     return range_return(request, percelen)
 
+
 @view_config(
     route_name='get_perceel_by_id',
     renderer='crab_itemjson', accept='application/json'
@@ -235,11 +252,12 @@ def list_percelen(request):
 def get_perceel_by_id(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
-    perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
+    perceel_id = request.matchdict.get('perceel_id1') + '/' + request.matchdict.get('perceel_id2')
     try:
         return Gateway.get_perceel_by_id(perceel_id)
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
+
 
 @view_config(
     route_name='list_huisnummers_by_perceel',
@@ -248,12 +266,13 @@ def get_perceel_by_id(request):
 def list_huisnummers_by_perceel(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
-    perceel_id = request.matchdict.get('perceel_id1')+'/'+request.matchdict.get('perceel_id2')
+    perceel_id = request.matchdict.get('perceel_id1') + '/' + request.matchdict.get('perceel_id2')
     try:
         perceel = Gateway.get_perceel_by_id(perceel_id)
         return Gateway.list_huisnummers_by_perceel(perceel)
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
+
 
 @view_config(
     route_name='list_gebouwen',
@@ -265,6 +284,7 @@ def list_gebouwen(request):
     huisnummer_id = request.matchdict.get('huisnummer_id')
     gebouwen = Gateway.list_gebouwen_by_huisnummer(huisnummer_id)
     return range_return(request, gebouwen)
+
 
 @view_config(
     route_name='get_gebouw_by_id',
@@ -279,6 +299,7 @@ def get_gebouw_by_id(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='get_wegobject',
     renderer='crab_itemjson', accept='application/json'
@@ -292,6 +313,7 @@ def get_wegobject(request):
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
+
 @view_config(
     route_name='list_subadressen',
     renderer='crab_listjson', accept='application/json'
@@ -302,6 +324,7 @@ def list_subadressen(request):
     huisnummer_id = request.matchdict.get('huisnummer_id')
     subadressen = Gateway.list_subadressen_by_huisnummer(huisnummer_id)
     return range_return(request, subadressen)
+
 
 @view_config(
     route_name='get_subadres_by_id',
@@ -374,6 +397,7 @@ def get_adrespositie_by_id(request):
 def list_landen(request):
     request = set_http_caching(request, 'crab', 'permanent')
     return list(pycountry.countries)
+
 
 @view_config(
     route_name='get_land_by_id',
