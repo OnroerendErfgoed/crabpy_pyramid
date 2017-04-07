@@ -9,8 +9,8 @@ before_install:
  - git clone https://github.com/OnroerendErfgoed/crabpy.git
  - (cd crabpy && git checkout 69_deprecate_capakey_soap)
 install:
- - python setup.py develop
  - pip install -r requirements-tci.txt
+ - python setup.py develop
  - pip install nose coverage nose-testconfig coveralls webtest
 script: 
   nosetests --nologcapture --config nose_cover.cfg --tc-file nose_travis.ini
