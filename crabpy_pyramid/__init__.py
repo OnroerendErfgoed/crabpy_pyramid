@@ -125,11 +125,11 @@ def _build_crab(registry, settings):
 
 
 def get_capakey(registry):
-    '''
+    """
     Get the Capakey Gateway
 
     :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
-    '''
+    """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
     if regis is None:
@@ -139,11 +139,11 @@ def get_capakey(registry):
 
 
 def get_crab(registry):
-    '''
+    """
     Get the Crab Gateway
 
     :rtype: :class:`crabpy.gateway.crab.CrabGateway`
-    '''
+    """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
     if regis is None:
@@ -168,28 +168,34 @@ def _get_proxy_settings(settings):
 
 
 def conditional_http_tween_factory(handler, registry):
-    '''
+    """
     Tween that adds ETag headers and tells Pyramid to enable 
     conditional responses where appropriate.
-    '''
+    """
+    settings = registry.settings if hasattr(registry, 'settings') else {}
+    not_cacheble_list = []
+    if 'not.cacheble.list' in settings:
+        not_cacheble_list = settings['not.cacheble.list']
 
     def conditional_http_tween(request):
         response = handler(request)
 
-        # If the Last-Modified header has been set, we want to enable the
-        # conditional response processing.
-        if response.last_modified is not None:
-            response.conditional_response = True
+        if request.current_route_url() not in not_cacheble_list:
 
-        # We want to only enable the conditional machinery if either we
-        # were given an explicit ETag header by the view or we have a
-        # buffered response and can generate the ETag header ourself.
-        if response.etag is not None:
-            response.conditional_response = True
-        elif (isinstance(response.app_iter, Sequence) and
-                      len(response.app_iter) == 1):
-            response.conditional_response = True
-            response.md5_etag()
+            # If the Last-Modified header has been set, we want to enable the
+            # conditional response processing.
+            if response.last_modified is not None:
+                response.conditional_response = True
+
+            # We want to only enable the conditional machinery if either we
+            # were given an explicit ETag header by the view or we have a
+            # buffered response and can generate the ETag header ourself.
+            if response.etag is not None:
+                response.conditional_response = True
+            elif (isinstance(response.app_iter, Sequence) and
+                          len(response.app_iter) == 1) and response.body is not None:
+                response.conditional_response = True
+                response.md5_etag()
 
         return response
 
@@ -197,11 +203,11 @@ def conditional_http_tween_factory(handler, registry):
 
 
 def includeme(config):
-    '''
+    """
     Include `crabpy_pyramid` in this `Pyramid` application.
 
     :param pyramid.config.Configurator config: A Pyramid configurator.
-    '''
+    """
 
     settings = _parse_settings(config.registry.settings)
     base_settings = _get_proxy_settings(settings)
@@ -248,9 +254,9 @@ def includeme(config):
 
 
 def main(global_config, **settings):
-    '''
+    """
      This function returns a Pyramid WSGI application.
-    '''
+    """
     config = Configurator(settings=settings)
 
     includeme(config)
