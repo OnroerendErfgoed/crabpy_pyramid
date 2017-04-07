@@ -1,0 +1,5 @@
+# Tested and approved with these versions
+pyramid==1.7.0
+#crabpy==0.8.0
+file:../crabpy_pyramid/crabpy#egg=crabpy
+pycountry==1.20

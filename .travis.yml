@@ -5,9 +5,11 @@ python:
  - 3.3
  - 3.4
  - 3.5
+before_install:
+ - (cd crabpy && git checkout 69_deprecate_capakey_soap)
 install:
  - python setup.py develop
- - pip install -r requirements.txt
+ - pip install -r requirements-tci.txt
  - pip install nose coverage nose-testconfig coveralls webtest
 script: 
   nosetests --nologcapture --config nose_cover.cfg --tc-file nose_travis.ini
