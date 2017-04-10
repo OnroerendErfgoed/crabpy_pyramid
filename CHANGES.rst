@@ -1,3 +1,9 @@
+0.6.0 (2017-??-??)
+------------------
+
+- Make compatible with CRABpy 0.8.0 and use the CAPAKEY REST gateway (#40)
+- Blacklist for conditional tween (#41)
+
 0.5.1 (2016-11-22)
 ------------------
 
