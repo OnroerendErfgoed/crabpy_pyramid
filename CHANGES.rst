@@ -1,4 +1,4 @@
-0.6.0 (2017-??-??)
+0.6.0 (2017-04-19)
 ------------------
 
 - Make compatible with CRABpy 0.8.0 and use the CAPAKEY REST gateway (#40)
