@@ -6,9 +6,8 @@ Setup and configuration
 
 Installing `crabpy_pyramid` is fairly straightforward, configuring it can be a
 bit more complicated. Fundamentally, `crabpy_pyramid` uses the :mod:`crabpy` 
-library to offer users access to both the CRAB and the CAPAKEY werbservice. Since
-the CAPAKEY service requires user authentication, it's possible to include none,
-one or both of the services.
+library to offer users access to both the CRAB and the CAPAKEY werbservice.
+It's possible to include none, one or both of the services.
 
 To add `crabpy_pyramid` to you project, just include it.
 
@@ -18,10 +17,9 @@ To add `crabpy_pyramid` to you project, just include it.
 
 Out of the box, this will add the :class:`crabpy.gateway.crab.CrabGateway` and
 the accompanying REST services. It will not add the 
-:class:`crabpy.gateway.capakey.CapakeyGateway` and it's accompanying services. 
+:class:`crabpy.gateway.capakey.CapakeyRestGateway` and it's accompanying services.
 If you want to use this service, you need to set the 
-:ref:`setting-capakey-include` setting to `True` and configure your 
-:ref:`setting-capakey-user` and :ref:`setting-capakey-password`.
+:ref:`setting-capakey-include` setting to `True`.
 
 The default will also set a :ref:`setting-cache-file-root` parameter. This is
 the default location for writing :mod:`dogpile.cache` file caches. It exists 
@@ -80,26 +78,7 @@ crabpy.capakey.include
 ----------------------
 
 This setting controls whether the CAPAKEY Gateway is configured or not. By default
-this is set to `False`. If you set this to `True`, you also need to set 
-:ref:`setting-capakey-user` and :ref:`setting-capakey-password` settings.
-
-.. _setting-capakey-user:
-
-crabpy.capakey.user
--------------------
-
-This setting has no effect unless the :ref:`setting-capakey-include` is set to
-`True`. When :ref:`setting-capakey-include` is set to `True`, this setting is
-mandatory. It contains the username for connecting to the AGIV CAPAKEY webservice.
-
-.. _setting-capakey-password:
-
-crabpy.capakey.password
------------------------
-
-This setting has no effect unless the :ref:`setting-capakey-include` is set to
-`True`. When :ref:`setting-capakey-include` is set to `True`, this setting is
-mandatory. It contains the password for connecting to the AGIV CAPAKEY webservice.
+this is set to `False`. If you set this to `True`.
 
 .. _setting-capakey-cache-config:
 

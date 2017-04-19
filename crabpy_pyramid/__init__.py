@@ -2,11 +2,10 @@
 
 import logging
 import os
-import warnings
 from collections import Sequence
 
-from crabpy.client import capakey_factory, crab_factory
-from crabpy.gateway.capakey import CapakeyGateway
+from crabpy.client import crab_factory
+from crabpy.gateway.capakey import CapakeyRestGateway
 from crabpy.gateway.crab import CrabGateway
 from pyramid.config import Configurator
 from pyramid.settings import asbool
@@ -33,7 +32,6 @@ class ICrab(Interface):
 
 
 def _parse_settings(settings):
-    args = {}
     defaults = {
         'capakey.include': False,
         'crab.include': True,
@@ -43,28 +41,21 @@ def _parse_settings(settings):
 
     # booelean settings
     for short_key_name in ('capakey.include', 'crab.include'):
-        key_name = "crabpy.%s" % (short_key_name)
+        key_name = "crabpy.%s" % short_key_name
         if key_name in settings:
             args[short_key_name] = asbool(settings.get(
                 key_name, defaults.get(short_key_name)
             ))
 
-    # set settings
-    for short_key_name in ('capakey.user', 'capakey.password'):
-        key_name = "crabpy.%s" % (short_key_name)
-        if key_name in settings:
-            args[short_key_name] = settings.get(
-                key_name, defaults.get(short_key_name)
-            )
     # string setting
     for short_key_name in ('proxy.http', 'proxy.https', 'cache.file.root'):
-        key_name = "crabpy.%s" % (short_key_name)
+        key_name = "crabpy.%s" % short_key_name
         if key_name in settings:
             args[short_key_name] = settings.get(key_name)
 
     # cache configuration
     for short_key_name in ('crab.cache_config', 'capakey.cache_config'):
-        key_name = "crabpy.%s." % (short_key_name)
+        key_name = "crabpy.%s." % short_key_name
         cache_config = {}
         for skey in settings.keys():
             if skey.startswith(key_name):
@@ -101,8 +92,7 @@ def _build_capakey(registry, settings):
         del settings['cache_config']
     else:
         cache_config = {}
-    factory = capakey_factory(**settings)
-    gateway = CapakeyGateway(factory, cache_config=cache_config)
+    gateway = CapakeyRestGateway(cache_config=cache_config)
 
     registry.registerUtility(gateway, ICapakey)
     return registry.queryUtility(ICapakey)
@@ -128,7 +118,7 @@ def get_capakey(registry):
     """
     Get the Capakey Gateway
 
-    :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
+    :rtype: :class:`crabpy.gateway.capakey.CapakeyRestGateway`
     """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -143,6 +133,7 @@ def get_crab(registry):
     Get the Crab Gateway
 
     :rtype: :class:`crabpy.gateway.crab.CrabGateway`
+    # argument might be a config or a request
     """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
@@ -224,21 +215,13 @@ def includeme(config):
     if capakey_settings['include']:
         log.info('Adding CAPAKEY Gateway.')
         del capakey_settings['include']
-        if not 'user' in capakey_settings or not 'password' in capakey_settings:
-            warnings.warn(
-                'capakey.user or capakey.password was not found in \
-                the settings, capakey needs this parameter to \
-                function properly.',
-                UserWarning
-            )
-        else:
-            config.add_renderer('capakey_listjson', capakey_json_list_renderer)
-            config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
-            _build_capakey(config.registry, capakey_settings)
-            config.add_request_method(get_capakey, 'capakey_gateway')
-            config.add_directive('get_capakey', get_capakey)
-            config.include('crabpy_pyramid.routes.capakey')
-            config.scan('crabpy_pyramid.views.capakey')
+        config.add_renderer('capakey_listjson', capakey_json_list_renderer)
+        config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
+        _build_capakey(config.registry, capakey_settings)
+        config.add_request_method(get_capakey, 'capakey_gateway')
+        config.add_directive('get_capakey', get_capakey)
+        config.include('crabpy_pyramid.routes.capakey')
+        config.scan('crabpy_pyramid.views.capakey')
 
     crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
     if crab_settings['include']:

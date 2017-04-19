@@ -1,4 +1,4 @@
 # Tested and approved with these versions
 pyramid==1.7.0
-crabpy==0.7.0
+crabpy==0.8.0
 pycountry==1.20

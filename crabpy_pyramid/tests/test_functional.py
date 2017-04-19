@@ -41,8 +41,6 @@ def run_crab_integration_tests():
 settings = {
     'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
     'crabpy.capakey.include': True,
-    'crabpy.capakey.user': 'vandaeko',
-    'crabpy.capakey.password': 'f77737b9-55cc-4c4a-b86a-895d328c88f4',
     'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
     'crabpy.capakey.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_permanent.dbm'),
@@ -147,7 +145,7 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_unexisting_capakey(self):
-        res = self.testapp.get('/capakey/percelen/00000000000/000000', status=404)
+        res = self.testapp.get('/capakey/percelen/99009X0009/00X000', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_get_perceel_by_percid(self):
@@ -155,7 +153,7 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_unexisting_percid(self):
-        res = self.testapp.get('/capakey/percelen/00000_0_0000_0_000_00', status=404)
+        res = self.testapp.get('/capakey/percelen/99009_X_0009_X_000_00', status=404)
         self.assertEqual('404 Not Found', res.status)
 
 
