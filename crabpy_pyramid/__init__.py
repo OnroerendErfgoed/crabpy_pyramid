@@ -118,7 +118,7 @@ def get_capakey(registry):
     """
     Get the Capakey Gateway
 
-    :rtype: :class:`crabpy.gateway.capakey.CapakeyGateway`
+    :rtype: :class:`crabpy.gateway.capakey.CapakeyRestGateway`
     """
     # argument might be a config or a request
     regis = getattr(registry, 'registry', None)
