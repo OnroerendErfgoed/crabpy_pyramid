@@ -5,11 +5,8 @@ python:
  - 3.4
  - 3.5
  - 3.6
-before_install:
- - git clone https://github.com/OnroerendErfgoed/crabpy.git
- - (cd crabpy && git checkout FIX_0.8.1)
 install:
- - pip install -r requirements-tci.txt
+ - pip install -r requirements.txt
  - python setup.py develop
  - pip install nose coverage nose-testconfig coveralls webtest
 script: 
