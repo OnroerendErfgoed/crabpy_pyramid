@@ -1,4 +1,4 @@
-0.6.1 (2017-04-??)
+0.6.1 (2017-04-20)
 ------------------
 
 - Make compatible with CRABpy 0.8.1 and fix center and bounding box formats in responses (#47)
