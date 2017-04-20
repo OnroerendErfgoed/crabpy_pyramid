@@ -1,5 +1,5 @@
 # Tested and approved with these versions
 pyramid==1.7.0
 #crabpy==0.8.1
--e git+ssh://git@github.com/OnroerendErfgoed/crabpy.git@FIX_0.8.1#egg=crabpy
+file:../crabpy_pyramid/crabpy#egg=crabpy
 pycountry==1.20
