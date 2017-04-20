@@ -83,10 +83,10 @@ class FunctionalTests(unittest.TestCase):
         testing.tearDown()
 
 
-# @unittest.skipUnless(
-#     run_capakey_integration_tests(),
-#     'No CAPAKEY Integration tests required'
-# )
+@unittest.skipUnless(
+    run_capakey_integration_tests(),
+    'No CAPAKEY Integration tests required'
+)
 class CapakeyFunctionalTests(FunctionalTests):
     def test_list_gemeenten(self):
         res = self.testapp.get('/capakey/gemeenten')
