@@ -1,7 +1,7 @@
 --requirement requirements.txt
 
 # Development
-pyramid-debugtoolbar==3.0.4
+pyramid-debugtoolbar==4.3
 waitress==0.9.0
 
 # Testing
