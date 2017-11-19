@@ -1,8 +1,8 @@
 --requirement requirements.txt
 
 # Documentation
-Sphinx==1.4.5
+Sphinx==1.6.3
 sphinxcontrib-httpdomain==1.5.0
 
 # Fix setuptools issues
-setuptools==1.4.2
+setuptools==36.4.0
