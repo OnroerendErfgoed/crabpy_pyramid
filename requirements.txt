@@ -2,4 +2,4 @@
 pyramid==1.9.1
 crabpy==0.8.2
 # -e git+ssh://git@github.com/OnroerendErfgoed/crabpy.git@FIX_0.8.1#egg=crabpy
-pycountry==1.20
+pycountry==17.9.23
