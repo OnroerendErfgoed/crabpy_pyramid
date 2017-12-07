@@ -1,3 +1,9 @@
+0.6.3 (2017-12-07)
+------------------
+
+- Make compatbile with CRABpy 0.8.3
+- Make compatible with latest pyCountry. (#56)
+
 0.6.2 (2017-08-29)
 ------------------
 
