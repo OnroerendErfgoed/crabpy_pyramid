@@ -5,4 +5,4 @@ Sphinx==1.7.1
 sphinxcontrib-httpdomain==1.6.0
 
 # Fix setuptools issues
-setuptools==38.4.0
+setuptools==38.5.1
