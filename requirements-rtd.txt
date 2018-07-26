@@ -2,7 +2,7 @@
 
 # Documentation
 Sphinx==1.7.5
-sphinxcontrib-httpdomain==1.6.1
+sphinxcontrib-httpdomain==1.7.0
 
 # Fix setuptools issues
 setuptools==39.2.0
