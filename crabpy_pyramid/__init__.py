@@ -63,6 +63,13 @@ def _parse_settings(settings):
         if cache_config:
             args[short_key_name] = cache_config
 
+    # crab wsdl settings
+    for short_key_name in ('crab.wsdl', ):
+        key_name = "crabpy.%s" % short_key_name
+        if key_name in settings:
+            args[short_key_name] = settings.get(key_name)
+
+    log.debug(settings)
     log.debug(args)
     return args
 
