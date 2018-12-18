@@ -118,7 +118,7 @@ def _build_crab(registry, settings):
     gateway = CrabGateway(factory, cache_config=cache_config)
 
     registry.registerUtility(gateway, ICrab)
-    return registry.queryUtility(ICapakey)
+    return registry.queryUtility(ICrab)
 
 
 def get_capakey(registry):
@@ -218,17 +218,19 @@ def includeme(config):
     if not os.path.exists(root):
         os.makedirs(root)
 
-    capakey_settings = dict(_filter_settings(settings, 'capakey.'), **base_settings)
-    if capakey_settings['include']:
-        log.info('Adding CAPAKEY Gateway.')
-        del capakey_settings['include']
-        config.add_renderer('capakey_listjson', capakey_json_list_renderer)
-        config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
-        _build_capakey(config.registry, capakey_settings)
-        config.add_request_method(get_capakey, 'capakey_gateway')
-        config.add_directive('get_capakey', get_capakey)
-        config.include('crabpy_pyramid.routes.capakey')
-        config.scan('crabpy_pyramid.views.capakey')
+    capakey_settings = dict(_filter_settings(settings, 'capakey.'),
+                            **base_settings)
+    if 'include' in capakey_settings:
+        log.info("The 'capakey.include' setting is deprecated. Capakey will "
+                 "always be included.")
+    log.info('Adding CAPAKEY Gateway.')
+    config.add_renderer('capakey_listjson', capakey_json_list_renderer)
+    config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
+    _build_capakey(config.registry, capakey_settings)
+    config.add_request_method(get_capakey, 'capakey_gateway')
+    config.add_directive('get_capakey', get_capakey)
+    config.include('crabpy_pyramid.routes.capakey')
+    config.scan('crabpy_pyramid.views.capakey')
 
     crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
     if crab_settings['include']:
