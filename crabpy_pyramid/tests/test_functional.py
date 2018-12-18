@@ -40,7 +40,6 @@ def run_crab_integration_tests():
 
 settings = {
     'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
-    'crabpy.capakey.include': True,
     'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
     'crabpy.capakey.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_permanent.dbm'),
