@@ -1,7 +1,9 @@
 0.7.0 (2019-01-03)
 ------------------
 
-- Update crabpy to get new deelgemeenten codes
+- Update crabpy to get new deelgemeente codes (#84, #92)
+- Include CAPAKEY by default (#46)
+- Allow passing custom crab wsdl (#75)
 
 0.6.3 (2017-12-07)
 ------------------
