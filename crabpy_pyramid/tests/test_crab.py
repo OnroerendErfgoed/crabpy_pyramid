@@ -22,8 +22,8 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # noqa
-    
-    
+
+
 class TestRegistry(object):
 
     def __init__(self, settings=None):
@@ -68,12 +68,13 @@ class TestGetAndBuild(unittest.TestCase):
         r.registerUtility(G, ICrab)
         G2 = _build_crab(r, {})
         self.assertIsInstance(G, CrabGateway)
-        self.assertIsInstance(G2, CrabGateway)  
+        self.assertIsInstance(G2, CrabGateway)
         self.assertEqual(G, G2)
 
     def test_build_crab_custom_settings(self):
         settings = {
             'crabpy.cache.file.root': './dogpile_data/',
+            'crabpy.crab.wsdl': 'http://crab.agiv.be/wscrab/WsCrab.svc?wsdl',
             'crabpy.crab.permanent.backend': 'dogpile.cache.dbm',
             'crabpy.crab.permanent.expiration_time': 604800,
             'crabpy.crab.permanent.arguments.filename': 'dogpile_data/crab_permanent.dbm',
@@ -86,6 +87,7 @@ class TestGetAndBuild(unittest.TestCase):
         }
         r = TestRegistry(settings)
         crab_settings = _filter_settings(_parse_settings(settings), 'crab.')
+        self.assertIn('wsdl', crab_settings)
         if 'include' in crab_settings:
             del crab_settings['include']
         G = _build_crab(r, crab_settings)

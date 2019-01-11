@@ -11,6 +11,7 @@ import shutil
 from pyramid import testing
 from webtest import TestApp
 
+import crabpy_pyramid
 from crabpy_pyramid import main
 
 
@@ -40,7 +41,6 @@ def run_crab_integration_tests():
 
 settings = {
     'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
-    'crabpy.capakey.include': True,
     'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
     'crabpy.capakey.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_permanent.dbm'),
@@ -364,3 +364,13 @@ class HttpCachingFunctionalTests(FunctionalTests):
         etag = res.headers['Etag']
         res2 = self.testapp.get('/crab/gewesten', headers={'If-None-Match': etag})
         self.assertEqual('304 Not Modified', res2.status)
+
+    def test_list_gewesten_not_cached(self):
+        crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.remove('list_gewesten')
+        try:
+            res = self.testapp.get('/crab/gewesten')
+            self.assertEqual('200 OK', res.status)
+            self.assertNotIn('ETag', res.headers)
+        finally:
+            crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.add('list_gewesten')
+
