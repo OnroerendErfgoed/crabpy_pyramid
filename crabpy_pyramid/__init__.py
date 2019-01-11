@@ -21,6 +21,7 @@ from crabpy_pyramid.renderers.crab import (
 )
 
 log = logging.getLogger(__name__)
+GENERATE_ETAG_ROUTE_NAMES = set()
 
 
 class ICapakey(Interface):
@@ -63,6 +64,13 @@ def _parse_settings(settings):
         if cache_config:
             args[short_key_name] = cache_config
 
+    # crab wsdl settings
+    for short_key_name in ('crab.wsdl', ):
+        key_name = "crabpy.%s" % short_key_name
+        if key_name in settings:
+            args[short_key_name] = settings.get(key_name)
+
+    log.debug(settings)
     log.debug(args)
     return args
 
@@ -111,7 +119,7 @@ def _build_crab(registry, settings):
     gateway = CrabGateway(factory, cache_config=cache_config)
 
     registry.registerUtility(gateway, ICrab)
-    return registry.queryUtility(ICapakey)
+    return registry.queryUtility(ICrab)
 
 
 def get_capakey(registry):
@@ -158,20 +166,32 @@ def _get_proxy_settings(settings):
     return base_settings
 
 
+def add_route(config, name, pattern, *args, **kwargs):
+    """
+    Adds a pyramid route to the config. All args and kwargs will be
+    passed on to config.add_route.
+
+    This exists so the default behaviour of including crabpy will still be to
+    cache all crabpy routes.
+    """
+    config.add_route(name, pattern, *args, **kwargs)
+    GENERATE_ETAG_ROUTE_NAMES.add(name)
+
+
 def conditional_http_tween_factory(handler, registry):
     """
     Tween that adds ETag headers and tells Pyramid to enable 
     conditional responses where appropriate.
     """
     settings = registry.settings if hasattr(registry, 'settings') else {}
-    not_cacheble_list = []
-    if 'not.cachable.list' in settings:
-        not_cacheble_list = settings.get('not.cachable.list').split()
+    if 'generate_etag_for.list' in settings:
+        route_names = settings.get('generate_etag_for.list').split()
+        GENERATE_ETAG_ROUTE_NAMES.update(route_names)
 
     def conditional_http_tween(request):
         response = handler(request)
 
-        if request.path not in not_cacheble_list:
+        if request.matched_route.name in GENERATE_ETAG_ROUTE_NAMES:
 
             # If the Last-Modified header has been set, we want to enable the
             # conditional response processing.
@@ -204,24 +224,27 @@ def includeme(config):
     base_settings = _get_proxy_settings(settings)
 
     # http caching tween
-    config.add_tween('crabpy_pyramid.conditional_http_tween_factory')
+    if not settings.get('etag_tween_disabled', False):
+        config.add_tween('crabpy_pyramid.conditional_http_tween_factory')
 
     # create cache
     root = settings.get('cache.file.root', '/tmp/dogpile_data')
     if not os.path.exists(root):
         os.makedirs(root)
 
-    capakey_settings = dict(_filter_settings(settings, 'capakey.'), **base_settings)
-    if capakey_settings['include']:
-        log.info('Adding CAPAKEY Gateway.')
-        del capakey_settings['include']
-        config.add_renderer('capakey_listjson', capakey_json_list_renderer)
-        config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
-        _build_capakey(config.registry, capakey_settings)
-        config.add_request_method(get_capakey, 'capakey_gateway')
-        config.add_directive('get_capakey', get_capakey)
-        config.include('crabpy_pyramid.routes.capakey')
-        config.scan('crabpy_pyramid.views.capakey')
+    capakey_settings = dict(_filter_settings(settings, 'capakey.'),
+                            **base_settings)
+    if 'include' in capakey_settings:
+        log.info("The 'capakey.include' setting is deprecated. Capakey will "
+                 "always be included.")
+    log.info('Adding CAPAKEY Gateway.')
+    config.add_renderer('capakey_listjson', capakey_json_list_renderer)
+    config.add_renderer('capakey_itemjson', capakey_json_item_renderer)
+    _build_capakey(config.registry, capakey_settings)
+    config.add_request_method(get_capakey, 'capakey_gateway')
+    config.add_directive('get_capakey', get_capakey)
+    config.include('crabpy_pyramid.routes.capakey')
+    config.scan('crabpy_pyramid.views.capakey')
 
     crab_settings = dict(_filter_settings(settings, 'crab.'), **base_settings)
     if crab_settings['include']:
