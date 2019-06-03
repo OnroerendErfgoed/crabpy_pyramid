@@ -190,6 +190,8 @@ def conditional_http_tween_factory(handler, registry):
 
     def conditional_http_tween(request):
         response = handler(request)
+        if request.matched_route is None:
+            return response
 
         if request.matched_route.name in GENERATE_ETAG_ROUTE_NAMES:
 
