@@ -9,7 +9,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 requires = [
     'pyramid',
     'crabpy>=0.8.0',
-    'pycountry>=16.11.08'
+    'pycountry>=18.12.8'
 ]
 
 tests_requires = [
