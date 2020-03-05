@@ -57,7 +57,8 @@ def list_perceel_adapter(obj, request):
         'capakey': obj.capakey,
         'percid': obj.percid
     }
-    
+
+
 json_list_renderer.add_adapter(capakey.Gemeente, list_gemeente_adapter)
 json_list_renderer.add_adapter(capakey.Afdeling, list_afdeling_adapter)
 json_list_renderer.add_adapter(capakey.Sectie, list_sectie_adapter)
@@ -135,7 +136,8 @@ def item_perceel_adapter(obj, request):
         'capakey': obj.capakey,
         'percid': obj.percid,
         'centroid': obj.centroid,
-        'bounding_box': obj.bounding_box
+        'bounding_box': obj.bounding_box,
+        'shape': obj.shape
     }
 
 

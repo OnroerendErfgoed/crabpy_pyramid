@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Tests for the capakey renderers module.
 
 .. versionadded:: 0.1.0
-'''
+"""
 
 from __future__ import unicode_literals
 
-from crabpy_pyramid.renderers.capakey import (
-    json_list_renderer,
-    json_item_renderer
-)
-
-from crabpy.gateway.capakey import (
-    Gemeente,
-    Afdeling,
-    Sectie,
-    Perceel
-)
-
-import unittest
 import json
+import unittest
+
+from crabpy.gateway.capakey import Afdeling
+from crabpy.gateway.capakey import Gemeente
+from crabpy.gateway.capakey import Perceel
+from crabpy.gateway.capakey import Sectie
+
+from crabpy_pyramid.renderers.capakey import json_item_renderer
+from crabpy_pyramid.renderers.capakey import json_list_renderer
+
 
 class CapakeyListTests(unittest.TestCase):
 
@@ -35,7 +32,7 @@ class CapakeyListTests(unittest.TestCase):
             Gemeente(44021, 'Gent'),
             Gemeente(31043, 'Knokke-Heist')
         ]
-        dump = self.renderer(gemeenten,{})
+        dump = self.renderer(gemeenten, {})
         self.assertEquals(
             json.loads(dump),
             [
@@ -49,13 +46,12 @@ class CapakeyListTests(unittest.TestCase):
             ]
         )
 
-
     def test_list_afdelingen(self):
         afdelingen = [
             Afdeling(44021, 'GENT  1 AFD', Gemeente(44021, 'Gent')),
             Afdeling(31043, 'KNOKKE-HEIST  1 AFD', Gemeente(31043, 'Knokke-Heist'))
         ]
-        dump = self.renderer(afdelingen,{})
+        dump = self.renderer(afdelingen, {})
         self.assertEquals(
             json.loads(dump),
             [
@@ -81,7 +77,7 @@ class CapakeyListTests(unittest.TestCase):
         secties = [
             Sectie('A', Afdeling(44021, 'GENT  1 AFD', Gemeente(44021, 'Gent')))
         ]
-        dump = self.renderer(secties,{})
+        dump = self.renderer(secties, {})
         self.assertEquals(
             json.loads(dump),
             [
@@ -227,7 +223,8 @@ class CapakeyItemTests(unittest.TestCase):
             '40613A1154/02C000', '40613_A_1154_C_000_02',
             'capaty', 'cashkey',
             (104893.06375, 196022.244094),
-            (104002.076625, 194168.3415, 105784.050875, 197876.146688)
+            (104002.076625, 194168.3415, 105784.050875, 197876.146688),
+            shape={'shape': 'one'}
         )
         dump = self.renderer(p, {})
         self.assertEquals(
@@ -248,6 +245,10 @@ class CapakeyItemTests(unittest.TestCase):
                 'capakey': '40613A1154/02C000',
                 'percid': '40613_A_1154_C_000_02',
                 'centroid': [104893.06375, 196022.244094],
-                'bounding_box': [104002.076625, 194168.3415, 105784.050875, 197876.146688]
+                'bounding_box': [104002.076625,
+                                 194168.3415,
+                                 105784.050875,
+                                 197876.146688],
+                'shape': {'shape': 'one'}
             }
         )
