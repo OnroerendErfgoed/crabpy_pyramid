@@ -406,8 +406,7 @@ def list_landen(request):
 def get_land_by_id(request):
     request = set_http_caching(request, 'crab', 'permanent')
     land_id = request.matchdict.get('land_id')
-    try:
-        land = pycountry.countries.get(alpha_2=land_id)
-    except KeyError:
+    land = pycountry.countries.get(alpha_2=land_id)
+    if land is None:
         return HTTPNotFound()
     return land
