@@ -15,5 +15,5 @@ flake8==3.8.3
 
 # Documentation
 Sphinx==1.8.5 ; python_version < '3.5'
-Sphinx==3.2.2 ; python_version >= '3.5'
+Sphinx==3.2.1 ; python_version >= '3.5'
 sphinxcontrib-httpdomain==1.7.0
