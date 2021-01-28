@@ -348,6 +348,14 @@ class CrabFunctionalTests(FunctionalTests):
         res = self.testapp.get('/crab/landen/MORDOR', status=404)
         self.assertEqual('404 Not Found', res.status)
 
+    def test_get_postkanton_by_huisnummer(self):
+        res = self.testapp.get('/crab/huisnummers/5/postkanton')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_postkanton_by_huisnummer_unexisting(self):
+        res = self.testapp.get('/crab/huisnummers/99999999/postkanton', status=404)
+        self.assertEqual('404 Not Found', res.status)
+
 @unittest.skipUnless(
     run_crab_integration_tests(),
     'No CRAB Integration tests required'
