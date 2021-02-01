@@ -4,15 +4,15 @@ Views for CRAB services
 
 .. versionadded:: 0.1.0
 """
-from pyramid.view import view_config
-from crabpy_pyramid.utils import range_return, set_http_caching
-import pycountry
-
-from crabpy.gateway.exception import GatewayResourceNotFoundException
-
-from pyramid.httpexceptions import HTTPNotFound
-
 import logging
+
+import pycountry
+from crabpy.gateway.exception import GatewayResourceNotFoundException
+from pyramid.httpexceptions import HTTPNotFound
+from pyramid.view import view_config
+
+from crabpy_pyramid.utils import range_return
+from crabpy_pyramid.utils import set_http_caching
 
 log = logging.getLogger(__name__)
 
@@ -410,3 +410,17 @@ def get_land_by_id(request):
     if land is None:
         return HTTPNotFound()
     return land
+
+
+@view_config(
+    route_name='get_postkanton_by_huisnummer',
+    renderer='crab_itemjson', accept='application/json'
+)
+def get_postkanton_by_huisnummer(request):
+    request = set_http_caching(request, 'crab', 'short')
+    Gateway = request.crab_gateway()
+    huisnummer_id = request.matchdict.get('huisnummer_id')
+    try:
+        return Gateway.get_postkanton_by_huisnummer(huisnummer_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()

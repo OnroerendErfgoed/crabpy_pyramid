@@ -4,10 +4,10 @@ Adapters to help render :mod:`crabpy.gateway.crab` objects to json.
 
 .. versionadded:: 0.1.0
 """
-from crabpy.gateway import crab
-import pycountry
 import gettext
 
+import pycountry
+from crabpy.gateway import crab
 from pyramid.renderers import JSON
 
 json_list_renderer = JSON()
@@ -514,6 +514,16 @@ def item_land_adapter(obj, request):
     }
 
 
+def item_postkanton_adapter(obj, request):
+    """
+    Adapter for rendering an item of
+    :class: `pycountry.db.Data` to json.
+    """
+    return {
+        'postcode': obj.id,
+    }
+
+
 json_item_renderer.add_adapter(crab.Gewest, item_gewest_adapter)
 json_item_renderer.add_adapter(crab.Provincie, item_provincie_adapter)
 json_item_renderer.add_adapter(crab.Gemeente, item_gemeente_adapter)
@@ -526,3 +536,4 @@ json_item_renderer.add_adapter(crab.Wegobject, item_wegobject_adapter)
 json_item_renderer.add_adapter(crab.Subadres, item_subadres_adapter)
 json_item_renderer.add_adapter(crab.Adrespositie, item_adrespositie_adapter)
 json_item_renderer.add_adapter(pycountry.db.Data, item_land_adapter)
+json_item_renderer.add_adapter(crab.Postkanton, item_postkanton_adapter)
