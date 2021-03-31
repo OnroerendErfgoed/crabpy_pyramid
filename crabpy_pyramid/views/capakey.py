@@ -16,7 +16,8 @@ from pyramid.httpexceptions import HTTPNotFound
 def list_gemeenten(request):
     request = set_http_caching(request, 'capakey', 'permanent')
     Gateway = request.capakey_gateway()
-    gemeenten = Gateway.list_gemeenten(1)
+    sort = request.params.get('sort', 1)
+    gemeenten = Gateway.list_gemeenten(sort)
     return range_return(request, gemeenten)
 
 
@@ -39,7 +40,8 @@ def list_kadastrale_afdelingen_by_gemeente(request):
     request = set_http_caching(request, 'capakey', 'permanent')
     Gateway = request.capakey_gateway()
     gemeente_id = request.matchdict.get('gemeente_id')
-    afdelingen = Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id)
+    sort = request.params.get('sort', 1)
+    afdelingen = Gateway.list_kadastrale_afdelingen_by_gemeente(gemeente_id, sort)
     return range_return(request, afdelingen)
 
 
