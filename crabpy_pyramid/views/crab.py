@@ -24,7 +24,8 @@ log = logging.getLogger(__name__)
 def list_gewesten(request):
     request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
-    gewesten = Gateway.list_gewesten()
+    sort = request.params.get('sort', 1)
+    gewesten = Gateway.list_gewesten(sort)
     return range_return(request, gewesten)
 
 
@@ -200,7 +201,8 @@ def list_huisnummers(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
-    huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
+    sort = request.params.get('sort', 1)
+    huisnummers = Gateway.list_huisnummers_by_straat(straat_id, sort)
     return range_return(request, huisnummers)
 
 
@@ -267,9 +269,10 @@ def list_huisnummers_by_perceel(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     perceel_id = request.matchdict.get('perceel_id1') + '/' + request.matchdict.get('perceel_id2')
+    sort = request.params.get('sort', 1)
     try:
         perceel = Gateway.get_perceel_by_id(perceel_id)
-        return Gateway.list_huisnummers_by_perceel(perceel)
+        return Gateway.list_huisnummers_by_perceel(perceel, sort)
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
