@@ -9,7 +9,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 requires = [
     'pyramid',
     'crabpy>=0.8.0',
-    'pycountry>=16.11.08'
+    'pycountry>=18.12.8'
 ]
 
 tests_requires = [
@@ -21,16 +21,16 @@ tests_requires = [
 testing_extras = tests_requires + []
 
 setup(name='crabpy_pyramid',
-      version='0.8.1',
+      version='0.9.0',
       description='Bindings for the CRABpy webservices and the Pyramid framework.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         'Development Status :: 5 - Production/Stable',
         "Programming Language :: Python",
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Intended Audience :: Developers",

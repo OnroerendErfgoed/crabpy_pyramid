@@ -1,3 +1,13 @@
+0.9.0 (08-04-2021)
+------------------
+
+- Drop suppport for Python 3.4 and 3.5. Supported versions are 2.7, 3.6, 3.7 and 3.8. This is the last version to support Python 2.
+- Updated to the latest pyCountry versions and adapted the API. (#119, #135)
+- Added the shape file of a perceel to the renderer. (#122)
+- Remove pyup integration (#133)
+- GetPostkantonByHuisnummerId ontsluiten (#138)
+- Sort parameter toevoegen aan alle requests (#140)
+
 0.8.1 (06-06-2019)
 ------------------
 

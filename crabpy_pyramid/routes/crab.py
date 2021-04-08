@@ -97,3 +97,6 @@ def includeme(config):
     crabpy_pyramid.add_route(config,
                              'get_land_by_id',
                              '/crab/landen/{land_id}')
+    crabpy_pyramid.add_route(config,
+                             'get_postkanton_by_huisnummer',
+                             '/crab/huisnummers/{huisnummer_id}/postkanton')

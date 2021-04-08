@@ -24,20 +24,13 @@ def as_bool(value):
     return value in ['true', 'True', '1', 't', 'T', 'Yes']
 
 
-def run_capakey_integration_tests():
+def run_integration_tests(section):
     from testconfig import config
     try:
-        return as_bool(config['capakey']['run_integration_tests'])
+        return as_bool(config[section]['run_integration_tests'])
     except KeyError:  # pragma NO COVER
         return False
 
-
-def run_crab_integration_tests():
-    from testconfig import config
-    try:
-        return as_bool(config['crab']['run_integration_tests'])
-    except KeyError:  # pragma NO COVER
-        return False
 
 settings = {
     'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
@@ -84,7 +77,7 @@ class FunctionalTests(unittest.TestCase):
 
 
 @unittest.skipUnless(
-    run_capakey_integration_tests(),
+    run_integration_tests('capakey'),
     'No CAPAKEY Integration tests required'
 )
 class CapakeyFunctionalTests(FunctionalTests):
@@ -125,7 +118,8 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_sectie_by_unexisting_id_and_afdeling(self):
-        res = self.testapp.get('/capakey/afdelingen/11001/secties/Z', status=404)
+        res = self.testapp.get(
+            '/capakey/afdelingen/11001/secties/Z', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_list_percelen_by_sectie(self):
@@ -133,11 +127,13 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_sectie_and_id(self):
-        res = self.testapp.get('/capakey/afdelingen/11001/secties/B/percelen/0001/00S000')
+        res = self.testapp.get(
+            '/capakey/afdelingen/11001/secties/B/percelen/0001/00S000')
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_unexisting_sectie_and_id(self):
-        res = self.testapp.get('/capakey/afdelingen/11001/secties/B/percelen/0000/00000', status=404)
+        res = self.testapp.get(
+            '/capakey/afdelingen/11001/secties/B/percelen/0000/00000', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_get_perceel_by_capakey(self):
@@ -145,7 +141,8 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_unexisting_capakey(self):
-        res = self.testapp.get('/capakey/percelen/99009X0009/00X000', status=404)
+        res = self.testapp.get(
+            '/capakey/percelen/99009X0009/00X000', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_get_perceel_by_percid(self):
@@ -153,12 +150,13 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_get_perceel_by_unexisting_percid(self):
-        res = self.testapp.get('/capakey/percelen/99009_X_0009_X_000_00', status=404)
+        res = self.testapp.get(
+            '/capakey/percelen/99009_X_0009_X_000_00', status=404)
         self.assertEqual('404 Not Found', res.status)
 
 
 @unittest.skipUnless(
-    run_crab_integration_tests(),
+    run_integration_tests('crab'),
     'No CRAB Integration tests required'
 )
 class CrabFunctionalTests(FunctionalTests):
@@ -223,9 +221,11 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_list_deelgemeenten_by_unexisting_gemeente(self):
-        res = self.testapp.get('/crab/gemeenten/99999/deelgemeenten', status=404)
+        res = self.testapp.get(
+            '/crab/gemeenten/99999/deelgemeenten', status=404)
         self.assertEqual('404 Not Found', res.status)
-        res = self.testapp.get('/crab/gemeenten/9999/deelgemeenten', status=404)
+        res = self.testapp.get(
+            '/crab/gemeenten/9999/deelgemeenten', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_get_deelgemeente_by_id(self):
@@ -247,6 +247,13 @@ class CrabFunctionalTests(FunctionalTests):
     def test_list_huisnummers(self):
         res = self.testapp.get('/crab/straten/1/huisnummers')
         self.assertEqual('200 OK', res.status)
+
+    def test_sort_huisnummers(self):
+        res = self.testapp.get('/crab/straten/1/huisnummers?sort=2')
+        self.assertEqual('200 OK', res.status)
+        nummers = [int(item['label']) for item in res.json]
+        ascending = sorted(nummers)
+        self.assertEqual(nummers, ascending)
 
     def test_get_huisnummer_by_straat_and_label(self):
         res = self.testapp.get('/crab/straten/1/huisnummers/3')
@@ -281,7 +288,8 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
 
     def test_list_huisnummers_by_unexisting_perceel(self):
-        res = self.testapp.get('/crab/percelen/31433D0011/000000/huisnummers', status=404)
+        res = self.testapp.get(
+            '/crab/percelen/31433D0011/000000/huisnummers', status=404)
         self.assertEqual('404 Not Found', res.status)
 
     def test_list_gebouwen(self):
@@ -348,8 +356,18 @@ class CrabFunctionalTests(FunctionalTests):
         res = self.testapp.get('/crab/landen/MORDOR', status=404)
         self.assertEqual('404 Not Found', res.status)
 
+    def test_get_postkanton_by_huisnummer(self):
+        res = self.testapp.get('/crab/huisnummers/5/postkanton')
+        self.assertEqual('200 OK', res.status)
+
+    def test_get_postkanton_by_huisnummer_unexisting(self):
+        res = self.testapp.get(
+            '/crab/huisnummers/99999999/postkanton', status=404)
+        self.assertEqual('404 Not Found', res.status)
+
+
 @unittest.skipUnless(
-    run_crab_integration_tests(),
+    run_integration_tests('crab'),
     'No CRAB Integration tests required'
 )
 class HttpCachingFunctionalTests(FunctionalTests):
@@ -362,7 +380,8 @@ class HttpCachingFunctionalTests(FunctionalTests):
         res = self.testapp.get('/crab/gewesten')
         self.assertEqual('200 OK', res.status)
         etag = res.headers['Etag']
-        res2 = self.testapp.get('/crab/gewesten', headers={'If-None-Match': etag})
+        res2 = self.testapp.get(
+            '/crab/gewesten', headers={'If-None-Match': etag})
         self.assertEqual('304 Not Modified', res2.status)
 
     def test_list_gewesten_not_cached(self):
@@ -373,4 +392,3 @@ class HttpCachingFunctionalTests(FunctionalTests):
             self.assertNotIn('ETag', res.headers)
         finally:
             crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.add('list_gewesten')
-

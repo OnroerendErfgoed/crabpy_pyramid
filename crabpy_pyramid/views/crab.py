@@ -4,15 +4,15 @@ Views for CRAB services
 
 .. versionadded:: 0.1.0
 """
-from pyramid.view import view_config
-from crabpy_pyramid.utils import range_return, set_http_caching
-import pycountry
-
-from crabpy.gateway.exception import GatewayResourceNotFoundException
-
-from pyramid.httpexceptions import HTTPNotFound
-
 import logging
+
+import pycountry
+from crabpy.gateway.exception import GatewayResourceNotFoundException
+from pyramid.httpexceptions import HTTPNotFound
+from pyramid.view import view_config
+
+from crabpy_pyramid.utils import range_return
+from crabpy_pyramid.utils import set_http_caching
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +24,8 @@ log = logging.getLogger(__name__)
 def list_gewesten(request):
     request = set_http_caching(request, 'crab', 'permanent')
     Gateway = request.crab_gateway()
-    gewesten = Gateway.list_gewesten()
+    sort = request.params.get('sort', 1)
+    gewesten = Gateway.list_gewesten(sort)
     return range_return(request, gewesten)
 
 
@@ -200,7 +201,8 @@ def list_huisnummers(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     straat_id = request.matchdict.get('straat_id')
-    huisnummers = Gateway.list_huisnummers_by_straat(straat_id)
+    sort = request.params.get('sort', 1)
+    huisnummers = Gateway.list_huisnummers_by_straat(straat_id, sort)
     return range_return(request, huisnummers)
 
 
@@ -267,9 +269,10 @@ def list_huisnummers_by_perceel(request):
     request = set_http_caching(request, 'crab', 'short')
     Gateway = request.crab_gateway()
     perceel_id = request.matchdict.get('perceel_id1') + '/' + request.matchdict.get('perceel_id2')
+    sort = request.params.get('sort', 1)
     try:
         perceel = Gateway.get_perceel_by_id(perceel_id)
-        return Gateway.list_huisnummers_by_perceel(perceel)
+        return Gateway.list_huisnummers_by_perceel(perceel, sort)
     except GatewayResourceNotFoundException:
         return HTTPNotFound()
 
@@ -406,8 +409,21 @@ def list_landen(request):
 def get_land_by_id(request):
     request = set_http_caching(request, 'crab', 'permanent')
     land_id = request.matchdict.get('land_id')
-    try:
-        land = pycountry.countries.get(alpha_2=land_id)
-    except KeyError:
+    land = pycountry.countries.get(alpha_2=land_id)
+    if land is None:
         return HTTPNotFound()
     return land
+
+
+@view_config(
+    route_name='get_postkanton_by_huisnummer',
+    renderer='crab_itemjson', accept='application/json'
+)
+def get_postkanton_by_huisnummer(request):
+    request = set_http_caching(request, 'crab', 'short')
+    Gateway = request.crab_gateway()
+    huisnummer_id = request.matchdict.get('huisnummer_id')
+    try:
+        return Gateway.get_postkanton_by_huisnummer(huisnummer_id)
+    except GatewayResourceNotFoundException:
+        return HTTPNotFound()
