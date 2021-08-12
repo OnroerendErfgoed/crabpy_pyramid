@@ -72,7 +72,7 @@ def list_straten_adapter(obj, request):
     :class:`crabpy.gateway.crab.Straat` to json.
     """
     naam = obj.label
-    for (language, name) in obj.namen:
+    for name, language in obj.namen:
         if language == 'nl' and name:
             naam = name
             break
