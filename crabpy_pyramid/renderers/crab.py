@@ -71,9 +71,15 @@ def list_straten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.crab.Straat` to json.
     """
+    naam = obj.label
+    for tuple in obj.namen:
+        if tuple[1] == 'nl' and tuple[0]:
+            naam = tuple[0]
+            break
     return {
         'id': obj.id,
         'label': obj.label,
+        'naam': naam,
         'status': {
             'id': obj.status.id,
             'naam': obj.status.naam,
