@@ -234,6 +234,7 @@ class CrabFunctionalTests(FunctionalTests):
 
     def test_list_straten(self):
         res = self.testapp.get('/crab/gemeenten/11001/straten')
+        self.assertIn('naam', res.json[0])
         self.assertEqual('200 OK', res.status)
 
     def test_get_straat_by_id(self):
