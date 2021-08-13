@@ -1,6 +1,6 @@
 0.10.0 (13-08-2021)
 ------------------
-- "naam" toevoegen aan straat renderer (#145)
+- naam toevoegen aan straat renderer (#145)
 
 0.9.0 (08-04-2021)
 ------------------
