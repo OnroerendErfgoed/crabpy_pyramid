@@ -8,7 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
 requires = [
     'pyramid',
-    'crabpy>=0.8.0',
+    'crabpy>=0.13.0',
     'pycountry>=18.12.8'
 ]
 
