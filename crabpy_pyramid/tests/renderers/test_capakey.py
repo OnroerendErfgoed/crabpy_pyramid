@@ -211,8 +211,8 @@ class CapakeyItemTests(unittest.TestCase):
 
     def test_item_perceel(self):
         p = Perceel(
-            '1154/02C000', 
-            Sectie(
+            id='1154/02C000',
+            sectie=Sectie(
                 'A',
                 Afdeling(
                     46013,
@@ -220,10 +220,10 @@ class CapakeyItemTests(unittest.TestCase):
                     Gemeente(46013, 'Kruibeke')
                 )
             ),
-            '40613A1154/02C000', '40613_A_1154_C_000_02',
-            'capaty', 'cashkey',
-            (104893.06375, 196022.244094),
-            (104002.076625, 194168.3415, 105784.050875, 197876.146688),
+            capakey='40613A1154/02C000', percid='40613_A_1154_C_000_02',
+            capatype='capaty', cashkey='cashkey',
+            centroid=(104893.06375, 196022.244094),
+            bounding_box=(104002.076625, 194168.3415, 105784.050875, 197876.146688),
             shape={'shape': 'one'}
         )
         dump = self.renderer(p, {})
