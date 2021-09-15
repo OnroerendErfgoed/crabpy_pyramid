@@ -1,3 +1,9 @@
+0.11.0 (15-09-2021)
+-------------------
+- Drop python 2 support
+- crabpy updaten (#148)
+
+
 0.10.0 (13-08-2021)
 ------------------
 - "naam" toevoegen aan straat renderer (#145)
