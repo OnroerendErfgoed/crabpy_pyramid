@@ -303,7 +303,7 @@ def item_straat_adapter(obj, request):
                 'definitie': obj.metadata.begin_organisatie.definitie
             }
         },
-        'bounding_box': obj.bounding_box
+        'bounding_box': [float(i) for i in obj.bounding_box]
     }
 
 
