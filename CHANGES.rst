@@ -9,7 +9,6 @@
 - Drop python 2 support
 - crabpy updaten (#148)
 
-
 0.10.0 (13-08-2021)
 ------------------
 
