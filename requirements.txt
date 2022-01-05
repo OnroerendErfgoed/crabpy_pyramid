@@ -1,5 +1,5 @@
 # Tested and approved with these versions
-pyramid==1.10.4
+pyramid==2.0.0
 crabpy==0.15.0
 pycountry==18.12.8 ; python_version < '3.0'
 pycountry==20.7.3 ; python_version >= '3.4'
