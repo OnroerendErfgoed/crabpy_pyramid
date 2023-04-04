@@ -46,7 +46,7 @@ def list_gemeente_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Gemeenten` to json.
     """
-    return {"niscode": obj.niscode, "naam": obj.naam}
+    return {"niscode": obj.niscode, "naam": obj.naam, "uri": obj.uri}
 
 
 def list_straten_adapter(obj, request):
@@ -54,7 +54,7 @@ def list_straten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adresregister.Straat` to json.
     """
-    return {"id": obj.id, "naam": obj.naam, "status": obj.status}
+    return {"id": obj.id, "naam": obj.naam, "status": obj.status, "uri": obj.uri}
 
 
 def list_adressen_adapter(obj, request):
@@ -64,10 +64,12 @@ def list_adressen_adapter(obj, request):
     """
     return {
         "id": obj.id,
+        "uri": obj.uri,
         "label": obj.label,
         "huisnummer": obj.huisnummer,
         "busnummer": obj.busnummer,
         "status": obj.status,
+
     }
 
 
@@ -76,7 +78,7 @@ def list_percelen_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Perceel` to json.
     """
-    return {"id": obj.id, "status": obj.status}
+    return {"id": obj.id, "uri": obj.uri, "status": obj.status}
 
 
 def list_postinfo_adapter(obj, request):
@@ -84,7 +86,7 @@ def list_postinfo_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Postinfo` to json.
     """
-    return {"postcode": obj.id, "status": obj.status, "namen": obj.namen()}
+    return {"postcode": obj.id, "uri": obj.uri, "status": obj.status, "namen": obj.namen()}
 
 
 def list_landen_adapter(obj, request):
@@ -139,6 +141,7 @@ def item_gemeente_adapter(obj, request):
     """
     return {
         "niscode": obj.niscode,
+        "uri": obj.uri,
         "naam": obj.naam(),
         "taal": obj.taal,
         "status": obj.status,
@@ -162,7 +165,7 @@ def item_straat_adapter(obj, request):
     Adapter for rendering an object of
     :class:`crabpy.gateway.adressenregister.Straat` to json.
     """
-    return {"id": obj.id, "naam": obj.naam(), "status": obj.status}
+    return {"id": obj.id, "naam": obj.naam(), "status": obj.status, "uri": obj.uri}
 
 
 def item_adres_adapter(obj, request):
@@ -172,6 +175,7 @@ def item_adres_adapter(obj, request):
     """
     return {
         "id": obj.id,
+        "uri": obj.uri,
         "label": obj.label,
         "huisnummer": obj.huisnummer,
         "busnummer": obj.busnummer,
@@ -186,6 +190,7 @@ def item_perceel_adapter(obj, request):
     """
     return {
         "id": obj.id,
+        "uri": obj.uri,
         "status": obj.status,
         "adressen": [{"id": adres.id} for adres in obj.adressen],
     }
