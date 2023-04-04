@@ -5,6 +5,7 @@ python:
  - 3.7
  - 3.8
 install:
+ - pip install git+ssh://git@github.com/OnroerendErfgoed/crabpy.git@c8a7aedd048882986b9e262c19e07743d5cd5e08#egg=crabpy
  - pip install -r requirements.txt
  - python setup.py develop
  - pip install nose coverage nose-testconfig coveralls webtest
