@@ -238,9 +238,10 @@ def adressenregister_get_adres_by_straat_huisnummer_busnummer(request):
     Gateway = request.adressenregister_gateway()
     straat_id = request.matchdict.get("straat_id")
     huisnummer = request.matchdict.get("huisnummer")
+    busnummer = request.matchdict.get("busnummer")
     try:
         adressen = Gateway.list_adressen_with_params(
-            straatnaamObjectId=straat_id, huisnummer=huisnummer
+            straatnaamObjectId=straat_id, huisnummer=huisnummer, busnummer=busnummer
         )
     except (GatewayResourceNotFoundException, AdressenRegisterClientException):
         return HTTPNotFound()
