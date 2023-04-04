@@ -491,7 +491,16 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             )
             res = self.testapp.get("/adressenregister/provincies/10000/gemeenten")
         self.assertEqual("200 OK", res.status)
-        self.assertCountEqual(res.json, [{"niscode": "11001", "naam": "Aartselaar"}])
+        self.assertCountEqual(
+            res.json,
+            [
+                {
+                    "niscode": "11001",
+                    "naam": "Aartselaar",
+                    "uri": "https://data.vlaanderen.be/id/gemeente/11001",
+                }
+            ],
+        )
 
     def test_list_gemeenten_by_provincie_404(self):
         with responses.RequestsMock() as rsps:
@@ -540,6 +549,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "niscode": "11001",
                 "status": "inGebruik",
                 "taal": "nl",
+                "uri": "https://data.vlaanderen.be/id/gemeente/11001",
             },
             res.json,
         )
@@ -571,8 +581,18 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res = self.testapp.get("/adressenregister/gemeenten/11001/straten")
         self.assertCountEqual(
             [
-                {"id": "1", "naam": "Acacialaan", "status": "inGebruik"},
-                {"id": "2", "naam": "Adriaan Sanderslei", "status": "inGebruik"},
+                {
+                    "id": "1",
+                    "naam": "Acacialaan",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/straatnaam/1",
+                },
+                {
+                    "id": "2",
+                    "naam": "Adriaan Sanderslei",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/straatnaam/2",
+                },
             ],
             res.json,
         )
@@ -601,7 +621,13 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res = self.testapp.get("/adressenregister/straten/1")
         self.assertEqual("200 OK", res.status)
         self.assertDictEqual(
-            {"id": "1", "naam": "Acacialaan", "status": "inGebruik"}, res.json
+            {
+                "id": "1",
+                "naam": "Acacialaan",
+                "status": "inGebruik",
+                "uri": "https://data.vlaanderen.be/id/straatnaam/1",
+            },
+            res.json,
         )
 
     def test_get_straat_by_unexisting_id(self):
@@ -656,6 +682,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                     "id": "307106",
                     "label": "Acacialaan 4, 2630 Aartselaar",
                     "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/adres/307106",
                 }
             ],
             res.json,
@@ -697,6 +724,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                     "id": "307106",
                     "label": "Acacialaan 4, 2630 Aartselaar",
                     "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/adres/307106",
                 },
             ],
             res.json,
@@ -734,6 +762,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "id": "900746",
                 "label": "Sint-Jansvest 50, 9000 Gent",
                 "status": "inGebruik",
+                "uri": "https://data.vlaanderen.be/id/adres/900746",
             },
             res.json,
         )
@@ -759,7 +788,14 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res = self.testapp.get("/adressenregister/adressen/200001/percelen")
         self.assertEqual("200 OK", res.status)
         self.assertListEqual(
-            [{"id": "13013C0384-02H003", "status": "gerealiseerd"}], res.json
+            [
+                {
+                    "id": "13013C0384-02H003",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/perceel/13013C0384-02H003",
+                }
+            ],
+            res.json,
         )
 
     def test_get_percelen_by_adres_id_404(self):
@@ -789,6 +825,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "adressen": [{"id": "200001"}],
                 "id": "13013C0384-02H003",
                 "status": "gerealiseerd",
+                "uri": "https://data.vlaanderen.be/id/perceel/13013C0384-02H003",
             },
             res.json,
         )
@@ -829,8 +866,18 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("200 OK", res.status)
         self.assertListEqual(
             [
-                {"namen": ["BRUSSEL"], "postcode": "1000", "status": "gerealiseerd"},
-                {"namen": ["Laken"], "postcode": "1020", "status": "gerealiseerd"},
+                {
+                    "namen": ["BRUSSEL"],
+                    "postcode": "1000",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1000",
+                },
+                {
+                    "namen": ["Laken"],
+                    "postcode": "1020",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1020",
+                },
             ],
             res.json,
         )
@@ -859,7 +906,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res = self.testapp.get("/adressenregister/postinfo/1000")
         self.assertEqual("200 OK", res.status)
         self.assertDictEqual(
-            {"namen": ["BRUSSEL"], "postcode": "1000", "status": "gerealiseerd"},
+            {
+                "namen": ["BRUSSEL"],
+                "postcode": "1000",
+                "status": "gerealiseerd",
+                "uri": "https://data.vlaanderen.be/id/postinfo/1000",
+            },
             res.json,
         )
 
