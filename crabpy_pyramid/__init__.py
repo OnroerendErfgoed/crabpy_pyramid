@@ -49,6 +49,11 @@ def _parse_settings(settings):
         'cache.file.root': '/tmp/dogpile_data',
     }
     args = defaults.copy()
+    if 'adressenregister.api_key' not in settings:
+        log.warning(
+            "No adressenregister.api_key set in settings. "
+            "The api might stop working after reaching the limit of x requests per day."
+        )
 
     # booelean settings
     for short_key_name in ('capakey.include', 'crab.include', 'adressenregister.include'):
