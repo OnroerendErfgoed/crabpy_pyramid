@@ -312,7 +312,7 @@ def adressenregister_list_postinfo_by_gemeente(request):
 
 @view_config(
     route_name="adressenregister_get_postinfo_by_postcode",
-    renderer="adresreg_listjson",
+    renderer="adresreg_itemjson",
     accept="application/json",
 )
 def adressenregister_get_postinfo_by_postcode(request):
