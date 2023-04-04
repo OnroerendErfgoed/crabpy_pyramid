@@ -69,7 +69,6 @@ def list_adressen_adapter(obj, request):
         "huisnummer": obj.huisnummer,
         "busnummer": obj.busnummer,
         "status": obj.status,
-
     }
 
 
@@ -86,7 +85,12 @@ def list_postinfo_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Postinfo` to json.
     """
-    return {"postcode": obj.id, "uri": obj.uri, "status": obj.status, "namen": obj.namen()}
+    return {
+        "postcode": obj.id,
+        "uri": obj.uri,
+        "status": obj.status,
+        "namen": obj.namen(),
+    }
 
 
 def list_landen_adapter(obj, request):
@@ -209,6 +213,19 @@ def item_land_adapter(obj, request):
     }
 
 
+def list_postinfo_adapter(obj, request):
+    """
+    Adapter for rendering a list of
+    :class:`crabpy.gateway.adressenregister.Postinfo` to json.
+    """
+    return {
+        "postcode": obj.id,
+        "uri": obj.uri,
+        "status": obj.status,
+        "namen": obj.namen(),
+    }
+
+
 json_item_renderer.add_adapter(adressenregister.Gewest, item_gewest_adapter)
 json_item_renderer.add_adapter(adressenregister.Provincie, item_provincie_adapter)
 json_item_renderer.add_adapter(adressenregister.Deelgemeente, item_deelgemeente_adapter)
@@ -216,4 +233,5 @@ json_item_renderer.add_adapter(adressenregister.Gemeente, item_gemeente_adapter)
 json_item_renderer.add_adapter(adressenregister.Straat, item_straat_adapter)
 json_item_renderer.add_adapter(adressenregister.Perceel, item_perceel_adapter)
 json_item_renderer.add_adapter(adressenregister.Adres, item_adres_adapter)
+json_item_renderer.add_adapter(adressenregister.Postinfo, list_postinfo_adapter)
 json_item_renderer.add_adapter(pycountry.db.Data, item_land_adapter)
