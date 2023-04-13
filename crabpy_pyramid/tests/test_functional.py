@@ -4,15 +4,28 @@ Functional tests.
 
 .. versionadded:: 0.1.0
 '''
-import unittest
 import os
 import shutil
+import unittest
+from copy import deepcopy
 
+import responses
 from pyramid import testing
 from webtest import TestApp
 
 import crabpy_pyramid
 from crabpy_pyramid import main
+from crabpy_pyramid.tests.fixtures.adressenregister import adres
+from crabpy_pyramid.tests.fixtures.adressenregister import adressen
+from crabpy_pyramid.tests.fixtures.adressenregister import gemeente
+from crabpy_pyramid.tests.fixtures.adressenregister import gemeenten
+from crabpy_pyramid.tests.fixtures.adressenregister import perceel
+from crabpy_pyramid.tests.fixtures.adressenregister import percelen
+from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1000
+from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1020
+from crabpy_pyramid.tests.fixtures.adressenregister import postinfos
+from crabpy_pyramid.tests.fixtures.adressenregister import straat
+from crabpy_pyramid.tests.fixtures.adressenregister import straten
 
 
 def as_bool(value):
@@ -46,13 +59,19 @@ settings = {
     'crabpy.crab.include': True,
     'crabpy.crab.cache_config.permanent.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.permanent.expiration_time': 604800,
-    'crabpy.crab.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_permanent.dbm'),
+    'crabpy.crab.cache_config.permanent.arguments.filename': os.path.join(
+        os.path.dirname(__file__), 'dogpile_data', 'crab_permanent.dbm'),
     'crabpy.crab.cache_config.long.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.long.expiration_time': 86400,
-    'crabpy.crab.cache_config.long.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_long.dbm'),
+    'crabpy.crab.cache_config.long.arguments.filename': os.path.join(
+        os.path.dirname(__file__), 'dogpile_data', 'crab_long.dbm'),
     'crabpy.crab.cache_config.short.backend': 'dogpile.cache.dbm',
     'crabpy.crab.cache_config.short.expiration_time': 3600,
-    'crabpy.crab.cache_config.short.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'crab_short.dbm'),
+    'crabpy.crab.cache_config.short.arguments.filename': os.path.join(
+        os.path.dirname(__file__), 'dogpile_data', 'crab_short.dbm'),
+    'crabpy.adressenregister.include': True,
+    'crabpy.adressenregister.base_url': 'https://api.basisregisters.vlaanderen.be',
+    'crabpy.adressenregister.api_key': '33c6eb56-47cc-4723-8a69-3ad0b9cc3acd',
 }
 
 
@@ -393,3 +412,523 @@ class HttpCachingFunctionalTests(FunctionalTests):
             self.assertNotIn('ETag', res.headers)
         finally:
             crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.add('list_gewesten')
+
+
+class AdressenRegisterFunctionalTests(FunctionalTests):
+    def test_list_gewesten(self):
+        res = self.testapp.get("/adressenregister/gewesten")
+        self.assertEqual("200 OK", res.status)
+        self.assertCountEqual(
+            res.json,
+            [
+                {"id": 1, "naam": "Brussels Hoofdstedelijk Gewest"},
+                {"id": 2, "naam": "Vlaams Gewest"},
+                {"id": 3, "naam": "Waals Gewest"},
+            ],
+        )
+
+    def test_get_gewest_by_id(self):
+        res = self.testapp.get("/adressenregister/gewesten/2")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            res.json,
+            {
+                "bounding_box": [22279.17, 153050.23, 258873.3, 244022.31],
+                "centroid": [138165.09, 189297.53],
+                "id": 2,
+                "naam": "Vlaams Gewest",
+            },
+        )
+
+    def test_get_gewest_by_unexisting_id(self):
+        res = self.testapp.get("/adressenregister/gewesten/0", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_provincies(self):
+        res = self.testapp.get("/adressenregister/gewesten/2/provincies")
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(5, len(res.json))
+
+    def test_get_provincie_by_id(self):
+        res = self.testapp.get("/adressenregister/provincies/10000")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {"gewest": {"id": 2}, "naam": "Antwerpen", "niscode": "10000"}, res.json
+        )
+
+    def test_get_provincie_by_unexisting_id(self):
+        res = self.testapp.get("/adressenregister/provincies/00000", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_deelgemeenten(self):
+        res = self.testapp.get("/adressenregister/gewesten/2/deelgemeenten")
+        self.assertEqual("200 OK", res.status)
+
+    def test_list_deelgemeenten_wrong_gewest(self):
+        res = self.testapp.get("/adressenregister/gewesten/1/deelgemeenten", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_deelgemeenten_by_gemeente(self):
+        res = self.testapp.get("/adressenregister/gemeenten/11001/deelgemeenten")
+        self.assertEqual("200 OK", res.status)
+
+    def test_list_deelgemeenten_by_unexisting_gemeente(self):
+        res = self.testapp.get(
+            "/adressenregister/gemeenten/99999/deelgemeenten", status=404
+        )
+        self.assertEqual("404 Not Found", res.status)
+        res = self.testapp.get(
+            "/adressenregister/gemeenten/9999/deelgemeenten", status=404
+        )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_gemeenten_by_provincie(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                json=gemeenten,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten?limit=500",
+            )
+            res = self.testapp.get("/adressenregister/provincies/10000/gemeenten")
+        self.assertEqual("200 OK", res.status)
+        self.assertCountEqual(
+            res.json,
+            [
+                {
+                    "niscode": "11001",
+                    "naam": "Aartselaar",
+                    "uri": "https://data.vlaanderen.be/id/gemeente/11001",
+                }
+            ],
+        )
+
+    def test_list_gemeenten_by_provincie_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                status=404,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten?limit=500",
+            )
+            res = self.testapp.get(
+                "/adressenregister/provincies/10000/gemeenten", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_gemeenten_adressenregister(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                json=gemeenten,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten?limit=500",
+            )
+            res = self.testapp.get("/adressenregister/gewesten/2/gemeenten")
+        self.assertEqual("200 OK", res.status)
+
+    def test_list_gemeenten_adressenregister_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                status=404,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten?limit=500",
+            )
+            res = self.testapp.get("/adressenregister/gewesten/2/gemeenten", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_gemeente_adresregister_niscode(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                json=gemeente,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten/11001",
+            )
+            res = self.testapp.get("/adressenregister/gemeenten/11001")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "naam": "Aartselaar",
+                "niscode": "11001",
+                "status": "inGebruik",
+                "taal": "nl",
+                "uri": "https://data.vlaanderen.be/id/gemeente/11001",
+            },
+            res.json,
+        )
+
+    def test_get_gemeente_crab_unexisting_niscode(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten/00000",
+                status=404,
+            )
+            res = self.testapp.get("/adressenregister/gemeenten/00000", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_list_straten(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten/11001",
+                json=gemeente,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen?nisCode=11001&limit=500",
+                json=straten,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/gemeenten/11001/straten")
+        self.assertCountEqual(
+            [
+                {
+                    "id": "1",
+                    "naam": "Acacialaan",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/straatnaam/1",
+                },
+                {
+                    "id": "2",
+                    "naam": "Adriaan Sanderslei",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/straatnaam/2",
+                },
+            ],
+            res.json,
+        )
+        self.assertEqual("200 OK", res.status)
+
+    def test_list_straten_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/gemeenten/11001",
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/gemeenten/11001/straten", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_straat_by_id(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json=straat,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/straten/1")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "id": "1",
+                "naam": "Acacialaan",
+                "status": "inGebruik",
+                "uri": "https://data.vlaanderen.be/id/straatnaam/1",
+            },
+            res.json,
+        )
+
+    def test_get_straat_by_unexisting_id(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/0",
+                status=404,
+            )
+            res = self.testapp.get("/adressenregister/straten/0", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adressen_by_straat(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json=adressen,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/straten/1/adressen")
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(2, len(res.json))
+
+    def test_get_adressen_by_straat_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                status=404,
+            )
+            res = self.testapp.get("/adressenregister/straten/1/adressen", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adres_by_straat_and_huisnummer(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json=adressen_response,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/straten/1/huisnummers/4")
+        self.assertEqual("200 OK", res.status)
+        self.assertCountEqual(
+            [
+                {
+                    "busnummer": "",
+                    "huisnummer": "4",
+                    "id": "307106",
+                    "label": "Acacialaan 4, 2630 Aartselaar",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/adres/307106",
+                }
+            ],
+            res.json,
+        )
+
+    def test_get_adres_by_straat_and_huisnummer_404(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/straten/1/huisnummers/4", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adres_by_straat_and_huisnummer_and_busnummer(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json=adressen_response,
+                status=200,
+            )
+            res = self.testapp.get(
+                "/adressenregister/straten/1/huisnummers/4/busnummers/1"
+            )
+        self.assertEqual("200 OK", res.status)
+        self.assertCountEqual(
+            [
+                {
+                    "busnummer": "",
+                    "huisnummer": "4",
+                    "id": "307106",
+                    "label": "Acacialaan 4, 2630 Aartselaar",
+                    "status": "inGebruik",
+                    "uri": "https://data.vlaanderen.be/id/adres/307106",
+                },
+            ],
+            res.json,
+        )
+
+    def test_get_adres_by_straat_and_huisnummer_and_busnummer_404(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json=adressen_response,
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/straten/1" "/huisnummers/4/busnummers/1", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adres_by_id(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/900746",
+                json=adres,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/adressen/900746")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "busnummer": "",
+                "huisnummer": "50",
+                "id": "900746",
+                "label": "Sint-Jansvest 50, 9000 Gent",
+                "status": "inGebruik",
+                "uri": "https://data.vlaanderen.be/id/adres/900746",
+            },
+            res.json,
+        )
+
+    def test_get_adres_by_id_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/900746",
+                status=404,
+            )
+            res = self.testapp.get("/adressenregister/adressen/900746", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_percelen_by_adres_id(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen",
+                json=percelen,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/adressen/200001/percelen")
+        self.assertEqual("200 OK", res.status)
+        self.assertListEqual(
+            [
+                {
+                    "id": "13013C0384-02H003",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/perceel/13013C0384-02H003",
+                }
+            ],
+            res.json,
+        )
+
+    def test_get_percelen_by_adres_id_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen",
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/adressen/200001/percelen", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_perceel_by_id(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen/13013C0384-02H003",
+                json=perceel,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/percelen/13013C0384-02H003")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "adressen": [{"id": "200001"}],
+                "id": "13013C0384-02H003",
+                "status": "gerealiseerd",
+                "uri": "https://data.vlaanderen.be/id/perceel/13013C0384-02H003",
+            },
+            res.json,
+        )
+
+    def test_get_perceel_by_id_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen/13013C0384-02H003",
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/percelen/13013C0384-02H003", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_adresregister_list_postinfo_by_gemeente(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo",
+                json=postinfos,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1000",
+                json=postinfo_1000,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1020",
+                json=postinfo_1020,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/gemeenten/brussel/postinfo")
+        self.assertEqual("200 OK", res.status)
+        self.assertListEqual(
+            [
+                {
+                    "namen": ["BRUSSEL"],
+                    "postcode": "1000",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1000",
+                },
+                {
+                    "namen": ["Laken"],
+                    "postcode": "1020",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1020",
+                },
+            ],
+            res.json,
+        )
+
+    def test_adresregister_list_postinfo_by_gemeente_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo",
+                status=404,
+            )
+            res = self.testapp.get(
+                "/adressenregister/gemeenten/brussel/postinfo", status=404
+            )
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_adresregister_get_postinfo_by_postcode(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1000",
+                json=postinfo_1000,
+                status=200,
+            )
+
+            res = self.testapp.get("/adressenregister/postinfo/1000")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "namen": ["BRUSSEL"],
+                "postcode": "1000",
+                "status": "gerealiseerd",
+                "uri": "https://data.vlaanderen.be/id/postinfo/1000",
+            },
+            res.json,
+        )
+
+    def test_adresregister_get_postinfo_by_postcode_404(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1000",
+                status=404,
+            )
+            res = self.testapp.get("/adressenregister/postinfo/1000", status=404)
+        self.assertEqual("404 Not Found", res.status)
+
+    def test_get_land_by_id(self):
+        res = self.testapp.get("/adressenregister/landen/BE")
+        self.assertEqual("200 OK", res.status)
+
+    def test_get_land_by_unexisting_id(self):
+        res = self.testapp.get("/adressenregister/landen/MORDOR", status=404)
+        self.assertEqual("404 Not Found", res.status)
