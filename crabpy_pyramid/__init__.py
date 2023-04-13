@@ -4,21 +4,25 @@ import logging
 import os
 from collections import Sequence
 
+from crabpy.client import AdressenRegisterClient
 from crabpy.client import crab_factory
+from crabpy.gateway.adressenregister import Gateway
 from crabpy.gateway.capakey import CapakeyRestGateway
 from crabpy.gateway.crab import CrabGateway
 from pyramid.config import Configurator
 from pyramid.settings import asbool
 from zope.interface import Interface
 
-from crabpy_pyramid.renderers.capakey import (
-    json_list_renderer as capakey_json_list_renderer,
+from crabpy_pyramid.renderers.adressenregister import \
+    json_item_renderer as adresreg_json_item_renderer
+from crabpy_pyramid.renderers.adressenregister import \
+    json_list_renderer as adresreg_json_list_renderer
+from crabpy_pyramid.renderers.capakey import \
     json_item_renderer as capakey_json_item_renderer
-)
-from crabpy_pyramid.renderers.crab import (
-    json_list_renderer as crab_json_list_renderer,
-    json_item_renderer as crab_json_item_renderer
-)
+from crabpy_pyramid.renderers.capakey import \
+    json_list_renderer as capakey_json_list_renderer
+from crabpy_pyramid.renderers.crab import json_item_renderer as crab_json_item_renderer
+from crabpy_pyramid.renderers.crab import json_list_renderer as crab_json_list_renderer
 
 log = logging.getLogger(__name__)
 GENERATE_ETAG_ROUTE_NAMES = set()
@@ -32,16 +36,27 @@ class ICrab(Interface):
     pass
 
 
+class IAdressenregister(Interface):
+    pass
+
 def _parse_settings(settings):
     defaults = {
         'capakey.include': False,
         'crab.include': True,
-        'cache.file.root': '/tmp/dogpile_data'
+        'adressenregister.include': True,
+        'adressenregister.base_url': 'https://api.basisregisters.vlaanderen.be',
+        'adressenregister.api_key': None,
+        'cache.file.root': '/tmp/dogpile_data',
     }
     args = defaults.copy()
+    if 'adressenregister.api_key' not in settings:
+        log.warning(
+            "No adressenregister.api_key set in settings. "
+            "The api might stop working after reaching the limit of x requests per day."
+        )
 
     # booelean settings
-    for short_key_name in ('capakey.include', 'crab.include'):
+    for short_key_name in ('capakey.include', 'crab.include', 'adressenregister.include'):
         key_name = "crabpy.%s" % short_key_name
         if key_name in settings:
             args[short_key_name] = asbool(settings.get(
@@ -49,13 +64,23 @@ def _parse_settings(settings):
             ))
 
     # string setting
-    for short_key_name in ('proxy.http', 'proxy.https', 'cache.file.root'):
+    for short_key_name in (
+        'proxy.http',
+        'proxy.https',
+        'cache.file.root',
+        'adressenregister.base_url',
+        'adressenregister.api_key'
+    ):
         key_name = "crabpy.%s" % short_key_name
         if key_name in settings:
             args[short_key_name] = settings.get(key_name)
 
     # cache configuration
-    for short_key_name in ('crab.cache_config', 'capakey.cache_config'):
+    for short_key_name in (
+        'crab.cache_config',
+        'capakey.cache_config',
+        'adressenregister.cache_config'
+    ):
         key_name = "crabpy.%s." % short_key_name
         cache_config = {}
         for skey in settings.keys():
@@ -65,7 +90,7 @@ def _parse_settings(settings):
             args[short_key_name] = cache_config
 
     # crab wsdl settings
-    for short_key_name in ('crab.wsdl', ):
+    for short_key_name in ('crab.wsdl',):
         key_name = "crabpy.%s" % short_key_name
         if key_name in settings:
             args[short_key_name] = settings.get(key_name)
@@ -122,6 +147,24 @@ def _build_crab(registry, settings):
     return registry.queryUtility(ICrab)
 
 
+def _build_adressenregister(registry, settings):
+    adressenregister = registry.queryUtility(IAdressenregister)
+    if adressenregister is not None:
+        return adressenregister
+    if 'cache_config' in settings:
+        cache_config = settings['cache_config']
+        del settings['cache_config']
+    else:
+        cache_config = None
+    gateway = Gateway(
+        client=AdressenRegisterClient(settings["base_url"], settings["api_key"]),
+        cache_settings=cache_config
+    )
+
+    registry.registerUtility(gateway, IAdressenregister)
+    return registry.queryUtility(IAdressenregister)
+
+
 def get_capakey(registry):
     """
     Get the Capakey Gateway
@@ -149,6 +192,21 @@ def get_crab(registry):
         regis = registry
 
     return regis.queryUtility(ICrab)
+
+
+def get_adressenregister(registry):
+    """
+    Get the Adresssenregister Gateway
+
+    :rtype: :class:`crabpy.gateway.adressenregister.Gateway`
+    # argument might be a config or a request
+    """
+    # argument might be a config or a request
+    regis = getattr(registry, 'registry', None)
+    if regis is None:
+        regis = registry
+
+    return regis.queryUtility(IAdressenregister)
 
 
 def _get_proxy_settings(settings):
@@ -259,6 +317,23 @@ def includeme(config):
         config.add_request_method(get_crab, 'crab_gateway')
         config.include('crabpy_pyramid.routes.crab')
         config.scan('crabpy_pyramid.views.crab')
+
+    # adressenregister wordt afgekort tot adresreg
+    adresreg_settings = dict(
+        _filter_settings(settings, 'adressenregister.'),
+        **base_settings
+    )
+
+    if adresreg_settings['include']:
+        log.info('Adding adressen register Gateway.')
+        del adresreg_settings['include']
+        config.add_renderer('adresreg_listjson', adresreg_json_list_renderer)
+        config.add_renderer('adresreg_itemjson', adresreg_json_item_renderer)
+        _build_adressenregister(config.registry, adresreg_settings)
+        config.add_directive('get_adressenregister', get_adressenregister)
+        config.add_request_method(get_adressenregister, 'adressenregister_gateway')
+        config.include('crabpy_pyramid.routes.adressenregister')
+        config.scan('crabpy_pyramid.views.adressenregister')
 
 
 def main(global_config, **settings):

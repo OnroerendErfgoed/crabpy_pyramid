@@ -1,10 +1,16 @@
+1.2.0 (13-04-2023)
+------------------
+
+- Drop python < 3.8 support
+- Adressenregister implementeren (#165)
+
 1.1.0 (30-03-2023)
--------------------
+------------------
 
 - Overschakelen naar nieuwe AGIV services (#164)
 
 1.0.0 (13-04-2022)
--------------------
+------------------
 
 - Upgrade naar Pyramid 2.0 (#144)
 
