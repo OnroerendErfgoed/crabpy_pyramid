@@ -2,6 +2,7 @@
 ------------------
 
 - Drop python < 3.8 support
+- Adressenregister implementeren (#165)
 
 1.1.0 (30-03-2023)
 ------------------
