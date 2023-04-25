@@ -421,9 +421,9 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertCountEqual(
             res.json,
             [
-                {"id": 1, "naam": "Brussels Hoofdstedelijk Gewest"},
-                {"id": 2, "naam": "Vlaams Gewest"},
-                {"id": 3, "naam": "Waals Gewest"},
+                {"id": 1, "niscode": "4000",  "naam": "Brussels Hoofdstedelijk Gewest"},
+                {"id": 2, "niscode": "2000", "naam": "Vlaams Gewest"},
+                {"id": 3, "niscode": "3000", "naam": "Waals Gewest"},
             ],
         )
 
@@ -498,6 +498,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                     "niscode": "11001",
                     "naam": "Aartselaar",
                     "uri": "https://data.vlaanderen.be/id/gemeente/11001",
+                    "provincie": {"niscode": "10000"},
                 }
             ],
         )
