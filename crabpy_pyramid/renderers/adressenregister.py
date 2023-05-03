@@ -49,7 +49,6 @@ def list_gemeente_adapter(obj, request):
     return {
         "niscode": obj.niscode,
         "naam": obj.naam,
-        "uri": obj.uri,
         "provincie": {"niscode": obj.provincie_niscode}
     }
 
@@ -153,6 +152,7 @@ def item_gemeente_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam(),
         "provincie": {"niscode": obj.provincie_niscode},
+        "gewest": {"niscode": obj.gewest.niscode}
     }
 
 
