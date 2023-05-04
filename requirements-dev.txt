@@ -10,6 +10,7 @@ nose-testconfig==0.10
 coverage==5.3
 WebTest==2.0.35
 responses==0.23.1
+requests==2.29.0
 
 # Linting
 flake8==3.8.3
