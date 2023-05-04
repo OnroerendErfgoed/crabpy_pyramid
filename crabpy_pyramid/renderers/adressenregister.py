@@ -1,4 +1,3 @@
-import crabpy
 import pycountry
 from crabpy.gateway import adressenregister
 from pyramid.renderers import JSON
@@ -24,7 +23,7 @@ def list_provincie_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam,
         "gewest": {
-            "id": obj.gewest,
+            "id": obj.gewest_niscode,
         },
     }
 
@@ -48,7 +47,7 @@ def list_gemeente_adapter(obj, request):
     """
     return {
         "niscode": obj.niscode,
-        "naam": obj.naam,
+        "naam": obj.naam(),
         "provincie": {"niscode": obj.provincie_niscode}
     }
 
@@ -138,7 +137,7 @@ def item_provincie_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam,
         "gewest": {
-            "id": obj.gewest,
+            "niscode": obj.gewest_niscode,
         },
     }
 
