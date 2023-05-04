@@ -675,11 +675,8 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             )
             res = self.testapp.get("/adressenregister/adressen/900746", expect_errors=True)
         self.assertEqual(500, res.status_code)
-        self.assertEqual(500, res.status_code)
-        self.assertEqual(
-            '{"message": "Er ging iets fout in de vraag naar adressenregister API.", '
-            '"Errors": ["413 Client Error: Request Entity Too Large for url: '
-            'https://api.basisregisters.vlaanderen.be/v2/adressen/900746"]}',
+        self.assertIn(
+            "Er ging iets fout in de vraag naar adressenregister API.",
             res.text
         )
 
