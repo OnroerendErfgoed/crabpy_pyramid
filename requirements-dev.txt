@@ -11,6 +11,7 @@ coverage==5.3
 WebTest==2.0.35
 responses==0.23.1
 requests==2.29.0
+urllib3==1.26.15
 
 # Linting
 flake8==3.8.3
