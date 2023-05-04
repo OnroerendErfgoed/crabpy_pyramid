@@ -665,6 +665,25 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res.json,
         )
 
+    def test_error_other_then_404_400(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/900746",
+                json=adres,
+                status=413,
+            )
+            res = self.testapp.get("/adressenregister/adressen/900746", expect_errors=True)
+        self.assertEqual(500, res.status_code)
+        self.assertEqual(500, res.status_code)
+        self.assertEqual(
+            '{"message": "Er ging iets fout in de vraag naar adressenregister API.", '
+            '"Errors": ["413 Client Error: Request Entity Too Large for url: '
+            'https://api.basisregisters.vlaanderen.be/v2/adressen/900746"]}',
+            res.text
+        )
+
+
     def test_get_adres_by_straat_and_huisnummer_and_busnummer_404(self):
         with responses.RequestsMock() as rsps:
             adressen_response = deepcopy(adressen)
