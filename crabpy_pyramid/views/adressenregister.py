@@ -27,6 +27,7 @@ def handle_gateway_response(gateway_method, *args, **kwargs):
             if status_code == 400:
                 detail = getattr(cause.response, "text", "")
                 raise HTTPBadRequest(detail=detail)
+        raise ae
 
 
 @view_config(
