@@ -16,9 +16,6 @@ def internal_server_error(exception, request):
     original_exception = exception.__cause__
     request.response.status_int = 500
     errors = [str(original_exception)]
-    if hasattr(original_exception, "response"):
-        if hasattr(original_exception.response, "text"):
-            errors.append(original_exception.response.text)
 
     return {
         "message": "Er ging iets fout in de vraag naar adressenregister API.",
