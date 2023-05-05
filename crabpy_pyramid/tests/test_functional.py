@@ -410,9 +410,9 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertCountEqual(
             res.json,
             [
-                {"id": 1, "niscode": "4000", "naam": "Brussels Hoofdstedelijk Gewest"},
-                {"id": 2, "niscode": "2000", "naam": "Vlaams Gewest"},
-                {"id": 3, "niscode": "3000", "naam": "Waals Gewest"},
+                {"niscode": "4000", "naam": "Brussels Hoofdstedelijk Gewest"},
+                {"niscode": "2000", "naam": "Vlaams Gewest"},
+                {"niscode": "3000", "naam": "Waals Gewest"},
             ],
         )
 
@@ -424,7 +424,6 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             {
                 "bounding_box": [22279.17, 153050.23, 258873.3, 244022.31],
                 "centroid": [138165.09, 189297.53],
-                "id": 2,
                 "naam": "Vlaams Gewest",
                 "niscode": "2000",
             },
