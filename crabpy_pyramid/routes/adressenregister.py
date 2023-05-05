@@ -7,24 +7,24 @@ def includeme(config):
     )
     crabpy_pyramid.add_route(
         config,
-        "adressenregister_get_gewest_by_id",
-        "/adressenregister/gewesten/{gewest_id}",
+        "adressenregister_get_gewest_by_niscode",
+        "/adressenregister/gewesten/{gewest_niscode}",
     )
 
     crabpy_pyramid.add_route(
         config,
         "adressenregister_list_provincies",
-        "/adressenregister/gewesten/{gewest_id}/provincies",
+        "/adressenregister/gewesten/{gewest_niscode}/provincies",
     )
     crabpy_pyramid.add_route(
         config,
         "adressenregister_get_provincie",
-        "/adressenregister/provincies/{provincie_id}",
+        "/adressenregister/provincies/{provincie_niscode}",
     )
     crabpy_pyramid.add_route(
         config,
         "adressenregister_list_deelgemeenten",
-        "/adressenregister/gewesten/{gewest_id}/deelgemeenten",
+        "/adressenregister/gewesten/{gewest_niscode}/deelgemeenten",
     )
     crabpy_pyramid.add_route(
         config,
@@ -34,18 +34,18 @@ def includeme(config):
     crabpy_pyramid.add_route(
         config,
         "adressenregister_get_deelgemeente_by_id",
-        "/adressenregister/deelgemeenten/{deelgemeente_id}",
+        "/adressenregister/deelgemeenten/{deelgemeente_niscode}",
     )
 
     crabpy_pyramid.add_route(
         config,
         "adressenregister_list_gemeenten_by_provincie",
-        "/adressenregister/provincies/{provincie_id}/gemeenten",
+        "/adressenregister/provincies/{provincie_niscode}/gemeenten",
     )
     crabpy_pyramid.add_route(
         config,
         "list_gemeenten_adressenregister",
-        "/adressenregister/gewesten/{gewest_id}/gemeenten",
+        "/adressenregister/gewesten/{gewest_niscode}/gemeenten",
     )
 
     crabpy_pyramid.add_route(

@@ -1,4 +1,3 @@
-import crabpy
 import pycountry
 from crabpy.gateway import adressenregister
 from pyramid.renderers import JSON
@@ -12,7 +11,7 @@ def list_gewesten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Gewest` to json.
     """
-    return {"id": obj.id, "naam": obj.naam}
+    return {"id": obj.id, "naam": obj.naam, "niscode": obj.niscode}
 
 
 def list_provincie_adapter(obj, request):
@@ -24,7 +23,7 @@ def list_provincie_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam,
         "gewest": {
-            "id": obj.gewest,
+            "id": obj.gewest_niscode,
         },
     }
 
@@ -46,7 +45,11 @@ def list_gemeente_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Gemeenten` to json.
     """
-    return {"niscode": obj.niscode, "naam": obj.naam, "uri": obj.uri}
+    return {
+        "niscode": obj.niscode,
+        "naam": obj.naam(),
+        "provincie": {"niscode": obj.provincie_niscode}
+    }
 
 
 def list_straten_adapter(obj, request):
@@ -118,6 +121,7 @@ def item_gewest_adapter(obj, request):
     """
     return {
         "id": obj.id,
+        "niscode": obj.niscode,
         "naam": obj.naam,
         "centroid": obj.centroid,
         "bounding_box": obj.bounding_box,
@@ -133,7 +137,7 @@ def item_provincie_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam,
         "gewest": {
-            "id": obj.gewest,
+            "niscode": obj.gewest_niscode,
         },
     }
 
@@ -145,10 +149,9 @@ def item_gemeente_adapter(obj, request):
     """
     return {
         "niscode": obj.niscode,
-        "uri": obj.uri,
         "naam": obj.naam(),
-        "taal": obj.taal,
-        "status": obj.status,
+        "provincie": {"niscode": obj.provincie_niscode},
+        "gewest": {"niscode": obj.gewest.niscode}
     }
 
 

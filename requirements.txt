@@ -1,5 +1,5 @@
 # Tested and approved with these versions
 pyramid==2.0.0
-crabpy==1.0.0
+crabpy==1.2.1
 pycountry==18.12.8 ; python_version < '3.0'
 pycountry==22.3.5 ; python_version >= '3.4'

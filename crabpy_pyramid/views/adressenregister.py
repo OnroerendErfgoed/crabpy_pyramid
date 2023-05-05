@@ -2,7 +2,7 @@ import logging
 
 import pycountry
 from crabpy.client import AdressenRegisterClientException
-from crabpy.gateway.exception import GatewayResourceNotFoundException
+from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 
@@ -10,6 +10,24 @@ from crabpy_pyramid.utils import range_return
 from crabpy_pyramid.utils import set_http_caching
 
 log = logging.getLogger(__name__)
+
+
+def handle_gateway_response(gateway_method, *args, **kwargs):
+    try:
+        result = gateway_method(*args, **kwargs)
+        if not result:
+            raise HTTPNotFound()
+        return result
+    except AdressenRegisterClientException as ae:
+        cause = ae.__cause__
+        if hasattr(cause, "response"):
+            status_code = cause.response.status_code
+            if status_code == 404:
+                raise HTTPNotFound()
+            if status_code == 400:
+                detail = getattr(cause.response, "text", "")
+                raise HTTPBadRequest(detail=detail)
+        raise ae
 
 
 @view_config(
@@ -25,18 +43,15 @@ def list_gewesten(request):
 
 
 @view_config(
-    route_name="adressenregister_get_gewest_by_id",
+    route_name="adressenregister_get_gewest_by_niscode",
     renderer="adresreg_itemjson",
     accept="application/json",
 )
-def get_gewest_by_id(request):
+def get_gewest_by_niscode(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    gewest_id = int(request.matchdict.get("gewest_id"))
-    try:
-        return Gateway.get_gewest_by_id(gewest_id)
-    except GatewayResourceNotFoundException:
-        return HTTPNotFound()
+    gewest_niscode = request.matchdict.get("gewest_niscode")
+    return handle_gateway_response(Gateway.get_gewest_by_niscode, gewest_niscode)
 
 
 @view_config(
@@ -47,8 +62,8 @@ def get_gewest_by_id(request):
 def list_provincies(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
-    gewest_id = int(request.matchdict.get("gewest_id"))
-    provincies = Gateway.list_provincies(gewest_id)
+    gewest_niscode = request.matchdict.get("gewest_niscode")
+    provincies = handle_gateway_response(Gateway.list_provincies, gewest_niscode)
     return range_return(request, provincies)
 
 
@@ -60,12 +75,9 @@ def list_provincies(request):
 def get_provincie(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
-    provincie_id = int(request.matchdict.get("provincie_id"))
-    provincie = Gateway.get_provincie_by_id(provincie_id)
-    if provincie:
-        return provincie
-    else:
-        return HTTPNotFound()
+    provincie_niscode = request.matchdict.get("provincie_niscode")
+
+    return handle_gateway_response(Gateway.get_provincie_by_niscode, provincie_niscode)
 
 
 @view_config(
@@ -76,10 +88,11 @@ def get_provincie(request):
 def list_deelgemeenten(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
-    gewest_id = int(request.matchdict.get("gewest_id"))
-    if gewest_id != 2:
+    gewest_niscode = request.matchdict.get("gewest_niscode")
+    if gewest_niscode != "2000":
         return HTTPNotFound()
-    deelgemeenten = Gateway.list_deelgemeenten(gewest_id)
+    deelgemeenten = handle_gateway_response(Gateway.list_deelgemeenten, gewest_niscode)
+
     return range_return(request, deelgemeenten)
 
 
@@ -92,11 +105,9 @@ def list_deelgemeenten_by_gemeente(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
     gemeente_id = request.matchdict.get("niscode")
-    try:
-        gemeente = Gateway.get_gemeente_by_niscode(gemeente_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    gemeente = handle_gateway_response(Gateway.get_gemeente_by_niscode, gemeente_id)
     deelgemeenten = Gateway.list_deelgemeenten_by_gemeente(gemeente)
+
     return range_return(request, deelgemeenten)
 
 
@@ -108,11 +119,9 @@ def list_deelgemeenten_by_gemeente(request):
 def get_deelgemeente_by_id(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
-    deelgemeente_id = request.matchdict.get("deelgemeente_id")
-    try:
-        return Gateway.get_deelgemeente_by_id(deelgemeente_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    deelgemeente_niscode = request.matchdict.get("deelgemeente_niscode")
+
+    return handle_gateway_response(Gateway.get_deelgemeente_by_id, deelgemeente_niscode)
 
 
 @view_config(
@@ -123,11 +132,11 @@ def get_deelgemeente_by_id(request):
 def list_gemeenten_by_provincie(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    provincie_id = int(request.matchdict.get("provincie_id"))
-    try:
-        gemeenten = Gateway.list_gemeenten_by_provincie(provincie_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    provincie_id = request.matchdict.get("provincie_niscode")
+    gemeenten = handle_gateway_response(
+        Gateway.list_gemeenten_by_provincie, provincie_id
+    )
+
     return range_return(request, gemeenten)
 
 
@@ -139,11 +148,9 @@ def list_gemeenten_by_provincie(request):
 def list_gemeenten_adressenregister(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    gewest_id = request.matchdict.get("gewest_id")
-    try:
-        gemeenten = Gateway.list_gemeenten(gewest_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    gewest_niscode = request.matchdict.get("gewest_niscode")
+    gemeenten = handle_gateway_response(Gateway.list_gemeenten, gewest_niscode)
+
     return range_return(request, gemeenten)
 
 
@@ -155,11 +162,9 @@ def list_gemeenten_adressenregister(request):
 def get_gemeente_adressenregister(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    gemeente_id = request.matchdict.get("niscode")
-    try:
-        return Gateway.get_gemeente_by_niscode(gemeente_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    gemeente_niscode = request.matchdict.get("niscode")
+
+    return handle_gateway_response(Gateway.get_gemeente_by_niscode, gemeente_niscode)
 
 
 @view_config(
@@ -170,11 +175,9 @@ def get_gemeente_adressenregister(request):
 def list_straten(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
-    gemeente_id = request.matchdict.get("niscode")
-    try:
-        straten = Gateway.list_straten(gemeente_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    gemeente_niscode = request.matchdict.get("niscode")
+    straten = handle_gateway_response(Gateway.list_straten, gemeente_niscode)
+
     return range_return(request, straten)
 
 
@@ -187,10 +190,8 @@ def get_straat_by_id(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
     straat_id = request.matchdict.get("straat_id")
-    try:
-        return Gateway.get_straat_by_id(straat_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+
+    return handle_gateway_response(Gateway.get_straat_by_id, straat_id)
 
 
 @view_config(
@@ -202,10 +203,10 @@ def list_adressen_by_straat(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
     straat_id = request.matchdict.get("straat_id")
-    try:
-        straten = Gateway.list_adressen_with_params(straatnaamObjectId=straat_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    straten = handle_gateway_response(
+        Gateway.list_adressen_with_params, straatnaamObjectId=straat_id
+    )
+
     return range_return(request, straten)
 
 
@@ -219,12 +220,12 @@ def adressenregister_get_adres_by_straat_huisnummer(request):
     Gateway = request.adressenregister_gateway()
     straat_id = request.matchdict.get("straat_id")
     huisnummer = request.matchdict.get("huisnummer")
-    try:
-        adressen = Gateway.list_adressen_with_params(
-            straatnaamObjectId=straat_id, huisnummer=huisnummer
-        )
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    adressen = handle_gateway_response(
+        Gateway.list_adressen_with_params,
+        straatnaamObjectId=straat_id,
+        huisnummer=huisnummer,
+    )
+
     return range_return(request, adressen)
 
 
@@ -239,12 +240,13 @@ def adressenregister_get_adres_by_straat_huisnummer_busnummer(request):
     straat_id = request.matchdict.get("straat_id")
     huisnummer = request.matchdict.get("huisnummer")
     busnummer = request.matchdict.get("busnummer")
-    try:
-        adressen = Gateway.list_adressen_with_params(
-            straatnaamObjectId=straat_id, huisnummer=huisnummer, busnummer=busnummer
-        )
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    adressen = handle_gateway_response(
+        Gateway.list_adressen_with_params,
+        straatnaamObjectId=straat_id,
+        huisnummer=huisnummer,
+        busnummer=busnummer,
+    )
+
     return range_return(request, adressen)
 
 
@@ -257,10 +259,8 @@ def adressenregister_get_adres_by_id(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
     adres_id = request.matchdict.get("adres_id")
-    try:
-        return Gateway.get_adres_by_id(adres_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+
+    return handle_gateway_response(Gateway.get_adres_by_id, adres_id)
 
 
 @view_config(
@@ -272,10 +272,10 @@ def adressenregister_list_percelen_by_adres(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
     adres_id = request.matchdict.get("adres_id")
-    try:
-        adressen = Gateway.list_percelen_with_params(adresObjectId=adres_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    adressen = handle_gateway_response(
+        Gateway.list_percelen_with_params, adresObjectId=adres_id
+    )
+
     return range_return(request, adressen)
 
 
@@ -288,10 +288,7 @@ def adressenregister_get_perceel_by_id(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
     perceel_id = request.matchdict.get("perceel_id")
-    try:
-        return Gateway.get_perceel_by_id(perceel_id=perceel_id)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    return handle_gateway_response(Gateway.get_perceel_by_id, perceel_id=perceel_id)
 
 
 @view_config(
@@ -303,10 +300,10 @@ def adressenregister_list_postinfo_by_gemeente(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
     gemeente_naam = request.matchdict.get("gemeente_naam")
-    try:
-        adressen = Gateway.get_postinfo_by_gemeentenaam(gemeente_naam)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+    adressen = handle_gateway_response(
+        Gateway.get_postinfo_by_gemeentenaam, gemeente_naam
+    )
+
     return range_return(request, adressen)
 
 
@@ -319,10 +316,8 @@ def adressenregister_get_postinfo_by_postcode(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
     postcode = request.matchdict.get("postcode")
-    try:
-        return Gateway.get_postinfo_by_id(postcode)
-    except (GatewayResourceNotFoundException, AdressenRegisterClientException):
-        return HTTPNotFound()
+
+    return handle_gateway_response(Gateway.get_postinfo_by_id, postcode)
 
 
 @view_config(
