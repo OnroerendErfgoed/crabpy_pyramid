@@ -334,6 +334,7 @@ def includeme(config):
         config.add_request_method(get_adressenregister, 'adressenregister_gateway')
         config.include('crabpy_pyramid.routes.adressenregister')
         config.scan('crabpy_pyramid.views.adressenregister')
+        config.scan("crabpy_pyramid.views.exceptions")
 
 
 def main(global_config, **settings):
