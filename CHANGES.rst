@@ -1,3 +1,9 @@
+1.3.0 (05-05-2023)
+------------------
+
+- Lijst gemeenten statisch maken (#173)
+- Exception handlig aanpassen (#175)
+
 1.2.0 (13-04-2023)
 ------------------
 
