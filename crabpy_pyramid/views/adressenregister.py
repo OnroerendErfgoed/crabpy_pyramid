@@ -90,7 +90,7 @@ def list_deelgemeenten(request):
     Gateway = request.adressenregister_gateway()
     gewest_niscode = request.matchdict.get("gewest_niscode")
     if gewest_niscode != "2000":
-        return HTTPNotFound()
+        raise HTTPNotFound()
     deelgemeenten = handle_gateway_response(Gateway.list_deelgemeenten, gewest_niscode)
 
     return range_return(request, deelgemeenten)
@@ -340,5 +340,5 @@ def get_land_by_id(request):
     land_id = request.matchdict.get("land_id")
     land = pycountry.countries.get(alpha_2=land_id)
     if land is None:
-        return HTTPNotFound()
+        raise HTTPNotFound()
     return land
