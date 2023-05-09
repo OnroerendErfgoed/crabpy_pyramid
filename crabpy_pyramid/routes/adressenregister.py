@@ -98,11 +98,15 @@ def includeme(config):
         "adressenregister_get_perceel_by_id",
         "/adressenregister/percelen/{perceel_id}",
     )
-
+    crabpy_pyramid.add_route(
+        config,
+        "adressenregister_get_perceel_by_id_parts",
+        "/adressenregister/percelen/{perceel_id_part1}/{perceel_id_part2}",
+    )
     crabpy_pyramid.add_route(
         config,
         "adressenregister_list_postinfo_by_gemeente",
-        "/adressenregister/gemeenten/{gemeente_naam}/postinfo",
+        "/adressenregister/gemeenten/{gemeente_naam_niscode}/postinfo",
     )
     crabpy_pyramid.add_route(
         config,
