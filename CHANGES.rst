@@ -1,3 +1,9 @@
+1.4.0 (09-05-2023)
+------------------
+
+- Adressenregister fixes (#179)
+- Verschil tss return HttpNotfound en raise HttpNotfound wegwerken (#178)
+
 1.3.0 (05-05-2023)
 ------------------
 

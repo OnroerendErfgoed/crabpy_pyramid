@@ -11,7 +11,10 @@ def list_gewesten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Gewest` to json.
     """
-    return {"id": obj.id, "naam": obj.naam, "niscode": obj.niscode}
+    return {
+        "naam": obj.naam,
+        "niscode": obj.niscode
+    }
 
 
 def list_provincie_adapter(obj, request):
@@ -23,7 +26,7 @@ def list_provincie_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam,
         "gewest": {
-            "id": obj.gewest_niscode,
+            "niscode": obj.gewest_niscode,
         },
     }
 
@@ -34,9 +37,11 @@ def list_deelgemeente_adapter(obj, request):
     :class:`crabpy.gateway.adressenregister.Deelgemeente` to json.
     """
     return {
-        "id": obj.id,
+        "niscode": obj.id,
         "naam": obj.naam,
-        "gemeente_niscode": obj.gemeente_niscode,
+        "gemeente": {
+            "niscode": obj.gemeente_niscode
+        },
     }
 
 
@@ -48,7 +53,9 @@ def list_gemeente_adapter(obj, request):
     return {
         "niscode": obj.niscode,
         "naam": obj.naam(),
-        "provincie": {"niscode": obj.provincie_niscode}
+        "provincie": {
+            "niscode": obj.provincie_niscode
+        }
     }
 
 
@@ -57,7 +64,12 @@ def list_straten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adresregister.Straat` to json.
     """
-    return {"id": obj.id, "naam": obj.naam, "status": obj.status, "uri": obj.uri}
+    return {
+        "id": obj.id,
+        "naam": obj.naam,
+        "status": obj.status,
+        "uri": obj.uri
+    }
 
 
 def list_adressen_adapter(obj, request):
@@ -80,7 +92,11 @@ def list_percelen_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Perceel` to json.
     """
-    return {"id": obj.id, "uri": obj.uri, "status": obj.status}
+    return {
+        "id": obj.id,
+        "uri": obj.uri,
+        "status": obj.status
+    }
 
 
 def list_postinfo_adapter(obj, request):
@@ -100,7 +116,10 @@ def list_landen_adapter(obj, request):
     """
     Adapter for rendering a list of landen to json.
     """
-    return {"id": obj.alpha_2, "naam": _(obj.name)}
+    return {
+        "id": obj.alpha_2,
+        "naam": _(obj.name)
+    }
 
 
 json_list_renderer.add_adapter(adressenregister.Gewest, list_gewesten_adapter)
@@ -120,7 +139,6 @@ def item_gewest_adapter(obj, request):
     :class:`crabpy.gateway.adressenregister.Gewest` to json.
     """
     return {
-        "id": obj.id,
         "niscode": obj.niscode,
         "naam": obj.naam,
         "centroid": obj.centroid,
@@ -161,9 +179,12 @@ def item_deelgemeente_adapter(obj, request):
     :class:`crabpy.gateway.adressenregister.Deelgemeente` to json.
     """
     return {
-        "id": obj.id,
+        "niscode": obj.id,
         "naam": obj.naam,
-        "gemeente": {"id": obj.gemeente.id, "naam": obj.gemeente.naam},
+        "gemeente": {
+            "niscode": obj.gemeente.niscode,
+            "naam": obj.gemeente.naam()
+        },
     }
 
 
@@ -172,7 +193,12 @@ def item_straat_adapter(obj, request):
     Adapter for rendering an object of
     :class:`crabpy.gateway.adressenregister.Straat` to json.
     """
-    return {"id": obj.id, "naam": obj.naam(), "status": obj.status, "uri": obj.uri}
+    return {
+        "id": obj.id,
+        "naam": obj.naam(),
+        "status": obj.status,
+        "uri": obj.uri
+    }
 
 
 def item_adres_adapter(obj, request):
