@@ -442,8 +442,8 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         res = self.testapp.get("/adressenregister/provincies/10000")
         self.assertEqual("200 OK", res.status)
         self.assertDictEqual(
-            {"gewest": {'niscode': '2000'}, "naam": "Antwerpen", "niscode": "10000"},
-            res.json
+            {"gewest": {"niscode": "2000"}, "naam": "Antwerpen", "niscode": "10000"},
+            res.json,
         )
 
     def test_get_provincie_by_unexisting_id(self):
@@ -509,7 +509,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         )
 
     def test_get_gemeente_crab_unexisting_niscode(self):
-        res = self.testapp.get("/adressenregister/gemeenten/00000", status=404, )
+        res = self.testapp.get("/adressenregister/gemeenten/00000", status=404)
         self.assertEqual("404 Not Found", res.status)
 
     def test_list_straten(self):
@@ -679,7 +679,6 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res.text
         )
 
-
     def test_get_adres_by_straat_and_huisnummer_and_busnummer_404(self):
         with responses.RequestsMock() as rsps:
             adressen_response = deepcopy(adressen)
@@ -780,6 +779,26 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             res.json,
         )
 
+    def test_get_perceel_by_id_parts(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen/13013C0384-02H003",
+                json=perceel,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/percelen/13013C0384/02H003")
+        self.assertEqual("200 OK", res.status)
+        self.assertDictEqual(
+            {
+                "adressen": [{"id": "200001"}],
+                "id": "13013C0384-02H003",
+                "status": "gerealiseerd",
+                "uri": "https://data.vlaanderen.be/id/perceel/13013C0384-02H003",
+            },
+            res.json,
+        )
+
     def test_get_perceel_by_id_404(self):
         with responses.RequestsMock() as rsps:
             rsps.add(
@@ -792,7 +811,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             )
         self.assertEqual("404 Not Found", res.status)
 
-    def test_adresregister_list_postinfo_by_gemeente(self):
+    def test_adresregister_list_postinfo_by_gemeente_naam(self):
         with responses.RequestsMock() as rsps:
             rsps.add(
                 method=rsps.GET,
@@ -813,6 +832,46 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 status=200,
             )
             res = self.testapp.get("/adressenregister/gemeenten/brussel/postinfo")
+        self.assertEqual("200 OK", res.status)
+        self.assertListEqual(
+            [
+                {
+                    "namen": ["BRUSSEL"],
+                    "postcode": "1000",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1000",
+                },
+                {
+                    "namen": ["Laken"],
+                    "postcode": "1020",
+                    "status": "gerealiseerd",
+                    "uri": "https://data.vlaanderen.be/id/postinfo/1020",
+                },
+            ],
+            res.json,
+        )
+
+    def test_adresregister_list_postinfo_by_gemeente_niscode(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo",
+                json=postinfos,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1000",
+                json=postinfo_1000,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1020",
+                json=postinfo_1020,
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/gemeenten/21004/postinfo")
         self.assertEqual("200 OK", res.status)
         self.assertListEqual(
             [
@@ -870,7 +929,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             rsps.add(
                 method=rsps.GET,
                 url="https://api.basisregisters.vlaanderen.be/v2/postinfo/1000",
-                headers={'accept': 'application/json'},
+                headers={"accept": "application/json"},
                 status=404,
             )
             res = self.testapp.get("/adressenregister/postinfo/1000", status=404)
