@@ -1,4 +1,5 @@
 import logging
+import re
 
 import pycountry
 from crabpy.client import AdressenRegisterClientException
@@ -292,6 +293,21 @@ def adressenregister_get_perceel_by_id(request):
 
 
 @view_config(
+    route_name="adressenregister_get_perceel_by_id_parts",
+    renderer="adresreg_itemjson",
+    accept="application/json",
+)
+def adressenregister_get_perceel_by_id_parts(request):
+    request = set_http_caching(request, "adressenregister", "short")
+    Gateway = request.adressenregister_gateway()
+    perceel_id = (
+        f'{request.matchdict.get("perceel_id_part1")}'
+        f'-{request.matchdict.get("perceel_id_part2")}'
+    )
+    return handle_gateway_response(Gateway.get_perceel_by_id, perceel_id=perceel_id)
+
+
+@view_config(
     route_name="adressenregister_list_postinfo_by_gemeente",
     renderer="adresreg_listjson",
     accept="application/json",
@@ -299,9 +315,15 @@ def adressenregister_get_perceel_by_id(request):
 def adressenregister_list_postinfo_by_gemeente(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    gemeente_naam = request.matchdict.get("gemeente_naam")
+    gemeente_param = request.matchdict.get("gemeente_naam_niscode")
+    niscode_pattern = re.compile(r"^\d{5}$")
+    if niscode_pattern.match(gemeente_param):
+        gemeente = handle_gateway_response(
+            Gateway.get_gemeente_by_niscode, gemeente_param
+        )
+        gemeente_param = gemeente.naam()
     adressen = handle_gateway_response(
-        Gateway.get_postinfo_by_gemeentenaam, gemeente_naam
+        Gateway.get_postinfo_by_gemeentenaam, gemeente_param
     )
 
     return range_return(request, adressen)
