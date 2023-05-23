@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import logging
 import os
-from collections import Sequence
+from  collections.abc import Sequence
 
 from crabpy.client import AdressenRegisterClient
 from crabpy.client import crab_factory
