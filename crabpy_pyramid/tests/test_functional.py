@@ -938,6 +938,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
     def test_get_land_by_id(self):
         res = self.testapp.get("/adressenregister/landen/BE")
         self.assertEqual("200 OK", res.status)
+        self.assertEqual("BE", res.json["code"])
 
     def test_get_land_by_unexisting_id(self):
         res = self.testapp.get("/adressenregister/landen/MORDOR", status=404)
