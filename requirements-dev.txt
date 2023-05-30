@@ -10,7 +10,7 @@ nose-testconfig==0.10
 coverage==5.3
 WebTest==2.0.35
 responses==0.23.1
-requests==2.29.0
+requests==2.31.0
 urllib3==1.26.15
 
 # Linting
