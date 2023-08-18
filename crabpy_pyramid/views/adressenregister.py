@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 def handle_gateway_response(gateway_method, *args, **kwargs):
     try:
         result = gateway_method(*args, **kwargs)
-        if not result:
+        if result is None:
             raise HTTPNotFound()
         return result
     except AdressenRegisterClientException as ae:
