@@ -47,7 +47,7 @@ def _parse_settings(settings):
         'cache.file.root': '/tmp/dogpile_data',
     }
     args = defaults.copy()
-    if 'adressenregister.api_key' not in settings:
+    if 'crabpy.adressenregister.api_key' not in settings:
         log.warning(
             "No adressenregister.api_key set in settings. "
             "The api might stop working after reaching the limit of x requests per day."
