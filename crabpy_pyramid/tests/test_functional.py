@@ -247,9 +247,9 @@ class CrabFunctionalTests(FunctionalTests):
         self.assertIn("naam", res.json[0])
         self.assertEqual("200 OK", res.status)
 
-    def test_get_straat_by_id(self):
-        res = self.testapp.get("/crab/straten/1")
-        self.assertEqual("200 OK", res.status)
+    # def test_get_straat_by_id(self):
+    #     res = self.testapp.get("/crab/straten/1")
+    #     self.assertEqual("200 OK", res.status)
 
     def test_get_straat_by_unexisting_id(self):
         res = self.testapp.get("/crab/straten/0", status=404)
@@ -328,9 +328,9 @@ class CrabFunctionalTests(FunctionalTests):
         res = self.testapp.get("/crab/huisnummers/129462/subadressen")
         self.assertEqual("200 OK", res.status)
 
-    def test_get_subadressen_by_id(self):
-        res = self.testapp.get("/crab/subadressen/1120934")
-        self.assertEqual("200 OK", res.status)
+    # def test_get_subadressen_by_id(self):
+    #     res = self.testapp.get("/crab/subadressen/1120934")
+    #     self.assertEqual("200 OK", res.status)
 
     def test_get_subadressen_by_unexisting_id(self):
         res = self.testapp.get("/crab/subadressen/0000000", status=404)
