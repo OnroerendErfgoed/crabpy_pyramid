@@ -59,8 +59,8 @@ def list_straten_adapter(obj, request):
     """
     return {
         "id": obj.id,
-        "naam": obj.naam,
-        "homoniem": obj.homoniem,
+        "naam": obj.naam(),
+        "homoniem": obj.homoniem(),
         "status": obj.status,
         "uri": obj.uri,
     }
