@@ -67,6 +67,7 @@ def list_straten_adapter(obj, request):
     return {
         "id": obj.id,
         "naam": obj.naam,
+        "homoniem": obj.homoniem,
         "status": obj.status,
         "uri": obj.uri
     }
@@ -196,6 +197,7 @@ def item_straat_adapter(obj, request):
     return {
         "id": obj.id,
         "naam": obj.naam(),
+        "homoniem": obj.homoniem(),
         "status": obj.status,
         "uri": obj.uri
     }
