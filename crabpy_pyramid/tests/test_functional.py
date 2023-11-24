@@ -535,12 +535,14 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 {
                     "id": "1",
                     "naam": "Acacialaan",
+                    "homoniem": None,
                     "status": "inGebruik",
                     "uri": "https://data.vlaanderen.be/id/straatnaam/1",
                 },
                 {
                     "id": "2",
                     "naam": "Adriaan Sanderslei",
+                    "homoniem": None,
                     "status": "inGebruik",
                     "uri": "https://data.vlaanderen.be/id/straatnaam/2",
                 },
@@ -567,6 +569,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             {
                 "id": "1",
                 "naam": "Acacialaan",
+                "homoniem": None,
                 "status": "inGebruik",
                 "uri": "https://data.vlaanderen.be/id/straatnaam/1",
             },
