@@ -45,32 +45,41 @@ def run_integration_tests(section):
 
 
 settings = {
-    'crabpy.cache.file.root': os.path.join(os.path.dirname(__file__), 'dogpile_data'),
-    'crabpy.capakey.cache_config.permanent.backend': 'dogpile.cache.dbm',
-    'crabpy.capakey.cache_config.permanent.expiration_time': 604800,
-    'crabpy.capakey.cache_config.permanent.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_permanent.dbm'),
-    'crabpy.capakey.cache_config.long.backend': 'dogpile.cache.dbm',
-    'crabpy.capakey.cache_config.long.expiration_time': 86400,
-    'crabpy.capakey.cache_config.long.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_long.dbm'),
-    'crabpy.capakey.cache_config.short.backend': 'dogpile.cache.dbm',
-    'crabpy.capakey.cache_config.short.expiration_time': 3600,
-    'crabpy.capakey.cache_config.short.arguments.filename': os.path.join(os.path.dirname(__file__), 'dogpile_data', 'capakey_short.dbm'),
-    'crabpy.crab.include': True,
-    'crabpy.crab.cache_config.permanent.backend': 'dogpile.cache.dbm',
-    'crabpy.crab.cache_config.permanent.expiration_time': 604800,
-    'crabpy.crab.cache_config.permanent.arguments.filename': os.path.join(
-        os.path.dirname(__file__), 'dogpile_data', 'crab_permanent.dbm'),
-    'crabpy.crab.cache_config.long.backend': 'dogpile.cache.dbm',
-    'crabpy.crab.cache_config.long.expiration_time': 86400,
-    'crabpy.crab.cache_config.long.arguments.filename': os.path.join(
-        os.path.dirname(__file__), 'dogpile_data', 'crab_long.dbm'),
-    'crabpy.crab.cache_config.short.backend': 'dogpile.cache.dbm',
-    'crabpy.crab.cache_config.short.expiration_time': 3600,
-    'crabpy.crab.cache_config.short.arguments.filename': os.path.join(
-        os.path.dirname(__file__), 'dogpile_data', 'crab_short.dbm'),
-    'crabpy.adressenregister.include': True,
-    'crabpy.adressenregister.base_url': 'https://api.basisregisters.vlaanderen.be',
-    'crabpy.adressenregister.api_key': '',
+    "crabpy.cache.file.root": os.path.join(os.path.dirname(__file__), "dogpile_data"),
+    "crabpy.capakey.cache_config.permanent.backend": "dogpile.cache.dbm",
+    "crabpy.capakey.cache_config.permanent.expiration_time": 604800,
+    "crabpy.capakey.cache_config.permanent.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "capakey_permanent.dbm"
+    ),
+    "crabpy.capakey.cache_config.long.backend": "dogpile.cache.dbm",
+    "crabpy.capakey.cache_config.long.expiration_time": 86400,
+    "crabpy.capakey.cache_config.long.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "capakey_long.dbm"
+    ),
+    "crabpy.capakey.cache_config.short.backend": "dogpile.cache.dbm",
+    "crabpy.capakey.cache_config.short.expiration_time": 3600,
+    "crabpy.capakey.cache_config.short.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "capakey_short.dbm"
+    ),
+    "crabpy.crab.include": True,
+    "crabpy.crab.cache_config.permanent.backend": "dogpile.cache.dbm",
+    "crabpy.crab.cache_config.permanent.expiration_time": 604800,
+    "crabpy.crab.cache_config.permanent.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "crab_permanent.dbm"
+    ),
+    "crabpy.crab.cache_config.long.backend": "dogpile.cache.dbm",
+    "crabpy.crab.cache_config.long.expiration_time": 86400,
+    "crabpy.crab.cache_config.long.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "crab_long.dbm"
+    ),
+    "crabpy.crab.cache_config.short.backend": "dogpile.cache.dbm",
+    "crabpy.crab.cache_config.short.expiration_time": 3600,
+    "crabpy.crab.cache_config.short.arguments.filename": os.path.join(
+        os.path.dirname(__file__), "dogpile_data", "crab_short.dbm"
+    ),
+    "crabpy.adressenregister.include": True,
+    "crabpy.adressenregister.base_url": "https://api.basisregisters.vlaanderen.be",
+    "crabpy.adressenregister.api_key": "",
 }
 
 
@@ -526,12 +535,14 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 {
                     "id": "1",
                     "naam": "Acacialaan",
+                    "homoniem": None,
                     "status": "inGebruik",
                     "uri": "https://data.vlaanderen.be/id/straatnaam/1",
                 },
                 {
                     "id": "2",
                     "naam": "Adriaan Sanderslei",
+                    "homoniem": None,
                     "status": "inGebruik",
                     "uri": "https://data.vlaanderen.be/id/straatnaam/2",
                 },
@@ -558,6 +569,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             {
                 "id": "1",
                 "naam": "Acacialaan",
+                "homoniem": None,
                 "status": "inGebruik",
                 "uri": "https://data.vlaanderen.be/id/straatnaam/1",
             },
