@@ -177,8 +177,10 @@ def list_straten(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
     gemeente_niscode = request.matchdict.get("niscode")
-    include_homoniem = request.matchdict.get("include_homoniem", False)
-    straten = handle_gateway_response(Gateway.list_straten, gemeente_niscode, include_homoniem)
+    include_homoniem = True if request.params.get("include_homoniem") else False
+    straten = handle_gateway_response(
+        Gateway.list_straten, gemeente_niscode, include_homoniem=include_homoniem
+    )
 
     return range_return(request, straten)
 
