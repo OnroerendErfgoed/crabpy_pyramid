@@ -11,10 +11,7 @@ def list_gewesten_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Gewest` to json.
     """
-    return {
-        "naam": obj.naam,
-        "niscode": obj.niscode
-    }
+    return {"naam": obj.naam, "niscode": obj.niscode}
 
 
 def list_provincie_adapter(obj, request):
@@ -39,9 +36,7 @@ def list_deelgemeente_adapter(obj, request):
     return {
         "niscode": obj.id,
         "naam": obj.naam,
-        "gemeente": {
-            "niscode": obj.gemeente_niscode
-        },
+        "gemeente": {"niscode": obj.gemeente_niscode},
     }
 
 
@@ -53,9 +48,7 @@ def list_gemeente_adapter(obj, request):
     return {
         "niscode": obj.niscode,
         "naam": obj.naam(),
-        "provincie": {
-            "niscode": obj.provincie_niscode
-        }
+        "provincie": {"niscode": obj.provincie_niscode},
     }
 
 
@@ -66,9 +59,10 @@ def list_straten_adapter(obj, request):
     """
     return {
         "id": obj.id,
-        "naam": obj.naam,
+        "naam": obj.naam(),
+        "homoniem": obj.homoniem(),
         "status": obj.status,
-        "uri": obj.uri
+        "uri": obj.uri,
     }
 
 
@@ -92,11 +86,7 @@ def list_percelen_adapter(obj, request):
     Adapter for rendering a list of
     :class:`crabpy.gateway.adressenregister.Perceel` to json.
     """
-    return {
-        "id": obj.id,
-        "uri": obj.uri,
-        "status": obj.status
-    }
+    return {"id": obj.id, "uri": obj.uri, "status": obj.status}
 
 
 def list_postinfo_adapter(obj, request):
@@ -116,10 +106,7 @@ def list_landen_adapter(obj, request):
     """
     Adapter for rendering a list of landen to json.
     """
-    return {
-        "code": obj.alpha_2,
-        "naam": _(obj.name)
-    }
+    return {"code": obj.alpha_2, "naam": _(obj.name)}
 
 
 json_list_renderer.add_adapter(adressenregister.Gewest, list_gewesten_adapter)
@@ -169,7 +156,7 @@ def item_gemeente_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam(),
         "provincie": {"niscode": obj.provincie_niscode},
-        "gewest": {"niscode": obj.gewest.niscode}
+        "gewest": {"niscode": obj.gewest.niscode},
     }
 
 
@@ -181,10 +168,7 @@ def item_deelgemeente_adapter(obj, request):
     return {
         "niscode": obj.id,
         "naam": obj.naam,
-        "gemeente": {
-            "niscode": obj.gemeente.niscode,
-            "naam": obj.gemeente.naam()
-        },
+        "gemeente": {"niscode": obj.gemeente.niscode, "naam": obj.gemeente.naam()},
     }
 
 
@@ -195,9 +179,12 @@ def item_straat_adapter(obj, request):
     """
     return {
         "id": obj.id,
-        "naam": obj.naam(),
+        "naam": obj.naam(
+            include_homoniem=True if request.params.get("include_homoniem") else False
+        ),
+        "homoniem": obj.homoniem(),
         "status": obj.status,
-        "uri": obj.uri
+        "uri": obj.uri,
     }
 
 
