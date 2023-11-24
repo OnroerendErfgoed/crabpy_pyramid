@@ -179,10 +179,10 @@ def item_straat_adapter(obj, request):
     """
     return {
         "id": obj.id,
-        "naam": obj.naam(),
-        "homoniem": obj.homoniem(
+        "naam": obj.naam(
             include_homoniem=True if request.params.get("include_homoniem") else False
         ),
+        "homoniem": obj.homoniem(),
         "status": obj.status,
         "uri": obj.uri,
     }
