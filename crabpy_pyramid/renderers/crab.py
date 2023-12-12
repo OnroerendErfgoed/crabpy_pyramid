@@ -13,7 +13,7 @@ from pyramid.renderers import JSON
 json_list_renderer = JSON()
 json_item_renderer = JSON()
 
-nederlands = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['nl'])
+nederlands = gettext.translation('iso3166-1', pycountry.LOCALES_DIR, languages=['nl'])
 nederlands.install()
 
 
