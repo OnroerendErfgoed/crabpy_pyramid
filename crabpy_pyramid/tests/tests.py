@@ -13,7 +13,6 @@ import warnings
 from crabpy_pyramid import (
     includeme,
     ICapakey,
-    ICrab,
     _filter_settings,
     _get_proxy_settings,
 )
