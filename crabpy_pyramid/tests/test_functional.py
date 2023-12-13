@@ -61,22 +61,6 @@ settings = {
     "crabpy.capakey.cache_config.short.arguments.filename": os.path.join(
         os.path.dirname(__file__), "dogpile_data", "capakey_short.dbm"
     ),
-    "crabpy.crab.include": True,
-    "crabpy.crab.cache_config.permanent.backend": "dogpile.cache.dbm",
-    "crabpy.crab.cache_config.permanent.expiration_time": 604800,
-    "crabpy.crab.cache_config.permanent.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "crab_permanent.dbm"
-    ),
-    "crabpy.crab.cache_config.long.backend": "dogpile.cache.dbm",
-    "crabpy.crab.cache_config.long.expiration_time": 86400,
-    "crabpy.crab.cache_config.long.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "crab_long.dbm"
-    ),
-    "crabpy.crab.cache_config.short.backend": "dogpile.cache.dbm",
-    "crabpy.crab.cache_config.short.expiration_time": 3600,
-    "crabpy.crab.cache_config.short.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "crab_short.dbm"
-    ),
     "crabpy.adressenregister.include": True,
     "crabpy.adressenregister.base_url": "https://api.basisregisters.vlaanderen.be",
     "crabpy.adressenregister.api_key": "",
@@ -177,241 +161,6 @@ class CapakeyFunctionalTests(FunctionalTests):
         self.assertEqual("404 Not Found", res.status)
 
 
-@unittest.skipUnless(
-    run_integration_tests("crab"), "No CRAB Integration tests required"
-)
-class CrabFunctionalTests(FunctionalTests):
-    def test_list_gewesten(self):
-        res = self.testapp.get("/crab/gewesten")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gewest_by_id(self):
-        res = self.testapp.get("/crab/gewesten/2")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gewest_by_unexisting_id(self):
-        res = self.testapp.get("/crab/gewesten/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_provincies(self):
-        res = self.testapp.get("/crab/gewesten/2/provincies")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_provincie_by_id(self):
-        res = self.testapp.get("/crab/provincies/10000")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_provincie_by_unexisting_id(self):
-        res = self.testapp.get("/crab/provincies/00000", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_gemeenten_by_provincie(self):
-        res = self.testapp.get("/crab/provincies/10000/gemeenten")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_gemeenten_crab(self):
-        res = self.testapp.get("/crab/gewesten/2/gemeenten")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gemeente_crab_niscode(self):
-        res = self.testapp.get("/crab/gemeenten/11001")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gemeente_crab_unexisting_niscode(self):
-        res = self.testapp.get("/crab/gemeenten/00000", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_get_gemeente_crab_id(self):
-        res = self.testapp.get("/crab/gemeenten/1")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gemeente_crab_unexisting_id(self):
-        res = self.testapp.get("/crab/gemeenten/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_deelgemeenten(self):
-        res = self.testapp.get("/crab/gewesten/2/deelgemeenten")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_deelgemeenten_wrong_gewest(self):
-        res = self.testapp.get("/crab/gewesten/1/deelgemeenten", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_deelgemeenten_by_gemeente(self):
-        res = self.testapp.get("/crab/gemeenten/11001/deelgemeenten")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_deelgemeenten_by_unexisting_gemeente(self):
-        res = self.testapp.get("/crab/gemeenten/99999/deelgemeenten", status=404)
-        self.assertEqual("404 Not Found", res.status)
-        res = self.testapp.get("/crab/gemeenten/9999/deelgemeenten", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_get_deelgemeente_by_id(self):
-        res = self.testapp.get("/crab/deelgemeenten/45062A")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_straten(self):
-        res = self.testapp.get("/crab/gemeenten/11001/straten")
-        self.assertIn("naam", res.json[0])
-        self.assertEqual("200 OK", res.status)
-
-    # def test_get_straat_by_id(self):
-    #     res = self.testapp.get("/crab/straten/1")
-    #     self.assertEqual("200 OK", res.status)
-
-    def test_get_straat_by_unexisting_id(self):
-        res = self.testapp.get("/crab/straten/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_huisnummers(self):
-        res = self.testapp.get("/crab/straten/1/huisnummers")
-        self.assertEqual("200 OK", res.status)
-
-    def test_sort_huisnummers(self):
-        res = self.testapp.get("/crab/straten/1/huisnummers?sort=2")
-        self.assertEqual("200 OK", res.status)
-        nummers = [int(item["label"]) for item in res.json]
-        ascending = sorted(nummers)
-        self.assertEqual(nummers, ascending)
-
-    def test_get_huisnummer_by_straat_and_label(self):
-        res = self.testapp.get("/crab/straten/1/huisnummers/3")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_huisnummer_by_unexisting_straat_and_label(self):
-        res = self.testapp.get("/crab/straten/1/huisnummers/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_get_huisnummer_by_id(self):
-        res = self.testapp.get("/crab/huisnummers/1")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_huisnummer_by_unexisting_id(self):
-        res = self.testapp.get("/crab/huisnummers/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_percelen(self):
-        res = self.testapp.get("/crab/huisnummers/1/percelen")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_perceel_by_id(self):
-        res = self.testapp.get("/crab/percelen/31433D0011/00T016")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_perceel_by_unexisting_id(self):
-        res = self.testapp.get("/crab/percelen/31433D0011/000000", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_huisnummers_by_perceel(self):
-        res = self.testapp.get("/crab/percelen/31433D0011/00T016/huisnummers")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_huisnummers_by_unexisting_perceel(self):
-        res = self.testapp.get(
-            "/crab/percelen/31433D0011/000000/huisnummers", status=404
-        )
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_gebouwen(self):
-        res = self.testapp.get("/crab/huisnummers/1/gebouwen")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gebouw_by_id(self):
-        res = self.testapp.get("/crab/gebouwen/1538575")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_gebouw_by_unexisting_id(self):
-        res = self.testapp.get("/crab/gebouwen/99999999", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_get_wegobject(self):
-        res = self.testapp.get("/crab/wegobjecten/53694755")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_unexisting_wegobject(self):
-        res = self.testapp.get("/crab/wegobjecten/00000000", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_subadressen(self):
-        res = self.testapp.get("/crab/huisnummers/129462/subadressen")
-        self.assertEqual("200 OK", res.status)
-
-    # def test_get_subadressen_by_id(self):
-    #     res = self.testapp.get("/crab/subadressen/1120934")
-    #     self.assertEqual("200 OK", res.status)
-
-    def test_get_subadressen_by_unexisting_id(self):
-        res = self.testapp.get("/crab/subadressen/0000000", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_postkantons_by_gemeente(self):
-        res = self.testapp.get("/crab/gemeenten/90/postkantons")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_adresposities_by_huisnummer(self):
-        res = self.testapp.get("/crab/huisnummers/145/adresposities")
-        self.assertEqual("200 OK", res.status)
-
-    def test_list_adresposities_by_subadres(self):
-        res = self.testapp.get("/crab/subadressen/145/adresposities")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_adrespositie_by_id(self):
-        res = self.testapp.get("/crab/adresposities/137")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_adrespositie_by_unexisting_id(self):
-        res = self.testapp.get("/crab/adresposities/0", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_list_landen(self):
-        res = self.testapp.get("/crab/landen")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_land_by_id(self):
-        res = self.testapp.get("/crab/landen/BE")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_land_by_unexisting_id(self):
-        res = self.testapp.get("/crab/landen/MORDOR", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-    def test_get_postkanton_by_huisnummer(self):
-        res = self.testapp.get("/crab/huisnummers/5/postkanton")
-        self.assertEqual("200 OK", res.status)
-
-    def test_get_postkanton_by_huisnummer_unexisting(self):
-        res = self.testapp.get("/crab/huisnummers/99999999/postkanton", status=404)
-        self.assertEqual("404 Not Found", res.status)
-
-
-@unittest.skipUnless(
-    run_integration_tests("crab"), "No CRAB Integration tests required"
-)
-class HttpCachingFunctionalTests(FunctionalTests):
-    def test_list_gewesten(self):
-        res = self.testapp.get("/crab/gewesten")
-        self.assertEqual("200 OK", res.status)
-        self.assertIn("ETag", res.headers)
-
-    def test_http_304_res(self):
-        res = self.testapp.get("/crab/gewesten")
-        self.assertEqual("200 OK", res.status)
-        etag = res.headers["Etag"]
-        res2 = self.testapp.get("/crab/gewesten", headers={"If-None-Match": etag})
-        self.assertEqual("304 Not Modified", res2.status)
-
-    def test_list_gewesten_not_cached(self):
-        crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.remove("list_gewesten")
-        try:
-            res = self.testapp.get("/crab/gewesten")
-            self.assertEqual("200 OK", res.status)
-            self.assertNotIn("ETag", res.headers)
-        finally:
-            crabpy_pyramid.GENERATE_ETAG_ROUTE_NAMES.add("list_gewesten")
-
-
 class AdressenRegisterFunctionalTests(FunctionalTests):
     def test_list_gewesten(self):
         res = self.testapp.get("/adressenregister/gewesten")
@@ -486,7 +235,11 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("200 OK", res.status)
         self.assertEqual(len(res.json), 69)
         self.assertDictEqual(
-            {'naam': 'Aartselaar', 'niscode': '11001', 'provincie': {'niscode': '10000'}},
+            {
+                "naam": "Aartselaar",
+                "niscode": "11001",
+                "provincie": {"niscode": "10000"},
+            },
             res.json[0],
         )
 
@@ -684,11 +437,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 json=adres,
                 status=413,
             )
-            res = self.testapp.get("/adressenregister/adressen/900746", expect_errors=True)
+            res = self.testapp.get(
+                "/adressenregister/adressen/900746", expect_errors=True
+            )
         self.assertEqual(500, res.status_code)
         self.assertIn(
-            "Er ging iets fout in de vraag naar adressenregister API.",
-            res.text
+            "Er ging iets fout in de vraag naar adressenregister API.", res.text
         )
 
     def test_get_adres_by_straat_and_huisnummer_and_busnummer_404(self):
