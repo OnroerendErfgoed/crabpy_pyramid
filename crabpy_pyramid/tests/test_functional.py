@@ -351,6 +351,25 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("200 OK", res.status)
         self.assertEqual(2, len(res.json))
 
+    def test_get_adressen_by_straat_with_params(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen?gemeentenaam=x"
+                    "&postcode=x&straatnaam=x&homoniemToevoeging=x&huisnummer=x"
+                    "&busnummer=x&niscode=x&status=x&straatnaamObjectId=1&limit=500",
+                json=adressen,
+                status=200,
+            )
+            res = self.testapp.get(
+                "/adressenregister/straten/1/adressen?gemeentenaam=x"
+                "&postcode=x&straatnaam=x&homoniem_toevoeging=x"
+                "&huisnummer=x&busnummer=x&niscode=x&status=x"
+            )
+        self.assertTrue(rsps.assert_all_requests_are_fired)
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(2, len(res.json))
+
     def test_get_adressen_by_straat_404(self):
         with responses.RequestsMock() as rsps:
             rsps.add(
