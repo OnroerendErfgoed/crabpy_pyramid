@@ -132,8 +132,10 @@ def list_gemeenten_by_provincie(request):
 def list_gemeenten_adressenregister(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
-    gewest_niscode = request.matchdict.get("gewest_niscode")
-    gemeenten = handle_gateway_response(Gateway.list_gemeenten, gewest_niscode)
+    method = Gateway.list_gemeenten
+    kwargs = extract_valid_params(method, request)
+    kwargs["gewest_niscode"] = request.matchdict.get("gewest_niscode")
+    gemeenten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, gemeenten)
 
@@ -159,11 +161,10 @@ def get_gemeente_adressenregister(request):
 def list_straten(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
-    gemeente_niscode = request.matchdict.get("niscode")
-    include_homoniem = True if request.params.get("include_homoniem") else False
-    straten = handle_gateway_response(
-        Gateway.list_straten, gemeente_niscode, include_homoniem=include_homoniem
-    )
+    method = Gateway.list_straten
+    kwargs = extract_valid_params(method, request)
+    kwargs["gemeente"] = request.matchdict.get("niscode")
+    straten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, straten)
 
@@ -192,9 +193,7 @@ def list_adressen_by_straat(request):
     method = Gateway.list_adressen_with_params
     kwargs = extract_valid_params(method, request)
     kwargs["straatnaamObjectId"] = request.matchdict.get("straat_id")
-    straten = handle_gateway_response(
-        method, **kwargs
-    )
+    straten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, straten)
 

@@ -40,4 +40,8 @@ def extract_valid_params(method, request):
         )
     ]
 
-    return {name: request.params.get(name) for name in kwargs_names}
+    return {
+        name: request.params.get(name)
+        for name in kwargs_names
+        if request.params.get(name)
+    }
