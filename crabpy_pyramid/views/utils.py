@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPNotFound
 def handle_gateway_response(gateway_method, *args, **kwargs):
     try:
         result = gateway_method(*args, **kwargs)
-        if not result:
+        if not result and not isinstance(result, list):
             raise HTTPNotFound()
         return result
     except AdressenRegisterClientException as ae:

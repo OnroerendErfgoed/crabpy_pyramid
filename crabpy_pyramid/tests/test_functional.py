@@ -347,6 +347,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 json=adressen,
                 status=200,
             )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
             res = self.testapp.get("/adressenregister/straten/1/adressen")
         self.assertEqual("200 OK", res.status)
         self.assertEqual(2, len(res.json))
@@ -356,9 +362,15 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             rsps.add(
                 method=rsps.GET,
                 url="https://api.basisregisters.vlaanderen.be/v2/adressen?gemeentenaam=x"
-                    "&postcode=x&straatnaam=x&homoniemToevoeging=x&huisnummer=x"
-                    "&busnummer=x&niscode=x&status=x&straatnaamObjectId=1&limit=500",
+                "&postcode=x&straatnaam=x&homoniemToevoeging=x&huisnummer=x"
+                "&busnummer=x&niscode=x&status=x&straatnaamObjectId=1&limit=500",
                 json=adressen,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
                 status=200,
             )
             res = self.testapp.get(
@@ -374,11 +386,29 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         with responses.RequestsMock() as rsps:
             rsps.add(
                 method=rsps.GET,
-                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
                 status=404,
             )
             res = self.testapp.get("/adressenregister/straten/1/adressen", status=404)
         self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adressen_by_straat_empty(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json={"adressen": []},
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/straten/1/adressen")
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual([], res.json)
 
     def test_get_adres_by_straat_and_huisnummer(self):
         with responses.RequestsMock() as rsps:
@@ -388,6 +418,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 method=rsps.GET,
                 url="https://api.basisregisters.vlaanderen.be/v2/adressen",
                 json=adressen_response,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
                 status=200,
             )
             res = self.testapp.get("/adressenregister/straten/1/huisnummers/4")
@@ -408,17 +444,35 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
 
     def test_get_adres_by_straat_and_huisnummer_404(self):
         with responses.RequestsMock() as rsps:
-            adressen_response = deepcopy(adressen)
-            adressen_response["adressen"] = [adressen["adressen"][0]]
             rsps.add(
                 method=rsps.GET,
-                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
                 status=404,
             )
             res = self.testapp.get(
                 "/adressenregister/straten/1/huisnummers/4", status=404
             )
         self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adres_by_straat_and_huisnummer_empty(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json={"adressen": []},
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/straten/1/huisnummers/4")
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual([], res.json)
 
     def test_get_adres_by_straat_and_huisnummer_and_busnummer(self):
         with responses.RequestsMock() as rsps:
@@ -428,6 +482,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 method=rsps.GET,
                 url="https://api.basisregisters.vlaanderen.be/v2/adressen",
                 json=adressen_response,
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
                 status=200,
             )
             res = self.testapp.get(
@@ -470,7 +530,7 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
             adressen_response["adressen"] = [adressen["adressen"][0]]
             rsps.add(
                 method=rsps.GET,
-                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
                 json=adressen_response,
                 status=404,
             )
@@ -478,6 +538,28 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "/adressenregister/straten/1" "/huisnummers/4/busnummers/1", status=404
             )
         self.assertEqual("404 Not Found", res.status)
+
+    def test_get_adres_by_straat_and_huisnummer_and_busnummer_empty(self):
+        with responses.RequestsMock() as rsps:
+            adressen_response = deepcopy(adressen)
+            adressen_response["adressen"] = [adressen["adressen"][0]]
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen",
+                json={"adressen": []},
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/straatnamen/1",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
+            res = self.testapp.get(
+                "/adressenregister/straten/1/huisnummers/4/busnummers/1"
+            )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual([], res.json)
 
     def test_get_adres_by_id(self):
         with responses.RequestsMock() as rsps:
@@ -519,6 +601,12 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 json=percelen,
                 status=200,
             )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/200001",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
             res = self.testapp.get("/adressenregister/adressen/200001/percelen")
         self.assertEqual("200 OK", res.status)
         self.assertListEqual(
@@ -536,13 +624,31 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         with responses.RequestsMock() as rsps:
             rsps.add(
                 method=rsps.GET,
-                url="https://api.basisregisters.vlaanderen.be/v2/percelen",
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/200001",
                 status=404,
             )
             res = self.testapp.get(
                 "/adressenregister/adressen/200001/percelen", status=404
             )
         self.assertEqual("404 Not Found", res.status)
+
+    def test_get_percelen_by_adres_id_empty(self):
+        with responses.RequestsMock() as rsps:
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/percelen",
+                json={"percelen": []},
+                status=200,
+            )
+            rsps.add(
+                method=rsps.GET,
+                url="https://api.basisregisters.vlaanderen.be/v2/adressen/200001",
+                json={"identificator": {"objectId": 1}},
+                status=200,
+            )
+            res = self.testapp.get("/adressenregister/adressen/200001/percelen")
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual([], res.json)
 
     def test_get_perceel_by_id(self):
         with responses.RequestsMock() as rsps:
