@@ -1,34 +1,17 @@
+import inspect
 import logging
 import re
 
 import pycountry
-from crabpy.client import AdressenRegisterClientException
-from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 
 from crabpy_pyramid.utils import range_return
 from crabpy_pyramid.utils import set_http_caching
+from crabpy_pyramid.views.utils import extract_valid_params
+from crabpy_pyramid.views.utils import handle_gateway_response
 
 log = logging.getLogger(__name__)
-
-
-def handle_gateway_response(gateway_method, *args, **kwargs):
-    try:
-        result = gateway_method(*args, **kwargs)
-        if not result:
-            raise HTTPNotFound()
-        return result
-    except AdressenRegisterClientException as ae:
-        cause = ae.__cause__
-        if hasattr(cause, "response"):
-            status_code = cause.response.status_code
-            if status_code == 404:
-                raise HTTPNotFound()
-            if status_code == 400:
-                detail = getattr(cause.response, "text", "")
-                raise HTTPBadRequest(detail=detail)
-        raise ae
 
 
 @view_config(
@@ -64,6 +47,7 @@ def list_provincies(request):
     request = set_http_caching(request, "adressenregister", "permanent")
     Gateway = request.adressenregister_gateway()
     gewest_niscode = request.matchdict.get("gewest_niscode")
+    handle_gateway_response(Gateway.get_gewest_by_niscode, gewest_niscode)
     provincies = handle_gateway_response(Gateway.list_provincies, gewest_niscode)
     return range_return(request, provincies)
 
@@ -134,9 +118,8 @@ def list_gemeenten_by_provincie(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
     provincie_id = request.matchdict.get("provincie_niscode")
-    gemeenten = handle_gateway_response(
-        Gateway.list_gemeenten_by_provincie, provincie_id
-    )
+    provincie = handle_gateway_response(Gateway.get_provincie_by_niscode, provincie_id)
+    gemeenten = handle_gateway_response(Gateway.list_gemeenten_by_provincie, provincie)
 
     return range_return(request, gemeenten)
 
@@ -149,8 +132,12 @@ def list_gemeenten_by_provincie(request):
 def list_gemeenten_adressenregister(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_gemeenten
     gewest_niscode = request.matchdict.get("gewest_niscode")
-    gemeenten = handle_gateway_response(Gateway.list_gemeenten, gewest_niscode)
+    handle_gateway_response(Gateway.get_gewest_by_niscode, gewest_niscode)
+    kwargs = extract_valid_params(method, request)
+    kwargs["gewest_niscode"] = gewest_niscode
+    gemeenten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, gemeenten)
 
@@ -176,11 +163,14 @@ def get_gemeente_adressenregister(request):
 def list_straten(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_straten
     gemeente_niscode = request.matchdict.get("niscode")
-    include_homoniem = True if request.params.get("include_homoniem") else False
-    straten = handle_gateway_response(
-        Gateway.list_straten, gemeente_niscode, include_homoniem=include_homoniem
+    gemeente = handle_gateway_response(
+        Gateway.get_gemeente_by_niscode, gemeente_niscode
     )
+    kwargs = extract_valid_params(method, request)
+    kwargs["gemeente"] = gemeente
+    straten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, straten)
 
@@ -206,10 +196,12 @@ def get_straat_by_id(request):
 def list_adressen_by_straat(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_adressen_with_params
     straat_id = request.matchdict.get("straat_id")
-    straten = handle_gateway_response(
-        Gateway.list_adressen_with_params, straatnaamObjectId=straat_id
-    )
+    handle_gateway_response(Gateway.get_straat_by_id, straat_id)
+    kwargs = extract_valid_params(method, request)
+    kwargs["straatnaamObjectId"] = straat_id
+    straten = handle_gateway_response(method, **kwargs)
 
     return range_return(request, straten)
 
@@ -222,13 +214,13 @@ def list_adressen_by_straat(request):
 def adressenregister_get_adres_by_straat_huisnummer(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_adressen_with_params
     straat_id = request.matchdict.get("straat_id")
-    huisnummer = request.matchdict.get("huisnummer")
-    adressen = handle_gateway_response(
-        Gateway.list_adressen_with_params,
-        straatnaamObjectId=straat_id,
-        huisnummer=huisnummer,
-    )
+    handle_gateway_response(Gateway.get_straat_by_id, straat_id)
+    kwargs = extract_valid_params(method, request)
+    kwargs["straatnaamObjectId"] = straat_id
+    kwargs["huisnummer"] = request.matchdict.get("huisnummer")
+    adressen = handle_gateway_response(method, **kwargs)
 
     return range_return(request, adressen)
 
@@ -241,16 +233,14 @@ def adressenregister_get_adres_by_straat_huisnummer(request):
 def adressenregister_get_adres_by_straat_huisnummer_busnummer(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_adressen_with_params
     straat_id = request.matchdict.get("straat_id")
-    huisnummer = request.matchdict.get("huisnummer")
-    busnummer = request.matchdict.get("busnummer")
-    adressen = handle_gateway_response(
-        Gateway.list_adressen_with_params,
-        straatnaamObjectId=straat_id,
-        huisnummer=huisnummer,
-        busnummer=busnummer,
-    )
-
+    handle_gateway_response(Gateway.get_straat_by_id, straat_id)
+    kwargs = extract_valid_params(method, request)
+    kwargs["straatnaamObjectId"] = straat_id
+    kwargs["huisnummer"] = request.matchdict.get("huisnummer")
+    kwargs["busnummer"] = request.matchdict.get("busnummer")
+    adressen = handle_gateway_response(method, **kwargs)
     return range_return(request, adressen)
 
 
@@ -275,10 +265,12 @@ def adressenregister_get_adres_by_id(request):
 def adressenregister_list_percelen_by_adres(request):
     request = set_http_caching(request, "adressenregister", "short")
     Gateway = request.adressenregister_gateway()
+    method = Gateway.list_percelen_with_params
     adres_id = request.matchdict.get("adres_id")
-    adressen = handle_gateway_response(
-        Gateway.list_percelen_with_params, adresObjectId=adres_id
-    )
+    handle_gateway_response(Gateway.get_adres_by_id, adres_id)
+    kwargs = extract_valid_params(method, request)
+    kwargs["adresObjectId"] = adres_id
+    adressen = handle_gateway_response(method, **kwargs)
 
     return range_return(request, adressen)
 

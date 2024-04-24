@@ -1,3 +1,10 @@
+2.1.0 (24-04-2024)
+------------------
+
+- HTTPNotFound niet altijd raisen bij lege list responses. (#196)
+- Query params ondersteunen bij zoeken in adressenregister (#195)
+
+
 2.0.0 (13-12-2023)
 ------------------
 
