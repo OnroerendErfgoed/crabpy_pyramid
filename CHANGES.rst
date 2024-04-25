@@ -1,3 +1,8 @@
+2.1.1 (25-04-2024)
+------------------
+
+- Land rendering fix voor laatste versie van pycountry (#216)
+
 2.1.0 (24-04-2024)
 ------------------
 
