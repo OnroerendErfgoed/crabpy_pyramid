@@ -106,7 +106,7 @@ def list_landen_adapter(obj, request):
     """
     Adapter for rendering a list of landen to json.
     """
-    return {"code": obj.alpha_2, "naam": _(obj.name)}
+    return {"code": obj.alpha_2, "naam": obj.name, "vlag": obj.flag}
 
 
 json_list_renderer.add_adapter(adressenregister.Gewest, list_gewesten_adapter)
@@ -226,6 +226,7 @@ def item_land_adapter(obj, request):
         "alpha2": obj.alpha_2,
         "alpha3": obj.alpha_3,
         "naam": obj.name,
+        "vlag": obj.flag,
     }
 
 
