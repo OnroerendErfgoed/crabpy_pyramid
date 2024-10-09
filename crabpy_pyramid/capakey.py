@@ -97,7 +97,6 @@ def build_capakey(config: Configurator) -> CapakeyRestGateway:
         return capakey
 
     # Start building
-    settings = registry.settings
     parsed_settings = parse_settings(registry.settings)
     gateway = CapakeyRestGateway(cache_config=parsed_settings.cache_config)
 

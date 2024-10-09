@@ -6,12 +6,14 @@ Utility functions to help with range handling.
 """
 
 import re
+from typing import Literal
+from typing import Sequence
 
 
 MAX_NUMBER_ITEMS = 5000
 
 
-def parse_range_header(range):
+def parse_range_header(range) -> dict[str, int] | Literal[False]:
     """
     Parse a range header as used by the dojo Json Rest store.
 
@@ -33,7 +35,7 @@ def parse_range_header(range):
         return False
 
 
-def range_return(request, items):
+def range_return(request, items: Sequence):
     """
     Determine what range of objects to return.
 
@@ -44,8 +46,12 @@ def range_return(request, items):
     """
     if "Range" in request.headers:
         range = parse_range_header(request.headers["Range"])
+        if not range:
+            raise ValueError(request.headers["Range"])
     elif "X-Range" in request.headers:
         range = parse_range_header(request.headers["X-Range"])
+        if not range:
+            raise ValueError(request.headers["X-Range"])
     else:
         range = {"start": 0, "finish": MAX_NUMBER_ITEMS - 1, "count": MAX_NUMBER_ITEMS}
     filtered = items[range["start"] : range["finish"] + 1]

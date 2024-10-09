@@ -101,14 +101,6 @@ def build_adressenregister(config: Configurator) -> Gateway:
     return gateway
 
 
-def get_adressenregister(registry: Registry | Request) -> Gateway:
-    regis = getattr(registry, "registry", None)
-    if regis is None:
-        regis = registry
-
-    return regis.queryUtility(IAdressenregister)
-
-
 @functools.singledispatch
 def get_adressenregister(arg) -> Gateway:
     raise NotImplementedError(f"Invalid argument {arg}. Pass a request or registry.")
