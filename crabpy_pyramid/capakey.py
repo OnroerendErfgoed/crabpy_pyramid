@@ -98,7 +98,11 @@ def build_capakey(config: Configurator) -> CapakeyRestGateway:
 
     # Start building
     parsed_settings = parse_settings(registry.settings)
-    gateway = CapakeyRestGateway(cache_config=parsed_settings.cache_config)
+    kwargs = {}
+    if parsed_settings.cache_config:
+        kwargs["cache_config"] = parsed_settings.cache_config
+
+    gateway = CapakeyRestGateway(**kwargs)
 
     registry.registerUtility(gateway, ICapakey)
     config.add_request_method(get_capakey, "capakey_gateway")
