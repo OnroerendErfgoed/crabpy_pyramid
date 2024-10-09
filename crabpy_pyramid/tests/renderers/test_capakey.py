@@ -28,7 +28,7 @@ class CapakeyListTests(unittest.TestCase):
     def test_list_gemeenten(self):
         gemeenten = [Gemeente(44021, "Gent"), Gemeente(31043, "Knokke-Heist")]
         dump = self.renderer(gemeenten, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             [{"id": 44021, "naam": "Gent"}, {"id": 31043, "naam": "Knokke-Heist"}],
         )
@@ -39,7 +39,7 @@ class CapakeyListTests(unittest.TestCase):
             Afdeling(31043, "KNOKKE-HEIST  1 AFD", Gemeente(31043, "Knokke-Heist")),
         ]
         dump = self.renderer(afdelingen, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             [
                 {
@@ -58,7 +58,7 @@ class CapakeyListTests(unittest.TestCase):
     def test_list_secties(self):
         secties = [Sectie("A", Afdeling(44021, "GENT  1 AFD", Gemeente(44021, "Gent")))]
         dump = self.renderer(secties, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             [
                 {
@@ -87,7 +87,7 @@ class CapakeyListTests(unittest.TestCase):
             )
         ]
         dump = self.renderer(percelen, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             [
                 {
@@ -123,7 +123,7 @@ class CapakeyItemTests(unittest.TestCase):
             (94653.453, 185680.984, 113654.992, 208920.422),
         )
         dump = self.renderer(g, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             {
                 "id": 44021,
@@ -142,7 +142,7 @@ class CapakeyItemTests(unittest.TestCase):
             (104002.076625, 194168.3415, 105784.050875, 197876.146688),
         )
         dump = self.renderer(a, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             {
                 "id": 44021,
@@ -166,7 +166,7 @@ class CapakeyItemTests(unittest.TestCase):
             (104002.076625, 194168.3415, 105784.050875, 197876.146688),
         )
         dump = self.renderer(s, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             {
                 "id": "A",
@@ -203,7 +203,7 @@ class CapakeyItemTests(unittest.TestCase):
             shape={"shape": "one"},
         )
         dump = self.renderer(p, {})
-        self.assertEquals(
+        self.assertEqual(
             json.loads(dump),
             {
                 "id": "1154/02C000",

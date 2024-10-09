@@ -1,12 +1,11 @@
 sudo: false
 language: python
 python: 
- - 3.8
+ - 3.11
 install:
  - pip install -r requirements-dev.txt
- - python setup.py develop
- - pip install nose coverage nose-testconfig coveralls webtest
+ - pip install -e .
 script: 
-  nosetests --nologcapture --config nose_cover.cfg --tc-file nose_travis.ini
+  cd crabpy_pyramid; python -m unittest discover -s tests
 after_success:
   coveralls
