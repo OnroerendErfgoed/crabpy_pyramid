@@ -13,7 +13,6 @@ import responses
 from pyramid import testing
 from webtest import TestApp
 
-import crabpy_pyramid
 from crabpy_pyramid import main
 from crabpy_pyramid.tests.fixtures.adressenregister import adres
 from crabpy_pyramid.tests.fixtures.adressenregister import adressen
@@ -45,21 +44,20 @@ def run_integration_tests(section):
 
 
 settings = {
-    "crabpy.cache.file.root": os.path.join(os.path.dirname(__file__), "dogpile_data"),
     "crabpy.capakey.cache_config.permanent.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.permanent.expiration_time": 604800,
     "crabpy.capakey.cache_config.permanent.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_permanent.dbm"
+        "/tmp", "capakey_permanent.dbm"
     ),
     "crabpy.capakey.cache_config.long.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.long.expiration_time": 86400,
     "crabpy.capakey.cache_config.long.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_long.dbm"
+        "/tmp", "capakey_long.dbm"
     ),
     "crabpy.capakey.cache_config.short.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.short.expiration_time": 3600,
     "crabpy.capakey.cache_config.short.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_short.dbm"
+        "/tmp", "capakey_short.dbm"
     ),
     "crabpy.adressenregister.include": True,
     "crabpy.adressenregister.base_url": "https://api.basisregisters.vlaanderen.be",

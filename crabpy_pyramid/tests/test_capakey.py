@@ -1,102 +1,72 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Testing of the capakey specific aspects.
 .. versionadded:: 0.1.0
-'''
+"""
+
+import unittest
 
 from crabpy.gateway.capakey import CapakeyRestGateway
+from pyramid import testing
+from pyramid.registry import Registry
 
-from crabpy_pyramid import (
-    get_capakey,
-    _parse_settings,
-    _filter_settings,
-    _build_capakey,
-    ICapakey
-)
-
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest  # noqa
-    
-    
-class TestRegistry(object):
-
-    def __init__(self, settings=None):
-
-        if settings is None:
-            self.settings = {}
-        else:
-            self.settings = settings
-
-        self.capakey = None
-
-    def queryUtility(self, iface):
-        return self.capakey
-
-    def registerUtility(self, capakey, iface):
-        self.capakey = capakey
+from crabpy_pyramid import capakey
+from crabpy_pyramid.capakey import build_capakey
+from crabpy_pyramid.capakey import get_capakey
+from crabpy_pyramid.capakey import ICapakey
 
 
 class TestGetAndBuild(unittest.TestCase):
 
+    def setUp(self):
+        self.config = testing.setUp()
+        self.registry: Registry = self.config.registry  # type: ignore
+
+    def tearDown(self):
+        testing.tearDown()
+
     def test_get_capakey(self):
-        r = TestRegistry()
-        G = CapakeyRestGateway()
-        r.registerUtility(G, ICapakey)
-        G2 = get_capakey(r)
-        self.assertIsInstance(G, CapakeyRestGateway)
-        self.assertIsInstance(G2, CapakeyRestGateway)
-        self.assertEqual(G, G2)
+        gateway = CapakeyRestGateway()
+        self.registry.registerUtility(gateway, ICapakey)
+        gateway_2 = get_capakey(self.registry)
+        self.assertEqual(gateway, gateway_2)
 
     def test_build_capakey_already_exists(self):
-        r = TestRegistry()
-        G = CapakeyRestGateway()
-        r.registerUtility(G, ICapakey)
-        G2 = _build_capakey(r, {})
-        self.assertIsInstance(G, CapakeyRestGateway)
-        self.assertIsInstance(G2, CapakeyRestGateway)
-        self.assertEqual(G, G2)
+        gateway = CapakeyRestGateway()
+        self.registry.registerUtility(gateway, ICapakey)
+        gateway_2 = build_capakey(self.config)
+        self.assertEqual(gateway, gateway_2)
 
-    def test_build_capakey_default_settings(self):
-        r = TestRegistry()
-        G = CapakeyRestGateway()
-        r.registerUtility(G, ICapakey)
-        G2 = _build_capakey(r, {})
-        self.assertIsInstance(G, CapakeyRestGateway)
-        self.assertIsInstance(G2, CapakeyRestGateway)
-        self.assertEqual(G, G2)
-
-    def test_build_capakey_custom_settings(self):
+    def test_parse_settings(self):
         settings = {
-            'crabpy.cache.file.root': './dogpile_data/',
-            'crabpy.capakey.permanent.backend': 'dogpile.cache.dbm',
-            'crabpy.capakey.permanent.expiration_time': 604800,
-            'crabpy.capakey.permanent.arguments.filename': 'dogpile_data/capakey_permanent.dbm',
-            'crabpy.capakey.long.backend': 'dogpile.cache.dbm',
-            'crabpy.capakey.long.expiration_time': 86400,
-            'crabpy.capakey.long.arguments.filename': 'dogpile_data/capakey_long.dbm',
-            'crabpy.capakey.short.backend': 'dogpile.cache.dbm',
-            'crabpy.capakey.short.expiration_time': 3600,
-            'crabpy.capakey.short.arguments.filename': 'dogpile_data/capakey_short.dbm'
+            "crabpy.cache.file.root": "./dogpile_data/",
+            "crabpy.capakey.cache_config.permanent.backend": "dogpile.cache.dbm",
+            "crabpy.capakey.cache_config.permanent.expiration_time": 604800,
+            "crabpy.capakey.cache_config.permanent.arguments.filename": (
+                "dogpile_data/capakey_permanent.dbm"
+            ),
+            "crabpy.capakey.cache_config.long.backend": "dogpile.cache.dbm",
+            "crabpy.capakey.cache_config.long.expiration_time": 86400,
+            "crabpy.capakey.cache_config.long.arguments.filename": (
+                "dogpile_data/capakey_long.dbm"
+            ),
+            "crabpy.capakey.cache_config.short.backend": "dogpile.cache.dbm",
+            "crabpy.capakey.cache_config.short.expiration_time": 3600,
+            "crabpy.capakey.cache_config.short.arguments.filename": (
+                "dogpile_data/capakey_short.dbm"
+            ),
         }
-        r = TestRegistry(settings)
-        capakey_settings = _filter_settings(_parse_settings(settings), 'capakey.')
-        if 'include' in capakey_settings:
-            del capakey_settings['include']
-        G = _build_capakey(r, capakey_settings)
-        self.assertIsInstance(G, CapakeyRestGateway)
-
-
-class TestSettings(unittest.TestCase):
-
-    def _assert_contains_all_keys(self, args):
-        self.assertIn('proxy.http', args)
-
-    def test_get_all_settings(self):
-        settings = {
-            'crabpy.proxy.http': 'test'
+        parsed_settings = capakey.parse_settings(settings)
+        self.assertIsNotNone(parsed_settings)
+        expected = {
+            "long.arguments.filename": "dogpile_data/capakey_long.dbm",
+            "long.backend": "dogpile.cache.dbm",
+            "long.expiration_time": 86400,
+            "permanent.arguments.filename": "dogpile_data/capakey_permanent.dbm",
+            "permanent.backend": "dogpile.cache.dbm",
+            "permanent.expiration_time": 604800,
+            "short.arguments.filename": "dogpile_data/capakey_short.dbm",
+            "short.backend": "dogpile.cache.dbm",
+            "short.expiration_time": 3600,
         }
-        args = _parse_settings(settings)
-        self._assert_contains_all_keys(args)
-        self.assertEqual('test', args['proxy.http'])
+        self.assertEqual(expected, parsed_settings.cache_config)

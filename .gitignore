@@ -6,6 +6,7 @@
 # Packages
 *.egg
 *.egg-info
+.venv
 dist
 build
 eggs
@@ -43,4 +44,7 @@ dogpile_data
 
 # Rope
 .ropeproject
+
+# Editors
 .idea/
+.vscode/
