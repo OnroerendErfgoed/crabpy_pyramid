@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Testing of the capakey specific aspects.
 .. versionadded:: 0.1.0

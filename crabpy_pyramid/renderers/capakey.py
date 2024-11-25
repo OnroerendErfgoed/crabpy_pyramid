@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Adapters to help render :mod:`crabpy.gateway.capakey` objects to json.
 
