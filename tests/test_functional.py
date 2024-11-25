@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Functional tests.
 
@@ -14,15 +13,15 @@ from pyramid import testing
 from webtest import TestApp
 
 from crabpy_pyramid import main
-from crabpy_pyramid.tests.fixtures.adressenregister import adres
-from crabpy_pyramid.tests.fixtures.adressenregister import adressen
-from crabpy_pyramid.tests.fixtures.adressenregister import perceel
-from crabpy_pyramid.tests.fixtures.adressenregister import percelen
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1000
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1020
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfos
-from crabpy_pyramid.tests.fixtures.adressenregister import straat
-from crabpy_pyramid.tests.fixtures.adressenregister import straten
+from tests.fixtures.adressenregister import adres
+from tests.fixtures.adressenregister import adressen
+from tests.fixtures.adressenregister import perceel
+from tests.fixtures.adressenregister import percelen
+from tests.fixtures.adressenregister import postinfo_1000
+from tests.fixtures.adressenregister import postinfo_1020
+from tests.fixtures.adressenregister import postinfos
+from tests.fixtures.adressenregister import straat
+from tests.fixtures.adressenregister import straten
 
 
 def as_bool(value):
@@ -32,15 +31,6 @@ def as_bool(value):
     values are considered to be `False`.
     """
     return value in ["true", "True", "1", "t", "T", "Yes"]
-
-
-def run_integration_tests(section):
-    from testconfig import config
-
-    try:
-        return as_bool(config[section]["run_integration_tests"])
-    except KeyError:  # pragma NO COVER
-        return False
 
 
 settings = {
@@ -83,7 +73,8 @@ class FunctionalTests(unittest.TestCase):
 
 
 @unittest.skipUnless(
-    run_integration_tests("capakey"), "No CAPAKEY Integration tests required"
+    as_bool(os.environ.get("CRABPY_INTEGRATION_TESTS", False)),
+    "No CAPAKEY Integration tests required",
 )
 class CapakeyFunctionalTests(FunctionalTests):
     def test_list_gemeenten(self):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Testing of the capakey specific aspects.
 .. versionadded:: 0.1.0
@@ -11,9 +10,9 @@ from pyramid import testing
 from pyramid.registry import Registry
 
 from crabpy_pyramid import capakey
+from crabpy_pyramid.capakey import ICapakey
 from crabpy_pyramid.capakey import build_capakey
 from crabpy_pyramid.capakey import get_capakey
-from crabpy_pyramid.capakey import ICapakey
 
 
 class TestGetAndBuild(unittest.TestCase):

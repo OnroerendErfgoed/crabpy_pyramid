@@ -1,4 +1,3 @@
-import inspect
 import logging
 import re
 
@@ -10,6 +9,7 @@ from crabpy_pyramid.utils import range_return
 from crabpy_pyramid.utils import set_http_caching
 from crabpy_pyramid.views.utils import extract_valid_params
 from crabpy_pyramid.views.utils import handle_gateway_response
+
 
 log = logging.getLogger(__name__)
 
