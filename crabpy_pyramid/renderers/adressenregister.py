@@ -50,6 +50,7 @@ def list_gemeente_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam(),
         "provincie": {"niscode": obj.provincie_niscode},
+        "status": obj.status,
     }
 
 

@@ -3,6 +3,7 @@ Functional tests.
 
 .. versionadded:: 0.1.0
 """
+
 import os
 import shutil
 import unittest
@@ -220,7 +221,9 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("404 Not Found", res.status)
 
     def test_list_gemeenten_by_provincie(self):
-        res = self.testapp.get("/adressenregister/provincies/10000/gemeenten")
+        res = self.testapp.get(
+            "/adressenregister/provincies/10000" "/gemeenten?gemeente_status=inGebruik"
+        )
         self.assertEqual("200 OK", res.status)
         self.assertEqual(len(res.json), 69)
         self.assertDictEqual(
@@ -228,6 +231,21 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "naam": "Aartselaar",
                 "niscode": "11001",
                 "provincie": {"niscode": "10000"},
+                "status": "inGebruik",
+            },
+            res.json[0],
+        )
+        res = self.testapp.get(
+            "/adressenregister/provincies/10000/gemeenten?gemeente_status=voorgesteld"
+        )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(len(res.json), 1)
+        self.assertDictEqual(
+            {
+                "naam": "Beveren-Kruibeke-Zwijndrecht",
+                "niscode": "46030",
+                "provincie": {"niscode": "10000"},
+                "status": "voorgesteld",
             },
             res.json[0],
         )
@@ -239,8 +257,16 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("404 Not Found", res.status)
 
     def test_list_gemeenten_adressenregister(self):
-        res = self.testapp.get("/adressenregister/gewesten/2000/gemeenten")
+        res = self.testapp.get(
+            "/adressenregister/gewesten/2000/gemeenten?gemeente_status=inGebruik"
+        )
         self.assertEqual("200 OK", res.status)
+        self.assertEqual(300, len(res.json))
+        res = self.testapp.get(
+            "/adressenregister/gewesten/2000/gemeenten?gemeente_status=voorgesteld"
+        )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(12, len(res.json))
 
     def test_list_gemeenten_adressenregister_404(self):
         res = self.testapp.get("/adressenregister/gewesten/20000/gemeenten", status=404)
