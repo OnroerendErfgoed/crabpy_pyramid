@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-version = "2.1.1"
+version = "2.2.0"
 name = "crabpy_pyramid"
 readme = "README.md"
 authors = [
