@@ -1,4 +1,49 @@
-# Tested and approved with these versions
-pyramid==2.0.0
-crabpy==1.3.2
-pycountry==23.12.11 ; python_version >= '3.4'
+certifi==2024.8.30
+    # via requests
+charset-normalizer==3.4.0
+    # via requests
+crabpy==1.5.0
+    # via crabpy_pyramid (pyproject.toml)
+decorator==5.1.1
+    # via dogpile-cache
+dogpile-cache==1.3.3
+    # via crabpy
+hupper==1.12.1
+    # via pyramid
+idna==3.10
+    # via requests
+pastedeploy==3.1.0
+    # via plaster-pastedeploy
+pbr==6.1.0
+    # via stevedore
+plaster==1.1.2
+    # via
+    #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==1.0.1
+    # via pyramid
+pycountry==24.6.1
+    # via crabpy_pyramid (pyproject.toml)
+pyramid==2.0.2
+    # via crabpy_pyramid (pyproject.toml)
+requests==2.32.3
+    # via crabpy
+stevedore==5.3.0
+    # via dogpile-cache
+suds-py3==1.4.5.0
+    # via crabpy
+translationstring==1.4
+    # via pyramid
+urllib3==2.2.3
+    # via requests
+venusian==3.1.0
+    # via pyramid
+webob==1.8.8
+    # via pyramid
+zope-deprecation==5.0
+    # via pyramid
+zope-interface==7.1.0
+    # via pyramid
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

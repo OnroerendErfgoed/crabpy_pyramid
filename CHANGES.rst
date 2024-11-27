@@ -1,3 +1,10 @@
+2.2.0 (27-11-2024)
+------------------
+
+- Mogelijk maken om delen van de includeme apart op te roepen. (#218)
+- Backend update (#220)
+- Aanpassingen voor de nakende gemeentefusies (#222)
+
 2.1.1 (25-04-2024)
 ------------------
 

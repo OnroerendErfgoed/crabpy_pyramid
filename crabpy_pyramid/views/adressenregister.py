@@ -1,4 +1,3 @@
-import inspect
 import logging
 import re
 
@@ -10,6 +9,7 @@ from crabpy_pyramid.utils import range_return
 from crabpy_pyramid.utils import set_http_caching
 from crabpy_pyramid.views.utils import extract_valid_params
 from crabpy_pyramid.views.utils import handle_gateway_response
+
 
 log = logging.getLogger(__name__)
 
@@ -118,8 +118,11 @@ def list_gemeenten_by_provincie(request):
     request = set_http_caching(request, "adressenregister", "long")
     Gateway = request.adressenregister_gateway()
     provincie_id = request.matchdict.get("provincie_niscode")
+    kwargs = extract_valid_params(Gateway.list_gemeenten_by_provincie, request)
     provincie = handle_gateway_response(Gateway.get_provincie_by_niscode, provincie_id)
-    gemeenten = handle_gateway_response(Gateway.list_gemeenten_by_provincie, provincie)
+    gemeenten = handle_gateway_response(
+        Gateway.list_gemeenten_by_provincie, provincie, **kwargs
+    )
 
     return range_return(request, gemeenten)
 

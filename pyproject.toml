@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+version = "2.2.0"
+name = "crabpy_pyramid"
+readme = "README.md"
+authors = [
+    { name = "Flanders Heritage Agency", email = "ict@onroerenderfgoed.be" },
+]
+license = {file = "LICENSE"}
+description = "Bindings for the CRABpy webservices and the Pyramid framework."
+requires-python = ">=3.10,<3.13"
+keywords = ["web", "pyramid", "wsgi", "CRAB", "CAPAKEY", "AGIV"]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    "Programming Language :: Python",
+    'Programming Language :: Python :: 3.10',
+    "Framework :: Pyramid",
+    "Topic :: Internet :: WWW/HTTP",
+    "Intended Audience :: Developers",
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+]
+dependencies = [
+    "pyramid>=2.0.0",
+    "crabpy>=1.5.0",
+    "pycountry>=23.12.11",
+]
+
+[project.optional-dependencies]
+dev = [
+    "waitress==3.0.0",
+    "pytest==8.3.3",
+    "WebTest==3.0.1",
+    "responses==0.25.3",
+    "flake8==7.1.1",
+    "flake8-bugbear==24.8.19",
+    "black==24.10.0",
+    "uv==0.4.20",
+    "coveralls==4.0.1",
+    "flake8-import-order==0.18.2"
+]
+
+[project.urls]
+Repository = "https://github.com/OnroerendErfgoed/crabpy_pyramid.git"
+Issues = "https://github.com/OnroerendErfgoed/crabpy_pyramid/issues"
+Changelog = "https://github.com/OnroerendErfgoed/crabpy_pyramid/blob/master/CHANGES.rst"
+
+[project.entry-points."paste.app_factory"]
+main = "crabpy_pyramid:main"
+
+[tool.hatch.build.targets.wheel]
+# In the wheel we want to have crabpy_pyramid in the root as
+# python modules.
+packages = [
+    "/crabpy_pyramid",
+]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # crabpy_pyramid documentation build configuration file, created by
 # sphinx-quickstart on Wed Feb 19 09:56:43 2014.

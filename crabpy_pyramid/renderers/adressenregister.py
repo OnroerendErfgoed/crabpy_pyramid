@@ -1,6 +1,7 @@
-import pycountry
+import pycountry.db
 from crabpy.gateway import adressenregister
 from pyramid.renderers import JSON
+
 
 json_list_renderer = JSON()
 json_item_renderer = JSON()
@@ -49,6 +50,7 @@ def list_gemeente_adapter(obj, request):
         "niscode": obj.niscode,
         "naam": obj.naam(),
         "provincie": {"niscode": obj.provincie_niscode},
+        "status": obj.status,
     }
 
 

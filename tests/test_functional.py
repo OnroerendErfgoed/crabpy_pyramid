@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Functional tests.
 
 .. versionadded:: 0.1.0
 """
+
 import os
 import shutil
 import unittest
@@ -13,17 +13,16 @@ import responses
 from pyramid import testing
 from webtest import TestApp
 
-import crabpy_pyramid
 from crabpy_pyramid import main
-from crabpy_pyramid.tests.fixtures.adressenregister import adres
-from crabpy_pyramid.tests.fixtures.adressenregister import adressen
-from crabpy_pyramid.tests.fixtures.adressenregister import perceel
-from crabpy_pyramid.tests.fixtures.adressenregister import percelen
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1000
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfo_1020
-from crabpy_pyramid.tests.fixtures.adressenregister import postinfos
-from crabpy_pyramid.tests.fixtures.adressenregister import straat
-from crabpy_pyramid.tests.fixtures.adressenregister import straten
+from tests.fixtures.adressenregister import adres
+from tests.fixtures.adressenregister import adressen
+from tests.fixtures.adressenregister import perceel
+from tests.fixtures.adressenregister import percelen
+from tests.fixtures.adressenregister import postinfo_1000
+from tests.fixtures.adressenregister import postinfo_1020
+from tests.fixtures.adressenregister import postinfos
+from tests.fixtures.adressenregister import straat
+from tests.fixtures.adressenregister import straten
 
 
 def as_bool(value):
@@ -35,31 +34,21 @@ def as_bool(value):
     return value in ["true", "True", "1", "t", "T", "Yes"]
 
 
-def run_integration_tests(section):
-    from testconfig import config
-
-    try:
-        return as_bool(config[section]["run_integration_tests"])
-    except KeyError:  # pragma NO COVER
-        return False
-
-
 settings = {
-    "crabpy.cache.file.root": os.path.join(os.path.dirname(__file__), "dogpile_data"),
     "crabpy.capakey.cache_config.permanent.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.permanent.expiration_time": 604800,
     "crabpy.capakey.cache_config.permanent.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_permanent.dbm"
+        "/tmp", "capakey_permanent.dbm"
     ),
     "crabpy.capakey.cache_config.long.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.long.expiration_time": 86400,
     "crabpy.capakey.cache_config.long.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_long.dbm"
+        "/tmp", "capakey_long.dbm"
     ),
     "crabpy.capakey.cache_config.short.backend": "dogpile.cache.dbm",
     "crabpy.capakey.cache_config.short.expiration_time": 3600,
     "crabpy.capakey.cache_config.short.arguments.filename": os.path.join(
-        os.path.dirname(__file__), "dogpile_data", "capakey_short.dbm"
+        "/tmp", "capakey_short.dbm"
     ),
     "crabpy.adressenregister.include": True,
     "crabpy.adressenregister.base_url": "https://api.basisregisters.vlaanderen.be",
@@ -85,7 +74,8 @@ class FunctionalTests(unittest.TestCase):
 
 
 @unittest.skipUnless(
-    run_integration_tests("capakey"), "No CAPAKEY Integration tests required"
+    as_bool(os.environ.get("CRABPY_INTEGRATION_TESTS", False)),
+    "No CAPAKEY Integration tests required",
 )
 class CapakeyFunctionalTests(FunctionalTests):
     def test_list_gemeenten(self):
@@ -231,7 +221,9 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("404 Not Found", res.status)
 
     def test_list_gemeenten_by_provincie(self):
-        res = self.testapp.get("/adressenregister/provincies/10000/gemeenten")
+        res = self.testapp.get(
+            "/adressenregister/provincies/10000" "/gemeenten?gemeente_status=inGebruik"
+        )
         self.assertEqual("200 OK", res.status)
         self.assertEqual(len(res.json), 69)
         self.assertDictEqual(
@@ -239,6 +231,21 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
                 "naam": "Aartselaar",
                 "niscode": "11001",
                 "provincie": {"niscode": "10000"},
+                "status": "inGebruik",
+            },
+            res.json[0],
+        )
+        res = self.testapp.get(
+            "/adressenregister/provincies/10000/gemeenten?gemeente_status=voorgesteld"
+        )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(len(res.json), 1)
+        self.assertDictEqual(
+            {
+                "naam": "Beveren-Kruibeke-Zwijndrecht",
+                "niscode": "46030",
+                "provincie": {"niscode": "10000"},
+                "status": "voorgesteld",
             },
             res.json[0],
         )
@@ -250,8 +257,16 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         self.assertEqual("404 Not Found", res.status)
 
     def test_list_gemeenten_adressenregister(self):
-        res = self.testapp.get("/adressenregister/gewesten/2000/gemeenten")
+        res = self.testapp.get(
+            "/adressenregister/gewesten/2000/gemeenten?gemeente_status=inGebruik"
+        )
         self.assertEqual("200 OK", res.status)
+        self.assertEqual(300, len(res.json))
+        res = self.testapp.get(
+            "/adressenregister/gewesten/2000/gemeenten?gemeente_status=voorgesteld"
+        )
+        self.assertEqual("200 OK", res.status)
+        self.assertEqual(12, len(res.json))
 
     def test_list_gemeenten_adressenregister_404(self):
         res = self.testapp.get("/adressenregister/gewesten/20000/gemeenten", status=404)
