@@ -1,13 +1,17 @@
 name: crabpy_pyramid tests
 
 on:
-  push:
+  pull_request:
     paths:
       - crabpy_pyramid/**
       - tests/**
       - .github/workflows/backend.yaml
       - pyproject.toml
       - requirements*.txt
+
+  push:
+    branches:
+      - main
 
 env:
   CRABPY_INTEGRATION_TESTS: "true"
@@ -39,7 +43,13 @@ jobs:
       - name: Python tests
         run: |
           flake8
-          coverage run --source=crabpy_pyramid -m pytest tests
-    
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
+          pytest tests --cov=crabpy_pyramid --cov-report=xml
+
+      - name: Code Coverage Report
+        if: matrix.python-version == '3.11'
+        uses: orgoro/coverage@v3.2
+        with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          thresholdAll: 0.8
+          thresholdModified: 0.8
