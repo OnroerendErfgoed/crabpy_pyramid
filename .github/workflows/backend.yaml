@@ -36,9 +36,9 @@ jobs:
 
       - name: Install python requirements
         run: |
-          pip install pip-tools
+          pip install "pip-tools" "setuptools<81"
           pip-sync requirements-dev.txt
-          pip install setuptools
+          pip install "setuptools<81"
           pip install -e .
 
       - name: Python tests
