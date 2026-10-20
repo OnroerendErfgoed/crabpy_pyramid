@@ -845,6 +845,14 @@ class AdressenRegisterFunctionalTests(FunctionalTests):
         res = self.testapp.get("/adressenregister/landen/BE")
         self.assertEqual("200 OK", res.status)
         self.assertEqual("BE", res.json["code"])
+        self.assertEqual("België", res.json["naam"])
+
+    def test_list_landen(self):
+        res = self.testapp.get("/adressenregister/landen")
+        self.assertEqual("200 OK", res.status)
+        landen = {land["code"]: land["naam"] for land in res.json}
+        self.assertEqual("Nederland", landen["NL"])
+        self.assertEqual("Duitsland", landen["DE"])
 
     def test_get_land_by_unexisting_id(self):
         res = self.testapp.get("/adressenregister/landen/MORDOR", status=404)
