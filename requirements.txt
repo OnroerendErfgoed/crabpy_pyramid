@@ -44,6 +44,8 @@ zope-deprecation==5.0
     # via pyramid
 zope-interface==7.1.0
     # via pyramid
+Babel==2.13.1
+    # via crabpy_pyramid (localized country names)
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

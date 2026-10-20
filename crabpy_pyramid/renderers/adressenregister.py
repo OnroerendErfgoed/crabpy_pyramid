@@ -1,4 +1,6 @@
 import pycountry.db
+from babel import Locale
+_locale_nl = Locale.parse("nl")
 from crabpy.gateway import adressenregister
 from pyramid.renderers import JSON
 
@@ -108,7 +110,14 @@ def list_landen_adapter(obj, request):
     """
     Adapter for rendering a list of landen to json.
     """
-    return {"code": obj.alpha_2, "naam": obj.name, "vlag": obj.flag}
+    naam = None
+    try:
+        naam = _locale_nl.territories.get(obj.alpha_2)
+    except Exception:
+        naam = None
+    if not naam:
+        naam = getattr(obj, "name", None)
+    return {"code": obj.alpha_2, "naam": naam, "vlag": getattr(obj, "flag", None)}
 
 
 json_list_renderer.add_adapter(adressenregister.Gewest, list_gewesten_adapter)
@@ -223,12 +232,19 @@ def item_land_adapter(obj, request):
     Adapter for rendering an item of
     :class: `pycountry.db.Data` to json.
     """
+    naam = None
+    try:
+        naam = _locale_nl.territories.get(obj.alpha_2)
+    except Exception:
+        naam = None
+    if not naam:
+        naam = getattr(obj, "name", None)
     return {
         "code": obj.alpha_2,
         "alpha2": obj.alpha_2,
         "alpha3": obj.alpha_3,
-        "naam": obj.name,
-        "vlag": obj.flag,
+        "naam": naam,
+        "vlag": getattr(obj, "flag", None),
     }
 
 
