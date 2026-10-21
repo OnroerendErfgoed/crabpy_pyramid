@@ -29,7 +29,7 @@ dependencies = [
     "pycountry>=23.12.11",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "waitress==3.0.0",
     "pytest==8.3.3",
@@ -39,7 +39,6 @@ dev = [
     "flake8==7.1.1",
     "flake8-bugbear==24.8.19",
     "black==24.10.0",
-    "uv==0.4.20",
     "flake8-import-order==0.18.2"
 ]
 
