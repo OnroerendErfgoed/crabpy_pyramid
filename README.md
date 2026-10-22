@@ -11,6 +11,32 @@ Bindings for the crabpy library and the pyramid framework
 
 # Development
 
+## Local setup (mise)
+
+This repo uses [mise](https://mise.jdx.dev/) to make the project setup as
+simple as possible. From a fresh clone:
+
+```sh
+mise trust       # trust this config (depends on your mise settings)
+mise install     # install all tools (python 3.11, uv, pre-commit)
+mise run setup   # create .venv, install the dependencies and the pre-commit hooks
+```
+
+Daily use:
+
+```sh
+mise run test              # run the test suite
+mise run test:integration  # also run the tests against the live APIs, like CI
+mise run lint              # run flake8, like CI
+mise run server            # local server on http://localhost:6543
+```
+
+Other tasks: `mise run lock` (recompute `uv.lock`), `mise run build` (wheel +
+sdist) and `mise run cleanup` (remove everything `setup` created). `mise tasks`
+lists them all.
+
+## Dependencies
+
 Dependencies are managed with [uv](https://docs.astral.sh/uv/) and declared in
 `pyproject.toml`; `uv.lock` holds the full pinned resolution and is committed.
 
