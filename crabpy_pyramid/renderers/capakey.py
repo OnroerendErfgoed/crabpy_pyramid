@@ -3,6 +3,7 @@ Adapters to help render :mod:`crabpy.gateway.capakey` objects to json.
 
 .. versionadded:: 0.1.0
 """
+
 from crabpy.gateway import capakey
 from pyramid.renderers import JSON
 
