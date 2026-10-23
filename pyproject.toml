@@ -24,12 +24,12 @@ classifiers = [
     'Operating System :: OS Independent',
 ]
 dependencies = [
-    "pyramid>=2.0.0",
-    "crabpy>=1.5.0",
+    "pyramid>=2.1",
+    "crabpy>=1.5.1",
     "pycountry>=23.12.11",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "waitress==3.0.0",
     "pytest==8.3.3",
@@ -39,8 +39,7 @@ dev = [
     "flake8==7.1.1",
     "flake8-bugbear==24.8.19",
     "black==24.10.0",
-    "uv==0.4.20",
-    "flake8-import-order==0.18.2"
+    "flake8-import-order==0.19.2"
 ]
 
 [project.urls]

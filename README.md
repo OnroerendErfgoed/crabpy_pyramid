@@ -10,76 +10,39 @@ Bindings for the crabpy library and the pyramid framework
 
 
 # Development
-## Building the docs
 
-More information about this library can be found in `docs`. The docs can be 
-built using `Sphinx <http://sphinx-doc.org>`_.
+Dependencies are managed with [uv](https://docs.astral.sh/uv/) and declared in
+`pyproject.toml`; `uv.lock` holds the full pinned resolution and is committed.
 
-Please make sure you have installed Sphinx in the same environment where 
-crabpy\_pyramid is present.
+Install the library together with the dev dependencies in `.venv`:
 
 ```sh
-pip install sphinx sphinxcontrib-httpdomain
-pip install -e .
-cd docs
-make html
+uv sync
+```
+
+After changing dependencies in `pyproject.toml`, recompute the lock with
+`uv lock` (add `--upgrade` to update everything to the latest allowed versions).
+
+Run the tests and linting:
+
+```sh
+uv run pytest tests
+uv run flake8
+```
+
+## Building the docs
+
+More information about this library can be found in `docs`. The docs can be
+built using [Sphinx](http://sphinx-doc.org).
+
+```sh
+uv run --with sphinx --with sphinxcontrib-httpdomain make -C docs html
 ```
 
 ## Build wheel or sdist
 
 ```sh
-pip install hatch
-hatch build
-hatch build -t wheel
-hatch build -t sdist
-```
-
-
-## Work with pip-compile / pip-sync
-
-full docs: https://pip-tools.readthedocs.io/en/latest/
-
-To start, first install pip-tools: 
-```sh
-pip install pip-tools
-```
-
-### uv (optional)
-
-You can also use `uv` and for the remainder of the readme replace `pip`, `pip-compile` or
-`pip-sync` by `uv pip`, `uv pip compile` and `uv pip sync`.
-
-`uv` is a very fast replacement for pip-toools. It's optional, but can save a lot of time.
-```sh
-pip install uv
-```
-
-### Install requirements: pip-sync
-
-Note, `pip-sync` also uninstalls everything from the virtualenv which does not belong 
-there according to the requirements file. This includes the project itself. You will
-have to install `crabpy_pyramid` again after `pip-sync`.
-Since the requirements file of pip-sync is still a normal requirements file you can also
-use `pip install -r` to install all libraries defined in it. This will not cleanup your
-virtualenv and uninstall other libraries.
-
-The compiled requirements files are made in a 3.11 environment.
-```sh
-pip-sync requirements-dev.txt
-pip install -e .
-```
-`requirements-dev.txt` contains all libraries uncluding those for testing and development.
-
-`requirements.txt` contains only the necessary libraries for running the library.
-
-### Update requirements: pip-compile
-
-```sh
-echo -e "\nStarting"
-PIP_COMPILE_ARGS="-q --strip-extras --no-header --resolver=backtracking --no-emit-options pyproject.toml"
-pip-compile $PIP_COMPILE_ARGS -o requirements.txt;
-echo "requirements.txt done"
-pip-compile $PIP_COMPILE_ARGS --extra dev -o requirements-dev.txt;
-echo "requirements-dev.txt done"
-echo "Finished"
+uv build
+uv build --wheel
+uv build --sdist
 ```
