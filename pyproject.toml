@@ -24,7 +24,7 @@ classifiers = [
     'Operating System :: OS Independent',
 ]
 dependencies = [
-    "pyramid>=2.0.0",
+    "pyramid>=2.1",
     "crabpy>=1.5.1",
     "pycountry>=23.12.11",
 ]
@@ -39,7 +39,7 @@ dev = [
     "flake8==7.1.1",
     "flake8-bugbear==24.8.19",
     "black==24.10.0",
-    "flake8-import-order==0.18.2"
+    "flake8-import-order==0.19.2"
 ]
 
 [project.urls]
