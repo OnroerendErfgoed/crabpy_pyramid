@@ -24,7 +24,7 @@ classifiers = [
     'Operating System :: OS Independent',
 ]
 dependencies = [
-    "pyramid>=2.0.0",
+    "pyramid>=2.1",
     "crabpy>=1.5.1",
     "pycountry>=23.12.11",
 ]
