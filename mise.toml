@@ -1,0 +1,110 @@
+# mise configuration for crabpy_pyramid
+# https://mise.jdx.dev/
+#
+# crabpy_pyramid is a library: no frontend, database or docker stack, so the
+# docker/db/es/gpg tasks of the shared OE mise setup are deliberately absent.
+#
+# Quick start (after cloning):
+#   mise trust       # trust this config (depends on your mise settings)
+#   mise install     # install all tools below (python, uv, pre-commit)
+#   mise run setup   # set up the local development environment
+#   mise run test    # run the test suite
+
+[tools]
+python = "3.11"
+uv = "latest"
+pre-commit = "latest"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+# ===========================================================================
+#  Elementary tasks
+# ===========================================================================
+[tasks.setup]
+description = "Set up the complete local development environment"
+depends = ["setup:backend"]
+
+[tasks.test]
+description = "Run the test suite"
+run = [
+    "test -x .venv/bin/pytest || mise run setup",
+    ".venv/bin/pytest tests",
+]
+
+[tasks."test:integration"]
+description = "Run the test suite including the tests against the live APIs (like CI)"
+env = { CRABPY_INTEGRATION_TESTS = "true" }
+run = [
+    "test -x .venv/bin/pytest || mise run setup",
+    ".venv/bin/pytest tests",
+]
+
+[tasks.lint]
+description = "Run flake8 (same invocation as CI)"
+run = [
+    "test -x .venv/bin/flake8 || mise run setup",
+    ".venv/bin/flake8",
+]
+
+[tasks.server]
+description = "Run a local server on http://localhost:6543"
+run = [
+    "test -x .venv/bin/pserve || mise run setup",
+    # development.ini caches in dbm files under dogpile_data/
+    "mkdir -p dogpile_data",
+    ".venv/bin/pserve development.ini --reload",
+]
+
+[tasks.lock]
+description = "Recompute uv.lock from pyproject.toml"
+run = "uv lock"
+
+# ===========================================================================
+#  Build (wheel / sdist)
+# ===========================================================================
+[tasks.build]
+description = "Build both the wheel and the sdist"
+run = "uv build"
+
+[tasks."build:wheel"]
+description = "Build the wheel"
+run = "uv build --wheel"
+
+[tasks."build:sdist"]
+description = "Build the source distribution (sdist)"
+run = "uv build --sdist"
+
+# ===========================================================================
+#  Backend setup
+# ===========================================================================
+[tasks."setup:backend"]
+description = "Set up the backend (Python) development environment"
+depends = [
+    "setup:backend:dependencies",
+    "setup:backend:pre-commit",
+]
+alias = "sb"
+
+[tasks."setup:backend:dependencies"]
+description = "Install the python dependencies and crabpy_pyramid into the virtualenv"
+run = "uv sync --group dev"
+hide = true
+
+[tasks."setup:backend:pre-commit"]
+description = "Install the pre-commit git hooks"
+run = "pre-commit install"
+hide = true
+
+# ===========================================================================
+#  Cleanup
+# ===========================================================================
+[tasks.cleanup]
+description = "Remove everything created by the setup task"
+run = """
+rm -rf .venv
+rm -rf dist
+rm -rf .pytest_cache
+rm -rf dogpile_data
+rm -rf docs/build
+"""
