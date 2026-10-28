@@ -11,12 +11,16 @@ authors = [
 ]
 license = {file = "LICENSE"}
 description = "Bindings for the CRABpy webservices and the Pyramid framework."
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.11"
 keywords = ["web", "pyramid", "wsgi", "CRAB", "CAPAKEY", "AGIV"]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     "Programming Language :: Python",
-    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
     "Framework :: Pyramid",
     "Topic :: Internet :: WWW/HTTP",
     "Intended Audience :: Developers",
@@ -24,12 +28,12 @@ classifiers = [
     'Operating System :: OS Independent',
 ]
 dependencies = [
-    "pyramid>=2.0.0",
-    "crabpy>=1.5.0",
+    "pyramid>=2.1",
+    "crabpy>=1.5.1",
     "pycountry>=23.12.11",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "waitress==3.0.0",
     "pytest==8.3.3",
@@ -39,8 +43,8 @@ dev = [
     "flake8==7.1.1",
     "flake8-bugbear==24.8.19",
     "black==24.10.0",
-    "uv==0.4.20",
-    "flake8-import-order==0.18.2"
+    "flake8-import-order==0.19.2",
+    "pyramid-debugtoolbar>=4.12.1",
 ]
 
 [project.urls]

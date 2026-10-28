@@ -7,11 +7,11 @@ on:
       - tests/**
       - .github/workflows/backend.yaml
       - pyproject.toml
-      - requirements*.txt
+      - uv.lock
 
   push:
     branches:
-      - main
+      - master
 
 env:
   CRABPY_INTEGRATION_TESTS: "true"
@@ -21,30 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
+        python-version: [ "3.11", "3.12", "3.13", "3.14" ]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
       - name: Install python requirements
         run: |
-          pip install "pip-tools" "setuptools<81"
-          pip-sync requirements-dev.txt
-          pip install "setuptools<81"
-          pip install -e .
+          uv sync --locked -p ${{ matrix.python-version }}
 
       - name: Python tests
         run: |
-          flake8
-          pytest tests --cov=crabpy_pyramid --cov-report=xml
+          uv run --no-sync flake8
+          uv run --no-sync pytest tests --cov=crabpy_pyramid --cov-report=xml
 
       - name: Code Coverage Report
         if: matrix.python-version == '3.11'

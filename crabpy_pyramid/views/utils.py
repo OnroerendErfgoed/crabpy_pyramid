@@ -33,8 +33,9 @@ def extract_valid_params(method, request):
     signature = inspect.signature(method)
     parameters = signature.parameters
     kwargs_names = [
-        param.name for param in parameters.values() if
-        (
+        param.name
+        for param in parameters.values()
+        if (
             param.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD
             or param.kind == inspect.Parameter.KEYWORD_ONLY
         )
