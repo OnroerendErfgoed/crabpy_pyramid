@@ -1,0 +1,31 @@
+name: crabpy_pyramid
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.github/workflows/crabpy_pyramid.yaml'
+
+  push:
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  build:
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/python-tests.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write # coverage comment
+    with:
+      runs-on: ubuntu-latest # public repo: no self-hosted runners
+      installer: uv
+      lint-command: "" # the old workflow ran no linter
+      test-command: pytest --cov crabpy_pyramid --cov-report term-missing --cov-report xml:"$COVERAGE_XML" tests
+      # Only the total must reach 80%: the views calling CAPAKEY are only covered by the
+      # integration tests (CRABPY_INTEGRATION_TESTS), which don't run in CI.
+      coverage-threshold-modified: 0
+      coverage-threshold-new: 0

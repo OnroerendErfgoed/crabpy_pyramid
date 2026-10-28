@@ -3,6 +3,7 @@ Views for CAPAKEY services.
 
 .. versionadded:: 0.1.0
 """
+
 from crabpy.gateway.exception import GatewayResourceNotFoundException
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config

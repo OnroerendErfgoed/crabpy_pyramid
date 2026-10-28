@@ -1,3 +1,6 @@
+import gettext
+
+import pycountry
 import pycountry.db
 from crabpy.gateway import adressenregister
 from pyramid.renderers import JSON
@@ -5,6 +8,8 @@ from pyramid.renderers import JSON
 
 json_list_renderer = JSON()
 json_item_renderer = JSON()
+
+landen_nl = gettext.translation("iso3166-1", pycountry.LOCALES_DIR, languages=["nl"])
 
 
 def list_gewesten_adapter(obj, request):
@@ -108,7 +113,11 @@ def list_landen_adapter(obj, request):
     """
     Adapter for rendering a list of landen to json.
     """
-    return {"code": obj.alpha_2, "naam": obj.name, "vlag": obj.flag}
+    return {
+        "code": obj.alpha_2,
+        "naam": landen_nl.gettext(obj.name),
+        "vlag": obj.flag,
+    }
 
 
 json_list_renderer.add_adapter(adressenregister.Gewest, list_gewesten_adapter)
@@ -227,7 +236,7 @@ def item_land_adapter(obj, request):
         "code": obj.alpha_2,
         "alpha2": obj.alpha_2,
         "alpha3": obj.alpha_3,
-        "naam": obj.name,
+        "naam": landen_nl.gettext(obj.name),
         "vlag": obj.flag,
     }
 
