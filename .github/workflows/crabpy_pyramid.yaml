@@ -25,3 +25,7 @@ jobs:
       installer: uv
       lint-command: "" # the old workflow ran no linter
       test-command: pytest --cov crabpy_pyramid --cov-report term-missing --cov-report xml:"$COVERAGE_XML" tests
+      # Only the total must reach 80%: the views calling CAPAKEY are only covered by the
+      # integration tests (CRABPY_INTEGRATION_TESTS), which don't run in CI.
+      coverage-threshold-modified: 0
+      coverage-threshold-new: 0
