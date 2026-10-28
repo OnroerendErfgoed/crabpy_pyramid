@@ -6,7 +6,7 @@ on:
       - '**.py'
       - 'pyproject.toml'
       - 'uv.lock'
-      - '.github/workflows/crabpy_pyramid.yml'
+      - '.github/workflows/crabpy_pyramid.yaml'
 
   push:
     branches:
@@ -21,6 +21,7 @@ jobs:
       contents: read
       pull-requests: write # coverage comment
     with:
+      runs-on: ubuntu-latest # public repo: no self-hosted runners
       installer: uv
       lint-command: "" # the old workflow ran no linter
       test-command: pytest --cov crabpy_pyramid --cov-report term-missing --cov-report xml:"$COVERAGE_XML" tests
