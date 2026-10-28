@@ -11,12 +11,16 @@ authors = [
 ]
 license = {file = "LICENSE"}
 description = "Bindings for the CRABpy webservices and the Pyramid framework."
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.11"
 keywords = ["web", "pyramid", "wsgi", "CRAB", "CAPAKEY", "AGIV"]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     "Programming Language :: Python",
-    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
     "Framework :: Pyramid",
     "Topic :: Internet :: WWW/HTTP",
     "Intended Audience :: Developers",
