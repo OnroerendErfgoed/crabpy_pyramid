@@ -1,3 +1,16 @@
+3.0.0 (28-10-2026)
+------------------
+
+✨ Features
+
+- Add test coverage (#226)
+- landen lijst in het nederlands aanbieden (#228)
+- Use uv for package management (#230)
+
+🧹 Other
+
+- Mise setup (#232)
+
 2.2.0 (27-11-2024)
 ------------------
 
